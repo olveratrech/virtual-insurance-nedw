@@ -1,0 +1,64 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Archivos auxiliares de LaTeX
+*.tex
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Directorios de compilación
+build/
+out/
+
+# Ignorar todos los PDF, incluidos los recursos gráficos
+*.pdf
+
+# Conservar solamente el PDF final del anteproyecto
+!anteproyecto/Trejo Olvera Emmanuel - Anteproyecto.pdf
+
+# React / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# Java / Spring Boot
+backend/target/
+*.class
+*.jar
+*.war
+.mvn/timing.properties
+
+# Variables y secretos locales
+.env
+.env.*
+!.env.example
+application-local.properties
+application-local.yml
+
+# Cobertura y reportes de pruebas
+coverage/
+test-results/
+
+# Archivos temporales
+*.tmp
+*.swp
+*.swo
