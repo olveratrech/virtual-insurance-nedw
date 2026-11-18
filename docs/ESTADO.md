@@ -124,7 +124,7 @@
 ### Correcciones prioritarias antes del backend
 
 - Corrección terminada: conservar los campos capturados al utilizar “Revisar datos” desde un rechazo.
-- Conservar el tipo de seguro y la cotización al volver desde pago; actualmente una contratación médica puede regresar al resultado de respaldo de auto.
+- Corrección terminada: conservar el tipo de seguro y la cotización al volver desde pago.
 - Rechazar fechas de inicio pasadas y validar que el vencimiento ficticio de tarjeta no esté expirado.
 - Mostrar recurso no encontrado cuando `:polizaId` no exista, en lugar de utilizar silenciosamente la póliza de auto de respaldo.
 
@@ -259,4 +259,5 @@ Corregir la pérdida de datos y del tipo de seguro al retroceder, completar vali
 | 18/11/2026 | El autor verificó cancelación en pólizas de auto y médicas, incluido el intento duplicado. | El botón desaparece y el recorrido no permite iniciar otra solicitud desde la interfaz. | Registrar el incremento y auditar el recorrido frontend completo. |
 | 18/11/2026 | Se auditó el recorrido frontend completo y las diez rutas principales. | Se separaron fallos locales, pendientes de integración y mejoras de calidad. | Corregir navegación y validaciones prioritarias antes del backend. |
 | 18/11/2026 | Se conservaron los valores al regresar desde una cotización rechazada. | Auto y médico restauran campos y selecciones durante la navegación; el autor verificó ambos recorridos. | Corregir el regreso desde pago sin perder el tipo de seguro. |
+| 18/11/2026 | Se conservó la cotización y su tipo al volver desde pago. | Auto regresa a auto, médico regresa a médico y cada pago aprobado emite la póliza ficticia correspondiente; el autor verificó los recorridos. | Validar fechas pasadas y vencimientos ficticios. |
 

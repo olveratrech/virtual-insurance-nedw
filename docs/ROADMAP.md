@@ -97,8 +97,8 @@ Patrones que se aplicarán cuando aporten valor:
 - [ ] Crear servicios y adaptadores temporales con datos simulados.
 - [x] Validar campos y mostrar errores comprensibles.
 - [x] Conservar los datos al volver desde una cotización rechazada.
-- [ ] Conservar la cotización al volver desde pago.
-- [ ] Mantener el tipo de seguro durante toda la navegación.
+- [x] Conservar la cotización al volver desde pago.
+- [x] Mantener el tipo de seguro durante toda la navegación.
 - [ ] Validar fechas pasadas y vencimientos de demostración.
 - [ ] Mostrar una página no encontrada para pólizas inexistentes.
 

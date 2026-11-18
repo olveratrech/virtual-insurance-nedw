@@ -7,7 +7,7 @@ import './PaymentForm.css'
 
 const initialValues = { coverageStart: '', paymentMode: 'MONTHLY', cardholderName: '', cardNumber: '', expiration: '', cvv: '', acceptsTerms: false }
 
-function PaymentForm({ onPay, paymentError }) {
+function PaymentForm({ onPay, paymentError, backState }) {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
 
@@ -50,7 +50,7 @@ function PaymentForm({ onPay, paymentError }) {
       </div>
       {paymentError && <p className="payment-form__error" role="alert">{paymentError}</p>}
       <div className="payment-form__actions">
-        <Link className="button button--secondary" to="/cotizaciones/aprobada">Volver</Link>
+        <Link className="button button--secondary" to="/cotizaciones/aprobada" state={backState}>Volver</Link>
         <button className="button button--primary" type="submit">Pagar y emitir póliza</button>
       </div>
     </form>

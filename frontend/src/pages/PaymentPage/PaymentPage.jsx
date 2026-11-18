@@ -12,6 +12,7 @@ function PaymentPage() {
   const [paymentError, setPaymentError] = useState('')
   const quoteType = location.state?.quoteType ?? 'AUTO'
   const quote = location.state?.quote ?? quoteResultData[quoteType] ?? quoteResultData.AUTO
+  const backState = { quoteType, quote, values: location.state?.values }
 
   function handlePay(values) {
     const result = simulatePayment(values.cardNumber)
@@ -38,7 +39,7 @@ function PaymentPage() {
       </aside>
       <div className="payment-page__content">
         <PaymentSummary quote={quote} />
-        <PaymentForm onPay={handlePay} paymentError={paymentError} />
+        <PaymentForm onPay={handlePay} paymentError={paymentError} backState={backState} />
       </div>
     </div>
   )

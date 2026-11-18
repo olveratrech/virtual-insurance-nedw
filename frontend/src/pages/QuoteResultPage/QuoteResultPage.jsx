@@ -7,7 +7,7 @@ function QuoteResultPage({ outcome }) {
   const location = useLocation()
   const fallbackType = outcome === 'approved' ? 'AUTO' : 'MEDICAL'
   const quoteType = location.state?.quoteType ?? fallbackType
-  const result = quoteResultData[quoteType] ?? quoteResultData[fallbackType]
+  const result = location.state?.quote ?? quoteResultData[quoteType] ?? quoteResultData[fallbackType]
   const approved = outcome === 'approved'
 
   return (
@@ -63,7 +63,7 @@ function QuoteResultPage({ outcome }) {
       <div className="quote-result-page__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
         {approved ? (
-          <Link className="button button--primary" to="/contratacion/pago" state={{ quoteType, quote: result }}>Contratar seguro</Link>
+          <Link className="button button--primary" to="/contratacion/pago" state={{ quoteType, quote: result, values: location.state?.values }}>Contratar seguro</Link>
         ) : (
           <Link className="button button--primary" to={result.retryDestination} state={{ initialValues: location.state?.values }}>Revisar datos</Link>
         )}
