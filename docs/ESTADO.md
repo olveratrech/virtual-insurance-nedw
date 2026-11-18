@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 17 de noviembre de 2026  
+**Última actualización:** 18 de noviembre de 2026  
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -84,16 +84,21 @@
 - `QuoteResultPage` presenta resultados aprobados y rechazados mediante renderizado condicional.
 - `quoteResultData.js` mantiene precios, coberturas, beneficios y mensajes ficticios fuera de la interfaz.
 - Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
+- `PaymentPage` implementa contratación y pago simulado con resumen separado del formulario.
+- `PaymentForm` valida vigencia, modalidad, tarjeta ficticia, vencimiento, CVV y términos.
+- `paymentRules.js` permite demostrar pagos aprobados y rechazados sin procesar cargos reales.
+- Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
 - El panel, sus accesos rápidos, la actividad reciente y su adaptación a una columna aprobaron la revisión visual y las pruebas manuales del autor.
 - Los formularios de auto y médico, sus validaciones, reglas provisionales y recorridos de aprobación y rechazo aprobaron la revisión visual y las pruebas manuales del autor.
 - Las páginas de resultado aprobado y rechazado de ambos seguros aprobaron la revisión visual y las pruebas manuales del autor.
+- La contratación, las validaciones y los pagos simulados aprobado y rechazado aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar pago, póliza y cancelación.
+- Implementar detalle de póliza y cancelación.
 - Incorporar estados de carga, validación y error.
 - Sustituir posteriormente los datos simulados por servicios HTTP.
 - Conectar acceso y registro con Spring Security y eliminar la simulación local.
@@ -188,7 +193,7 @@
 
 ## Próxima acción
 
-Revisar los cuatro resultados posibles de ambos seguros y sus acciones. Después, explicar y aprobar la pantalla de contratación y pago simulado.
+Revisar validaciones y resultados aprobado y rechazado del pago simulado. Después, explicar y aprobar el detalle de póliza.
 
 ## Bitácora breve
 
@@ -206,4 +211,6 @@ Revisar los cuatro resultados posibles de ambos seguros y sus acciones. Después
 | 17/11/2026 | El autor probó ambos formularios, valores límite y decisiones aprobadas y rechazadas. | Las validaciones, adaptación visual y navegación funcionan conforme a las reglas provisionales. | Registrar el incremento y construir las páginas de resultado. |
 | 17/11/2026 | Se implementó una página configurable para resultados aprobados y rechazados. | Muestra producto, cobertura y precio cuando procede; el rechazo no genera operaciones. | Revisión manual y contratación/pago. |
 | 17/11/2026 | El autor probó los cuatro resultados, acciones y diseño visual. | Aprobación, rechazo y navegación funcionan conforme al alcance actual. | Preservar datos al revisar una cotización rechazada y registrar el incremento. |
+| 17/11/2026 | Se implementó contratación y pago simulado con tarjetas de demostración. | Un pago aprobado continúa a póliza y uno rechazado permanece sin emitirla. | Revisión manual y detalle de póliza. |
+| 18/11/2026 | El autor probó validaciones, pago aprobado, pago rechazado y adaptación visual. | El flujo impide emitir una póliza cuando el simulador rechaza el pago. | Registrar el incremento y construir el detalle de póliza. |
 
