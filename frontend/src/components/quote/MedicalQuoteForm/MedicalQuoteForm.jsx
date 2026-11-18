@@ -4,10 +4,10 @@ import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import './MedicalQuoteForm.css'
 
-const initialValues = { age: '', hypertension: false, glucoseOutOfRange: false, cholesterolOutOfRange: false, smoker: false, alcoholAddiction: false }
+const defaultValues = { age: '', hypertension: false, glucoseOutOfRange: false, cholesterolOutOfRange: false, smoker: false, alcoholAddiction: false }
 
-function MedicalQuoteForm({ onEvaluate }) {
-  const [values, setValues] = useState(initialValues)
+function MedicalQuoteForm({ onEvaluate, initialValues }) {
+  const [values, setValues] = useState(() => ({ ...defaultValues, ...initialValues }))
   const [errors, setErrors] = useState({})
 
   function updateField(event) {

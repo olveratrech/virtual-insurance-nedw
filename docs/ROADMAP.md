@@ -93,9 +93,14 @@ Patrones que se aplicarán cuando aporten valor:
 - [x] Implementar formularios de cotización de auto y médica.
 - [x] Implementar resultados aprobado y rechazado.
 - [x] Implementar pago, detalle de póliza y cancelación.
-- [ ] Crear componentes reutilizables.
+- [x] Crear componentes reutilizables.
 - [ ] Crear servicios y adaptadores temporales con datos simulados.
-- [ ] Validar campos y mostrar errores comprensibles.
+- [x] Validar campos y mostrar errores comprensibles.
+- [x] Conservar los datos al volver desde una cotización rechazada.
+- [ ] Conservar la cotización al volver desde pago.
+- [ ] Mantener el tipo de seguro durante toda la navegación.
+- [ ] Validar fechas pasadas y vencimientos de demostración.
+- [ ] Mostrar una página no encontrada para pólizas inexistentes.
 
 **Entregable:** recorrido completo navegable en React, todavía sin backend real.
 

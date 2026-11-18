@@ -68,7 +68,7 @@
 - `Header` implementa identidad, navegación principal y acceso.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
-- `ComingSoonPage` identifica visualmente las rutas todavía pendientes.
+- `ComingSoonPage` funciona actualmente como página no encontrada; todas las rutas principales ya tienen pantalla propia.
 - `AccessPage` implementa acceso y registro con formularios separados.
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
@@ -117,7 +117,33 @@
 - Generar pólizas y comprobantes PDF reales desde el backend.
 - Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
-- Conservar los valores capturados cuando el usuario selecciona “Revisar datos” desde una cotización rechazada; actualmente el formulario se reinicia al montarse nuevamente.
+- Los valores capturados se conservan cuando el usuario selecciona “Revisar datos” desde una cotización rechazada.
+
+## Auditoría del recorrido frontend
+
+### Correcciones prioritarias antes del backend
+
+- Corrección terminada: conservar los campos capturados al utilizar “Revisar datos” desde un rechazo.
+- Conservar el tipo de seguro y la cotización al volver desde pago; actualmente una contratación médica puede regresar al resultado de respaldo de auto.
+- Rechazar fechas de inicio pasadas y validar que el vencimiento ficticio de tarjeta no esté expirado.
+- Mostrar recurso no encontrado cuando `:polizaId` no exista, en lugar de utilizar silenciosamente la póliza de auto de respaldo.
+
+### Pendientes que dependen de integración
+
+- Proteger panel, cotizaciones, pagos y pólizas mediante autenticación real.
+- Reflejar la sesión en el encabezado y permitir cerrar sesión.
+- Persistir el estado después de recargar el navegador.
+- Agregar estados de carga, errores HTTP y sesión expirada.
+- Sustituir los archivos de `mocks/` por servicios y adaptadores HTTP cuando corresponda.
+- Impedir desde el backend accesos a pólizas de otros clientes y operaciones duplicadas.
+- Generar y descargar documentos reales.
+
+### Calidad pendiente
+
+- Incorporar pruebas automatizadas de reglas, validaciones y navegación crítica.
+- Eliminar recursos demostrativos de Vite que ya no se utilizan.
+- Reemplazar `ComingSoonPage` por una página 404 con nombre definitivo.
+- Revisar el encabezado móvil, accesibilidad y consistencia final contra Figma.
 
 ### Modelo relacional
 
@@ -206,7 +232,7 @@
 
 ## Próxima acción
 
-Revisar validaciones, confirmación y regreso a póliza de la cancelación. Después, cerrar el recorrido frontend y revisar faltantes antes de iniciar la base de datos mínima y el backend.
+Corregir la pérdida de datos y del tipo de seguro al retroceder, completar validaciones temporales de fechas y manejar pólizas inexistentes. Después, preparar la base de datos mínima y el contrato de la API.
 
 ## Bitácora breve
 
@@ -231,4 +257,6 @@ Revisar validaciones, confirmación y regreso a póliza de la cancelación. Desp
 | 18/11/2026 | Se implementó solicitud de cancelación con estado intermedio y folio simulado. | La póliza permanece activa y muestra la cancelación en revisión. | Revisión manual y auditoría del recorrido frontend. |
 | 18/11/2026 | Se corrigió la acción disponible después de solicitar cancelación. | La póliza ya no permite iniciar otra solicitud desde la interfaz mientras la anterior está pendiente. | Replicar la validación obligatoria en Spring Boot. |
 | 18/11/2026 | El autor verificó cancelación en pólizas de auto y médicas, incluido el intento duplicado. | El botón desaparece y el recorrido no permite iniciar otra solicitud desde la interfaz. | Registrar el incremento y auditar el recorrido frontend completo. |
+| 18/11/2026 | Se auditó el recorrido frontend completo y las diez rutas principales. | Se separaron fallos locales, pendientes de integración y mejoras de calidad. | Corregir navegación y validaciones prioritarias antes del backend. |
+| 18/11/2026 | Se conservaron los valores al regresar desde una cotización rechazada. | Auto y médico restauran campos y selecciones durante la navegación; el autor verificó ambos recorridos. | Corregir el regreso desde pago sin perder el tipo de seguro. |
 

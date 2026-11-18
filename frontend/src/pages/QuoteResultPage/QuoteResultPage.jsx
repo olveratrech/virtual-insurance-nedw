@@ -65,7 +65,7 @@ function QuoteResultPage({ outcome }) {
         {approved ? (
           <Link className="button button--primary" to="/contratacion/pago" state={{ quoteType, quote: result }}>Contratar seguro</Link>
         ) : (
-          <Link className="button button--primary" to={result.retryDestination}>Revisar datos</Link>
+          <Link className="button button--primary" to={result.retryDestination} state={{ initialValues: location.state?.values }}>Revisar datos</Link>
         )}
       </div>
     </div>

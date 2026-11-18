@@ -4,10 +4,10 @@ import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import SelectField from '../../ui/SelectField/SelectField.jsx'
 
-const initialValues = { brand: '', model: '', year: '', category: '', plates: '', licenseNumber: '', driverAge: '', negativePoints: '0', criminalRecord: false }
+const defaultValues = { brand: '', model: '', year: '', category: '', plates: '', licenseNumber: '', driverAge: '', negativePoints: '0', criminalRecord: false }
 
-function AutoQuoteForm({ onEvaluate }) {
-  const [values, setValues] = useState(initialValues)
+function AutoQuoteForm({ onEvaluate, initialValues }) {
+  const [values, setValues] = useState(() => ({ ...defaultValues, ...initialValues }))
   const [errors, setErrors] = useState({})
 
   function updateField(event) {
