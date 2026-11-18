@@ -1,0 +1,4 @@
+.insurance-card { align-items: flex-start; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--space-xl); justify-content: space-between; min-height: 12rem; padding: var(--space-xl); }
+.insurance-card h2 { margin: 0 0 var(--space-sm); }
+.insurance-card p { margin: 0; }
+.insurance-card__eyebrow { color: var(--color-primary); font-size: 0.78rem; font-weight: 750; letter-spacing: 0.08em; margin-bottom: var(--space-sm) !important; text-transform: uppercase; }

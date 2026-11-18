@@ -1,0 +1,13 @@
+.home-page { display: grid; gap: 4.5rem; padding-bottom: 5rem; padding-top: 4rem; }
+.home-hero { background: linear-gradient(135deg, var(--color-primary-soft), var(--color-surface)); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: clamp(2rem, 6vw, 5rem); }
+.home-hero h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); letter-spacing: -0.05em; line-height: 1; margin: var(--space-md) 0 var(--space-lg); max-width: 12ch; }
+.home-hero__description { color: var(--color-text); font-size: clamp(1.05rem, 2vw, 1.25rem); line-height: 1.65; max-width: 42rem; }
+.home-hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-xl); }
+.section-heading { margin-bottom: var(--space-xl); }
+.section-heading h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); margin: var(--space-sm) 0 0; }
+.insurance-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 720px) {
+  .home-page { gap: 3rem; padding-top: var(--space-xl); }
+  .insurance-grid { grid-template-columns: 1fr; }
+}

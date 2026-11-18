@@ -76,12 +76,12 @@ Patrones que se aplicarán cuando aporten valor:
 
 **Fecha objetivo:** 18 de noviembre
 
-- [ ] Comprobar Node.js, npm y Git.
-- [ ] Crear el proyecto React con Vite dentro de `frontend/`.
-- [ ] Explicar `package.json`, `main.jsx`, `App.jsx` y el ciclo básico de ejecución.
-- [ ] Configurar estilos globales y variables visuales.
-- [ ] Crear el layout general, encabezado y navegación.
-- [ ] Configurar React Router.
+- [x] Comprobar Node.js, npm y Git.
+- [x] Crear el proyecto React con Vite dentro de `frontend/`.
+- [x] Explicar `package.json`, `main.jsx`, `App.jsx` y el ciclo básico de ejecución.
+- [x] Configurar estilos globales y variables visuales.
+- [x] Crear el layout general, encabezado y navegación.
+- [x] Configurar React Router.
 
 **Entregable:** frontend ejecutable con rutas y layout común.
 

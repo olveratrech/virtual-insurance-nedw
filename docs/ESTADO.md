@@ -10,7 +10,7 @@
 - El anteproyecto y el prototipo navegable existen.
 - Existe una primera versión del modelo relacional, todavía en revisión lógica.
 - El entorno Oracle Database 26ai está disponible en Docker.
-- El frontend React, el backend Spring Boot y la integración con Oracle todavía no han comenzado.
+- El frontend React está en desarrollo; el backend Spring Boot y la integración con Oracle todavía no han comenzado.
 
 ## Estado por área
 
@@ -20,11 +20,12 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Parcial | Primera versión modular; faltan ajustes y reglas para el recorrido web. |
 | Oracle | Entorno disponible | Software funcional; falta desplegar el esquema definitivo del proyecto. |
-| Frontend React | No iniciado | Se desarrollará primero con datos simulados. |
+| Frontend React | En desarrollo | Base Vite sustituida por rutas, layout compartido, página de inicio y marcadores de pantallas pendientes. |
 | Backend Spring Boot | No iniciado | Se implementará después de estabilizar contratos y modelo mínimo. |
 | Spring Security | No iniciado | Falta decidir y documentar el mecanismo concreto de autenticación. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | No iniciadas | Se definirán junto con cada módulo y el recorrido integral. |
+| Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
 
@@ -53,10 +54,38 @@
 
 #### Pendientes del diseño
 
+- Completar los enlaces y recorridos secundarios que todavía no están conectados.
 - Revisar textos finales y consistencia visual antes de implementar cada pantalla.
 - Definir comportamiento adaptable para pantallas pequeñas.
 - Precisar estados de carga, errores de red y sesión expirada.
 - Agregar, si se requiere, vistas de historial detallado.
+
+### Frontend React
+
+- Proyecto creado con React y Vite.
+- React Router configurado con las diez rutas iniciales y una ruta de página no encontrada.
+- `MainLayout` comparte el encabezado y el área de contenido entre páginas.
+- `Header` implementa identidad, navegación principal y acceso.
+- `HomePage` implementa la primera versión funcional de la pantalla de inicio.
+- `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
+- `ComingSoonPage` identifica visualmente las rutas todavía pendientes.
+- `AccessPage` implementa acceso y registro con formularios separados.
+- `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
+- `FormField` unifica etiquetas, campos y mensajes de error accesibles.
+- El envío correcto navega al panel, pero la autenticación continúa siendo simulada y no persiste usuarios.
+- Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
+- `npm run lint` y `npm run build` terminan correctamente.
+- La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
+
+#### Pendientes del frontend
+
+- Implementar panel del cliente.
+- Implementar ambos formularios de cotización.
+- Implementar resultados, pago, póliza y cancelación.
+- Incorporar estados de carga, validación y error.
+- Sustituir posteriormente los datos simulados por servicios HTTP.
+- Conectar acceso y registro con Spring Security y eliminar la simulación local.
+- Revisar visualmente la aplicación en el navegador y comparar con Figma.
 
 ### Modelo relacional
 
@@ -89,15 +118,6 @@
 
 ## Componentes todavía no iniciados
 
-### Frontend
-
-- Proyecto React con Vite.
-- Rutas y layout general.
-- Componentes visuales reutilizables.
-- Formularios y validaciones.
-- Servicios, adaptadores y mocks.
-- Comunicación con la API REST.
-
 ### Backend
 
 - Proyecto Spring Boot.
@@ -124,6 +144,25 @@
 - No se integrarán pagos reales.
 - Se implementarán patrones solamente cuando resuelvan necesidades concretas.
 - La aplicación se desarrollará individualmente.
+- `docs/ESTADO.md` será el registro operativo y la base de contexto entre fases.
+- Antes de implementar una sección se explicarán sus componentes, archivos, responsabilidades y relaciones para permitir que el autor pueda modificarlos con autonomía.
+
+## Herramientas verificadas
+
+- Node.js `24.16.0`.
+- npm `11.13.0`.
+- OpenJDK `25.0.4.1`.
+- Maven `3.9.16`.
+- Repositorio remoto: `https://github.com/olveratrech/virtual-insurance-nedw.git`.
+- Rama principal: `main`.
+- Primer commit publicado: `f3a07a1` (`first commit`).
+- Vite `8.3.8` y React `19.3.1` instalados en `frontend/`.
+
+## Incidencias técnicas abiertas
+
+- `npm audit` reporta cinco vulnerabilidades altas originadas por `picomatch 4.0.7`, dependencia transitiva de las herramientas de desarrollo de Vite.
+- `npm audit fix` sin `--force` no puede resolverlas; la propuesta automática requiere bajar a Vite 6 y se evaluará antes del primer commit del frontend.
+- No se ejecutará `npm audit fix --force` sin revisar previamente el impacto.
 
 ## Riesgos actuales
 
@@ -135,11 +174,16 @@
 
 ## Próxima acción
 
-Comprobar las versiones de Node.js, npm, Java, Maven y Git; después crear el proyecto React con Vite en `frontend/` y explicar su estructura archivo por archivo.
+Revisar acceso, registro y sus validaciones en el navegador. Después, explicar y aprobar los componentes del panel del cliente antes de implementarlos.
 
 ## Bitácora breve
 
 | Fecha | Cambio | Resultado | Pendientes detectados |
 |---|---|---|---|
 | 17/11/2026 | Se definió la estructura del repositorio y se crearon los documentos de control. | Preparación inicial concluida. | Crear remoto y comenzar React. |
+| 17/11/2026 | Se verificaron el primer commit, el remoto de GitHub y las herramientas de desarrollo. También se revisó el prototipo de Figma. | Repositorio remoto operativo y entorno listo para React. | Completar enlaces del prototipo y aprobar la estructura del primer incremento frontend. |
+| 17/11/2026 | Se creó la plantilla React con Vite y se instalaron sus dependencias. | `npm run lint` y `npm run build` finalizan correctamente. | Implementar rutas y layout; decidir el tratamiento de la alerta de `picomatch`. |
+| 17/11/2026 | Se implementaron rutas, layout compartido, encabezado, inicio, tarjetas reutilizables y marcadores de trabajo pendiente. | Primer incremento React compila y pasa el analizador estático. | Revisión visual e implementación posterior de acceso y registro. |
+| 17/11/2026 | Se implementaron acceso, registro, campos reutilizables y validación local. | La ruta `/acceso` compila y navega al panel tras una simulación válida. | Sustituir la simulación por Spring Security e implementar el panel. |
+| 17/11/2026 | El autor realizó la revisión visual y las pruebas manuales de acceso y registro. | Campos obligatorios, contraseñas, términos y navegación funcionan conforme al incremento actual. | Registrar el incremento en Git y continuar con el panel del cliente. |
 
