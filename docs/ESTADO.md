@@ -92,6 +92,11 @@
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
 - `policyData.js` contiene pólizas ficticias diferenciadas para auto y seguro médico.
 - La descarga de documentos está simulada y no genera todavía archivos PDF reales.
+- `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
+- `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
+- `cancellationRules.js` genera un folio y el estado temporal `CANCELLATION_REQUESTED`.
+- Al regresar, `PolicyPage` muestra `CANCELACIÓN SOLICITADA` y conserva la indicación de cobertura activa.
+- `PolicyPage` oculta la acción de cancelación cuando ya existe una solicitud pendiente.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
@@ -100,15 +105,17 @@
 - Las páginas de resultado aprobado y rechazado de ambos seguros aprobaron la revisión visual y las pruebas manuales del autor.
 - La contratación, las validaciones y los pagos simulados aprobado y rechazado aprobaron la revisión visual y las pruebas manuales del autor.
 - Las pólizas de auto y médica, pagos, documentos simulados y diseño adaptable aprobaron la revisión visual y las pruebas manuales del autor.
+- La cancelación de ambos tipos de póliza, su estado intermedio y la prevención visual de solicitudes duplicadas aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar solicitud de cancelación.
+- Completar refinamientos de UX, estados de carga y errores antes de sustituir los mocks.
 - Incorporar estados de carga, validación y error.
 - Sustituir posteriormente los datos simulados por servicios HTTP.
 - Conectar acceso y registro con Spring Security y eliminar la simulación local.
 - Sustituir `quoteRules.js` por estrategias del backend y reglas definitivas documentadas.
 - Generar pólizas y comprobantes PDF reales desde el backend.
+- Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 - Conservar los valores capturados cuando el usuario selecciona “Revisar datos” desde una cotización rechazada; actualmente el formulario se reinicia al montarse nuevamente.
 
@@ -199,7 +206,7 @@
 
 ## Próxima acción
 
-Revisar pólizas de auto y médica, pagos, documentos y diseño adaptable. Después, explicar y aprobar la solicitud de cancelación.
+Revisar validaciones, confirmación y regreso a póliza de la cancelación. Después, cerrar el recorrido frontend y revisar faltantes antes de iniciar la base de datos mínima y el backend.
 
 ## Bitácora breve
 
@@ -221,4 +228,7 @@ Revisar pólizas de auto y médica, pagos, documentos y diseño adaptable. Despu
 | 18/11/2026 | El autor probó validaciones, pago aprobado, pago rechazado y adaptación visual. | El flujo impide emitir una póliza cuando el simulador rechaza el pago. | Registrar el incremento y construir el detalle de póliza. |
 | 18/11/2026 | Se implementó el detalle de póliza para auto y médico, pagos y documentos simulados. | La ruta dinámica muestra la póliza correspondiente y conserva únicamente el resultado del pago. | Revisión manual y solicitud de cancelación. |
 | 18/11/2026 | El autor probó ambas pólizas, emisión posterior al pago, documentos y adaptación visual. | El detalle funciona conforme al alcance actual y no expone datos de tarjeta. | Registrar el incremento y construir cancelación. |
+| 18/11/2026 | Se implementó solicitud de cancelación con estado intermedio y folio simulado. | La póliza permanece activa y muestra la cancelación en revisión. | Revisión manual y auditoría del recorrido frontend. |
+| 18/11/2026 | Se corrigió la acción disponible después de solicitar cancelación. | La póliza ya no permite iniciar otra solicitud desde la interfaz mientras la anterior está pendiente. | Replicar la validación obligatoria en Spring Boot. |
+| 18/11/2026 | El autor verificó cancelación en pólizas de auto y médicas, incluido el intento duplicado. | El botón desaparece y el recorrido no permite iniciar otra solicitud desde la interfaz. | Registrar el incremento y auditar el recorrido frontend completo. |
 

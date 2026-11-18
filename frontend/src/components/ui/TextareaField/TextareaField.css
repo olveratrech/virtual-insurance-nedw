@@ -1,0 +1,5 @@
+.textarea-field { display: grid; gap: var(--space-sm); }
+.textarea-field label { color: var(--color-text-strong); font-size: 0.9rem; font-weight: 700; }
+.textarea-field textarea { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-strong); min-height: 7rem; padding: 0.8rem; resize: vertical; width: 100%; }
+.textarea-field textarea:focus { border-color: var(--color-primary); outline: 3px solid rgb(37 99 235 / 0.12); }
+.textarea-field textarea[aria-invalid="true"] { border-color: var(--color-danger); }

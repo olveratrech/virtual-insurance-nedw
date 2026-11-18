@@ -13,6 +13,7 @@ function PolicyPage() {
   const [downloadMessage, setDownloadMessage] = useState('')
   const policy = policyData[polizaId] ?? policyData['802145']
   const issuedAfterPayment = location.state?.payment?.status === 'APPROVED'
+  const cancellationRequested = location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
 
   function handleDownload(document) {
     setDownloadMessage(`Descarga simulada: ${document.name}. El PDF real se generará desde el backend.`)
@@ -23,13 +24,14 @@ function PolicyPage() {
       <header className="policy-page__heading">
         <p className="eyebrow">Póliza {policy.policyNumber}</p>
         <div className="policy-page__title-row">
-          <h1>Tu póliza está activa</h1>
-          <StatusBadge tone="success">{policy.status}</StatusBadge>
+          <h1>{cancellationRequested ? 'Cancelación en revisión' : 'Tu póliza está activa'}</h1>
+          <StatusBadge tone={cancellationRequested ? 'warning' : 'success'}>{cancellationRequested ? 'CANCELACIÓN SOLICITADA' : policy.status}</StatusBadge>
         </div>
         <p>Cobertura vigente desde el {policy.validFrom}.</p>
       </header>
 
       {issuedAfterPayment && <p className="confirmation-message" role="status">Pago aprobado. La póliza se emitió correctamente.</p>}
+      {cancellationRequested && <p className="prototype-notice" role="status">La solicitud está en revisión. La cobertura permanece activa.</p>}
 
       <div className="policy-page__cards">
         <PolicyDetails policy={policy} />
@@ -41,7 +43,9 @@ function PolicyPage() {
 
       <div className="policy-page__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
-        <Link className="button button--primary" to={`/polizas/${polizaId}/cancelacion`} state={{ policy }}>Solicitar cancelación</Link>
+        {!cancellationRequested && (
+          <Link className="button button--primary" to={`/polizas/${polizaId}/cancelacion`} state={{ policy }}>Solicitar cancelación</Link>
+        )}
       </div>
     </div>
   )

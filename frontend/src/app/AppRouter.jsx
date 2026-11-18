@@ -9,6 +9,7 @@ import MedicalQuotePage from '../pages/MedicalQuotePage/MedicalQuotePage.jsx'
 import QuoteResultPage from '../pages/QuoteResultPage/QuoteResultPage.jsx'
 import PaymentPage from '../pages/PaymentPage/PaymentPage.jsx'
 import PolicyPage from '../pages/PolicyPage/PolicyPage.jsx'
+import CancellationPage from '../pages/CancellationPage/CancellationPage.jsx'
 
 function AppRouter() {
   return (
@@ -24,7 +25,7 @@ function AppRouter() {
           <Route path="cotizaciones/rechazada" element={<QuoteResultPage outcome="rejected" />} />
           <Route path="contratacion/pago" element={<PaymentPage />} />
           <Route path="polizas/:polizaId" element={<PolicyPage />} />
-          <Route path="polizas/:polizaId/cancelacion" element={<ComingSoonPage title="Solicitud de cancelación" />} />
+          <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
           <Route path="*" element={<ComingSoonPage title="Página no encontrada" />} />
         </Route>
       </Routes>

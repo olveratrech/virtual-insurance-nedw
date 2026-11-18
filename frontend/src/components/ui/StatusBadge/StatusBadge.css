@@ -2,3 +2,4 @@
 .status-badge--success { background: var(--color-success-soft); color: var(--color-success-text); }
 .status-badge--danger { background: var(--color-danger-soft); color: var(--color-danger); }
 .status-badge--neutral { background: var(--color-neutral-soft); color: var(--color-text); }
+.status-badge--warning { background: var(--color-warning-soft); color: var(--color-warning-text); }

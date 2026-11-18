@@ -13,3 +13,5 @@ a { color: inherit; }
 .button--primary:hover { background: var(--color-primary-dark); }
 .button--secondary { background: var(--color-surface); border-color: var(--color-border); color: var(--color-text-strong); }
 .button--secondary:hover { border-color: var(--color-primary); color: var(--color-primary-dark); }
+.button--danger { background: var(--color-danger); color: white; }
+.button--danger:hover { background: #991b1b; }

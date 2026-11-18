@@ -92,7 +92,7 @@ Patrones que se aplicarán cuando aporten valor:
 - [x] Implementar inicio, acceso y panel del cliente.
 - [x] Implementar formularios de cotización de auto y médica.
 - [x] Implementar resultados aprobado y rechazado.
-- [ ] Implementar pago, detalle de póliza y cancelación.
+- [x] Implementar pago, detalle de póliza y cancelación.
 - [ ] Crear componentes reutilizables.
 - [ ] Crear servicios y adaptadores temporales con datos simulados.
 - [ ] Validar campos y mostrar errores comprensibles.
@@ -121,6 +121,7 @@ Patrones que se aplicarán cuando aporten valor:
 - [ ] Crear entidades, DTO, repositorios, servicios y controladores.
 - [ ] Implementar Strategy para cotizaciones de auto y médicas.
 - [ ] Implementar transiciones válidas de estados.
+- [ ] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
 - [ ] Configurar registro, autenticación y autorización con Spring Security.
 - [ ] Exponer endpoints del recorrido prioritario.
 - [ ] Documentar el contrato básico de la API.
