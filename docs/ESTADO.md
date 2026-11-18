@@ -76,18 +76,24 @@
 - `DashboardPage` implementa el panel del cliente con saludo, accesos rápidos y actividad reciente.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
 - `dashboardData.js` separa los datos ficticios de los componentes que los presentan.
+- `QuotePageLayout` comparte la estructura visual y el aviso demostrativo de ambas cotizaciones.
+- `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
+- `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
+- `SelectField` y `CheckboxField` complementan los controles reutilizables del formulario.
+- `quoteRules.js` aísla reglas académicas provisionales de aprobación y rechazo para cada seguro.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
 - El panel, sus accesos rápidos, la actividad reciente y su adaptación a una columna aprobaron la revisión visual y las pruebas manuales del autor.
+- Los formularios de auto y médico, sus validaciones, reglas provisionales y recorridos de aprobación y rechazo aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar ambos formularios de cotización.
 - Implementar resultados, pago, póliza y cancelación.
 - Incorporar estados de carga, validación y error.
 - Sustituir posteriormente los datos simulados por servicios HTTP.
 - Conectar acceso y registro con Spring Security y eliminar la simulación local.
+- Sustituir `quoteRules.js` por estrategias del backend y reglas definitivas documentadas.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 
 ### Modelo relacional
@@ -177,7 +183,7 @@
 
 ## Próxima acción
 
-Revisar el panel del cliente, sus accesos rápidos y su actividad reciente en el navegador. Después, explicar y aprobar la estructura compartida de los formularios de cotización.
+Revisar visualmente ambos formularios, sus validaciones y las rutas de aprobación y rechazo. Después, explicar y aprobar las páginas de resultado de cotización.
 
 ## Bitácora breve
 
@@ -191,4 +197,6 @@ Revisar el panel del cliente, sus accesos rápidos y su actividad reciente en el
 | 17/11/2026 | El autor realizó la revisión visual y las pruebas manuales de acceso y registro. | Campos obligatorios, contraseñas, términos y navegación funcionan conforme al incremento actual. | Registrar el incremento en Git y continuar con el panel del cliente. |
 | 17/11/2026 | Se implementó el panel con acciones de cotización, estados y actividad reciente basada en mocks. | La ruta `/panel` compila y los accesos enlazan con las rutas planificadas. | Revisión visual y formularios de cotización. |
 | 17/11/2026 | El autor probó el acceso al panel, acciones, actividad reciente y diseño adaptable. | El incremento del panel funciona conforme al alcance actual. | Registrar el incremento en Git y continuar con cotizaciones. |
+| 17/11/2026 | Se implementaron formularios de auto y médico con controles compartidos y reglas provisionales aisladas. | Ambos formularios compilan, validan entradas y navegan hacia aprobación o rechazo. | Revisión manual y páginas de resultado. |
+| 17/11/2026 | El autor probó ambos formularios, valores límite y decisiones aprobadas y rechazadas. | Las validaciones, adaptación visual y navegación funcionan conforme a las reglas provisionales. | Registrar el incremento y construir las páginas de resultado. |
 

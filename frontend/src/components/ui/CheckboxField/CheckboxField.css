@@ -1,0 +1,5 @@
+.checkbox-control { align-items: flex-start; display: flex; gap: 0.75rem; }
+.checkbox-control input { height: 1.15rem; margin: 0.2rem 0 0; width: 1.15rem; }
+.checkbox-control label { cursor: pointer; display: grid; gap: 0.2rem; }
+.checkbox-control label strong { font-size: 0.95rem; }
+.checkbox-control label span { color: var(--color-text); font-size: 0.85rem; line-height: 1.4; }

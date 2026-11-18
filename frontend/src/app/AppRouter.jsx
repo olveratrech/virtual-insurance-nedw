@@ -4,6 +4,8 @@ import AccessPage from '../pages/AccessPage/AccessPage.jsx'
 import ComingSoonPage from '../pages/ComingSoonPage/ComingSoonPage.jsx'
 import DashboardPage from '../pages/DashboardPage/DashboardPage.jsx'
 import HomePage from '../pages/HomePage/HomePage.jsx'
+import AutoQuotePage from '../pages/AutoQuotePage/AutoQuotePage.jsx'
+import MedicalQuotePage from '../pages/MedicalQuotePage/MedicalQuotePage.jsx'
 
 function AppRouter() {
   return (
@@ -13,8 +15,8 @@ function AppRouter() {
           <Route index element={<HomePage />} />
           <Route path="acceso" element={<AccessPage />} />
           <Route path="panel" element={<DashboardPage />} />
-          <Route path="cotizar/auto" element={<ComingSoonPage title="Cotización de seguro de auto" />} />
-          <Route path="cotizar/medico" element={<ComingSoonPage title="Cotización de seguro médico" />} />
+          <Route path="cotizar/auto" element={<AutoQuotePage />} />
+          <Route path="cotizar/medico" element={<MedicalQuotePage />} />
           <Route path="cotizaciones/aprobada" element={<ComingSoonPage title="Cotización aprobada" />} />
           <Route path="cotizaciones/rechazada" element={<ComingSoonPage title="Cotización rechazada" />} />
           <Route path="contratacion/pago" element={<ComingSoonPage title="Contratación y pago" />} />
