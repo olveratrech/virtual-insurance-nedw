@@ -81,20 +81,25 @@
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
 - `SelectField` y `CheckboxField` complementan los controles reutilizables del formulario.
 - `quoteRules.js` aísla reglas académicas provisionales de aprobación y rechazo para cada seguro.
+- `QuoteResultPage` presenta resultados aprobados y rechazados mediante renderizado condicional.
+- `quoteResultData.js` mantiene precios, coberturas, beneficios y mensajes ficticios fuera de la interfaz.
+- Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
 - El panel, sus accesos rápidos, la actividad reciente y su adaptación a una columna aprobaron la revisión visual y las pruebas manuales del autor.
 - Los formularios de auto y médico, sus validaciones, reglas provisionales y recorridos de aprobación y rechazo aprobaron la revisión visual y las pruebas manuales del autor.
+- Las páginas de resultado aprobado y rechazado de ambos seguros aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar resultados, pago, póliza y cancelación.
+- Implementar pago, póliza y cancelación.
 - Incorporar estados de carga, validación y error.
 - Sustituir posteriormente los datos simulados por servicios HTTP.
 - Conectar acceso y registro con Spring Security y eliminar la simulación local.
 - Sustituir `quoteRules.js` por estrategias del backend y reglas definitivas documentadas.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
+- Conservar los valores capturados cuando el usuario selecciona “Revisar datos” desde una cotización rechazada; actualmente el formulario se reinicia al montarse nuevamente.
 
 ### Modelo relacional
 
@@ -183,7 +188,7 @@
 
 ## Próxima acción
 
-Revisar visualmente ambos formularios, sus validaciones y las rutas de aprobación y rechazo. Después, explicar y aprobar las páginas de resultado de cotización.
+Revisar los cuatro resultados posibles de ambos seguros y sus acciones. Después, explicar y aprobar la pantalla de contratación y pago simulado.
 
 ## Bitácora breve
 
@@ -199,4 +204,6 @@ Revisar visualmente ambos formularios, sus validaciones y las rutas de aprobaci�
 | 17/11/2026 | El autor probó el acceso al panel, acciones, actividad reciente y diseño adaptable. | El incremento del panel funciona conforme al alcance actual. | Registrar el incremento en Git y continuar con cotizaciones. |
 | 17/11/2026 | Se implementaron formularios de auto y médico con controles compartidos y reglas provisionales aisladas. | Ambos formularios compilan, validan entradas y navegan hacia aprobación o rechazo. | Revisión manual y páginas de resultado. |
 | 17/11/2026 | El autor probó ambos formularios, valores límite y decisiones aprobadas y rechazadas. | Las validaciones, adaptación visual y navegación funcionan conforme a las reglas provisionales. | Registrar el incremento y construir las páginas de resultado. |
+| 17/11/2026 | Se implementó una página configurable para resultados aprobados y rechazados. | Muestra producto, cobertura y precio cuando procede; el rechazo no genera operaciones. | Revisión manual y contratación/pago. |
+| 17/11/2026 | El autor probó los cuatro resultados, acciones y diseño visual. | Aprobación, rechazo y navegación funcionan conforme al alcance actual. | Preservar datos al revisar una cotización rechazada y registrar el incremento. |
 

@@ -6,6 +6,7 @@ import DashboardPage from '../pages/DashboardPage/DashboardPage.jsx'
 import HomePage from '../pages/HomePage/HomePage.jsx'
 import AutoQuotePage from '../pages/AutoQuotePage/AutoQuotePage.jsx'
 import MedicalQuotePage from '../pages/MedicalQuotePage/MedicalQuotePage.jsx'
+import QuoteResultPage from '../pages/QuoteResultPage/QuoteResultPage.jsx'
 
 function AppRouter() {
   return (
@@ -17,8 +18,8 @@ function AppRouter() {
           <Route path="panel" element={<DashboardPage />} />
           <Route path="cotizar/auto" element={<AutoQuotePage />} />
           <Route path="cotizar/medico" element={<MedicalQuotePage />} />
-          <Route path="cotizaciones/aprobada" element={<ComingSoonPage title="Cotización aprobada" />} />
-          <Route path="cotizaciones/rechazada" element={<ComingSoonPage title="Cotización rechazada" />} />
+          <Route path="cotizaciones/aprobada" element={<QuoteResultPage outcome="approved" />} />
+          <Route path="cotizaciones/rechazada" element={<QuoteResultPage outcome="rejected" />} />
           <Route path="contratacion/pago" element={<ComingSoonPage title="Contratación y pago" />} />
           <Route path="polizas/:polizaId" element={<ComingSoonPage title="Detalle de póliza" />} />
           <Route path="polizas/:polizaId/cancelacion" element={<ComingSoonPage title="Solicitud de cancelación" />} />

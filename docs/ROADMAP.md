@@ -91,7 +91,7 @@ Patrones que se aplicarán cuando aporten valor:
 
 - [x] Implementar inicio, acceso y panel del cliente.
 - [x] Implementar formularios de cotización de auto y médica.
-- [ ] Implementar resultados aprobado y rechazado.
+- [x] Implementar resultados aprobado y rechazado.
 - [ ] Implementar pago, detalle de póliza y cancelación.
 - [ ] Crear componentes reutilizables.
 - [ ] Crear servicios y adaptadores temporales con datos simulados.
