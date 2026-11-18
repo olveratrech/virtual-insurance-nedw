@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout.jsx'
 import AccessPage from '../pages/AccessPage/AccessPage.jsx'
 import ComingSoonPage from '../pages/ComingSoonPage/ComingSoonPage.jsx'
+import DashboardPage from '../pages/DashboardPage/DashboardPage.jsx'
 import HomePage from '../pages/HomePage/HomePage.jsx'
 
 function AppRouter() {
@@ -11,7 +12,7 @@ function AppRouter() {
         <Route element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="acceso" element={<AccessPage />} />
-          <Route path="panel" element={<ComingSoonPage title="Panel del cliente" />} />
+          <Route path="panel" element={<DashboardPage />} />
           <Route path="cotizar/auto" element={<ComingSoonPage title="Cotización de seguro de auto" />} />
           <Route path="cotizar/medico" element={<ComingSoonPage title="Cotización de seguro médico" />} />
           <Route path="cotizaciones/aprobada" element={<ComingSoonPage title="Cotización aprobada" />} />

@@ -89,7 +89,7 @@ Patrones que se aplicarán cuando aporten valor:
 
 **Fecha objetivo:** 19–20 de noviembre
 
-- [ ] Implementar inicio, acceso y panel del cliente.
+- [x] Implementar inicio, acceso y panel del cliente.
 - [ ] Implementar formularios de cotización de auto y médica.
 - [ ] Implementar resultados aprobado y rechazado.
 - [ ] Implementar pago, detalle de póliza y cancelación.

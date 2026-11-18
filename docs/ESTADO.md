@@ -73,13 +73,16 @@
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
 - El envío correcto navega al panel, pero la autenticación continúa siendo simulada y no persiste usuarios.
+- `DashboardPage` implementa el panel del cliente con saludo, accesos rápidos y actividad reciente.
+- `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
+- `dashboardData.js` separa los datos ficticios de los componentes que los presentan.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
+- El panel, sus accesos rápidos, la actividad reciente y su adaptación a una columna aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar panel del cliente.
 - Implementar ambos formularios de cotización.
 - Implementar resultados, pago, póliza y cancelación.
 - Incorporar estados de carga, validación y error.
@@ -174,7 +177,7 @@
 
 ## Próxima acción
 
-Revisar acceso, registro y sus validaciones en el navegador. Después, explicar y aprobar los componentes del panel del cliente antes de implementarlos.
+Revisar el panel del cliente, sus accesos rápidos y su actividad reciente en el navegador. Después, explicar y aprobar la estructura compartida de los formularios de cotización.
 
 ## Bitácora breve
 
@@ -186,4 +189,6 @@ Revisar acceso, registro y sus validaciones en el navegador. Después, explicar 
 | 17/11/2026 | Se implementaron rutas, layout compartido, encabezado, inicio, tarjetas reutilizables y marcadores de trabajo pendiente. | Primer incremento React compila y pasa el analizador estático. | Revisión visual e implementación posterior de acceso y registro. |
 | 17/11/2026 | Se implementaron acceso, registro, campos reutilizables y validación local. | La ruta `/acceso` compila y navega al panel tras una simulación válida. | Sustituir la simulación por Spring Security e implementar el panel. |
 | 17/11/2026 | El autor realizó la revisión visual y las pruebas manuales de acceso y registro. | Campos obligatorios, contraseñas, términos y navegación funcionan conforme al incremento actual. | Registrar el incremento en Git y continuar con el panel del cliente. |
+| 17/11/2026 | Se implementó el panel con acciones de cotización, estados y actividad reciente basada en mocks. | La ruta `/panel` compila y los accesos enlazan con las rutas planificadas. | Revisión visual y formularios de cotización. |
+| 17/11/2026 | El autor probó el acceso al panel, acciones, actividad reciente y diseño adaptable. | El incremento del panel funciona conforme al alcance actual. | Registrar el incremento en Git y continuar con cotizaciones. |
 
