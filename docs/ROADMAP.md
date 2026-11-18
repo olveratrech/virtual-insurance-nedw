@@ -99,7 +99,7 @@ Patrones que se aplicarán cuando aporten valor:
 - [x] Conservar los datos al volver desde una cotización rechazada.
 - [x] Conservar la cotización al volver desde pago.
 - [x] Mantener el tipo de seguro durante toda la navegación.
-- [ ] Validar fechas pasadas y vencimientos de demostración.
+- [x] Validar fechas pasadas y vencimientos de demostración.
 - [ ] Mostrar una página no encontrada para pólizas inexistentes.
 
 **Entregable:** recorrido completo navegable en React, todavía sin backend real.

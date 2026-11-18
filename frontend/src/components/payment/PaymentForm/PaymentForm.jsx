@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import SelectField from '../../ui/SelectField/SelectField.jsx'
+import { getTodayInputValue, isCardExpirationExpired, isPastDate } from '../../../utils/dateValidation.js'
 import './PaymentForm.css'
 
 const initialValues = { coverageStart: '', paymentMode: 'MONTHLY', cardholderName: '', cardNumber: '', expiration: '', cvv: '', acceptsTerms: false }
@@ -10,6 +11,7 @@ const initialValues = { coverageStart: '', paymentMode: 'MONTHLY', cardholderNam
 function PaymentForm({ onPay, paymentError, backState }) {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
+  const today = getTodayInputValue()
 
   function updateField(event) {
     const { name, type, checked, value } = event.target
@@ -21,9 +23,11 @@ function PaymentForm({ onPay, paymentError, backState }) {
     const errorsFound = {}
     const normalizedCard = values.cardNumber.replace(/\s/g, '')
     if (!values.coverageStart) errorsFound.coverageStart = 'Selecciona el inicio de vigencia.'
+    else if (isPastDate(values.coverageStart)) errorsFound.coverageStart = 'El inicio de vigencia no puede estar en el pasado.'
     if (!values.cardholderName.trim()) errorsFound.cardholderName = 'Ingresa el nombre de la tarjeta.'
     if (!/^\d{16}$/.test(normalizedCard)) errorsFound.cardNumber = 'Ingresa 16 dígitos.'
     if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(values.expiration)) errorsFound.expiration = 'Utiliza el formato MM/AA.'
+    else if (isCardExpirationExpired(values.expiration)) errorsFound.expiration = 'La tarjeta ficticia está vencida.'
     if (!/^\d{3}$/.test(values.cvv)) errorsFound.cvv = 'Ingresa 3 dígitos.'
     if (!values.acceptsTerms) errorsFound.acceptsTerms = 'Debes aceptar los términos para continuar.'
     setErrors(errorsFound)
@@ -33,7 +37,7 @@ function PaymentForm({ onPay, paymentError, backState }) {
   return (
     <form className="payment-form" onSubmit={handleSubmit} noValidate>
       <div className="payment-form__grid">
-        <FormField id="coverage-start" label="Inicio de vigencia" name="coverageStart" type="date" value={values.coverageStart} onChange={updateField} error={errors.coverageStart} />
+        <FormField id="coverage-start" label="Inicio de vigencia" name="coverageStart" type="date" min={today} value={values.coverageStart} onChange={updateField} error={errors.coverageStart} />
         <SelectField id="payment-mode" label="Modalidad de pago" name="paymentMode" value={values.paymentMode} onChange={updateField}>
           <option value="MONTHLY">Mensual</option><option value="ANNUAL">Anual</option>
         </SelectField>
