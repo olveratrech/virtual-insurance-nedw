@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout.jsx'
 import AccessPage from '../pages/AccessPage/AccessPage.jsx'
-import ComingSoonPage from '../pages/ComingSoonPage/ComingSoonPage.jsx'
 import DashboardPage from '../pages/DashboardPage/DashboardPage.jsx'
 import HomePage from '../pages/HomePage/HomePage.jsx'
 import AutoQuotePage from '../pages/AutoQuotePage/AutoQuotePage.jsx'
@@ -10,6 +9,7 @@ import QuoteResultPage from '../pages/QuoteResultPage/QuoteResultPage.jsx'
 import PaymentPage from '../pages/PaymentPage/PaymentPage.jsx'
 import PolicyPage from '../pages/PolicyPage/PolicyPage.jsx'
 import CancellationPage from '../pages/CancellationPage/CancellationPage.jsx'
+import NotFoundPage from '../pages/NotFoundPage/NotFoundPage.jsx'
 
 function AppRouter() {
   return (
@@ -26,7 +26,7 @@ function AppRouter() {
           <Route path="contratacion/pago" element={<PaymentPage />} />
           <Route path="polizas/:polizaId" element={<PolicyPage />} />
           <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
-          <Route path="*" element={<ComingSoonPage title="Página no encontrada" />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

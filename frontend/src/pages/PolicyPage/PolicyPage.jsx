@@ -5,15 +5,20 @@ import PaymentOverview from '../../components/policy/PaymentOverview/PaymentOver
 import PolicyDetails from '../../components/policy/PolicyDetails/PolicyDetails.jsx'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
 import { policyData } from '../../mocks/policyData.js'
+import NotFoundPage from '../NotFoundPage/NotFoundPage.jsx'
 import './PolicyPage.css'
 
 function PolicyPage() {
   const { polizaId } = useParams()
   const location = useLocation()
   const [downloadMessage, setDownloadMessage] = useState('')
-  const policy = policyData[polizaId] ?? policyData['802145']
+  const policy = policyData[polizaId]
   const issuedAfterPayment = location.state?.payment?.status === 'APPROVED'
   const cancellationRequested = location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
+
+  if (!policy) {
+    return <NotFoundPage title="Póliza no encontrada" message="No existe una póliza accesible con ese identificador." backTo="/panel" backLabel="Volver al panel" />
+  }
 
   function handleDownload(document) {
     setDownloadMessage(`Descarga simulada: ${document.name}. El PDF real se generará desde el backend.`)

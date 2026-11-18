@@ -1,16 +1,20 @@
 import { useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import CancellationForm from '../../components/cancellation/CancellationForm/CancellationForm.jsx'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
 import { createCancellationRequest } from '../../mocks/cancellationRules.js'
 import { policyData } from '../../mocks/policyData.js'
+import NotFoundPage from '../NotFoundPage/NotFoundPage.jsx'
 import './CancellationPage.css'
 
 function CancellationPage() {
   const { polizaId } = useParams()
-  const location = useLocation()
   const [request, setRequest] = useState(null)
-  const policy = location.state?.policy ?? policyData[polizaId] ?? policyData['802145']
+  const policy = policyData[polizaId]
+
+  if (!policy) {
+    return <NotFoundPage title="Póliza no encontrada" message="No se puede solicitar la cancelación porque la póliza indicada no existe." backTo="/panel" backLabel="Volver al panel" />
+  }
 
   function handleSubmitRequest(values) {
     setRequest(createCancellationRequest(values))

@@ -1,0 +1,4 @@
+.not-found-page { align-items: flex-start; display: flex; flex-direction: column; gap: var(--space-lg); padding-bottom: 5rem; padding-top: 5rem; }
+.not-found-page h1, .not-found-page p { margin: 0; }
+.not-found-page > p:not(.eyebrow) { color: var(--color-text); line-height: 1.6; max-width: 42rem; }
+.not-found-page code { background: var(--color-neutral-soft); border-radius: var(--radius-sm); color: var(--color-text); padding: 0.5rem 0.75rem; }

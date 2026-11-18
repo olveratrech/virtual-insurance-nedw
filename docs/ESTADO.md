@@ -68,7 +68,7 @@
 - `Header` implementa identidad, navegación principal y acceso.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
-- `ComingSoonPage` funciona actualmente como página no encontrada; todas las rutas principales ya tienen pantalla propia.
+- `NotFoundPage` atiende rutas y pólizas inexistentes; todas las rutas principales tienen pantalla propia.
 - `AccessPage` implementa acceso y registro con formularios separados.
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
@@ -126,7 +126,7 @@
 - Corrección terminada: conservar los campos capturados al utilizar “Revisar datos” desde un rechazo.
 - Corrección terminada: conservar el tipo de seguro y la cotización al volver desde pago.
 - Corrección terminada: rechazar fechas pasadas de vigencia y cancelación, y vencimientos ficticios expirados.
-- Mostrar recurso no encontrado cuando `:polizaId` no exista, en lugar de utilizar silenciosamente la póliza de auto de respaldo.
+- Corrección terminada: mostrar recurso no encontrado cuando `:polizaId` no exista, sin utilizar una póliza de respaldo.
 
 ### Pendientes que dependen de integración
 
@@ -142,7 +142,7 @@
 
 - Incorporar pruebas automatizadas de reglas, validaciones y navegación crítica.
 - Eliminar recursos demostrativos de Vite que ya no se utilizan.
-- Reemplazar `ComingSoonPage` por una página 404 con nombre definitivo.
+- Corrección terminada: `NotFoundPage` sustituyó a `ComingSoonPage` como página 404 definitiva.
 - Revisar el encabezado móvil, accesibilidad y consistencia final contra Figma.
 
 ### Modelo relacional
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Corregir la pérdida de datos y del tipo de seguro al retroceder, completar validaciones temporales de fechas y manejar pólizas inexistentes. Después, preparar la base de datos mínima y el contrato de la API.
+Preparar la base de datos mínima para NEDW y definir el contrato inicial de la API antes de crear el backend Spring Boot.
 
 ## Bitácora breve
 
@@ -261,4 +261,5 @@ Corregir la pérdida de datos y del tipo de seguro al retroceder, completar vali
 | 18/11/2026 | Se conservaron los valores al regresar desde una cotización rechazada. | Auto y médico restauran campos y selecciones durante la navegación; el autor verificó ambos recorridos. | Corregir el regreso desde pago sin perder el tipo de seguro. |
 | 18/11/2026 | Se conservó la cotización y su tipo al volver desde pago. | Auto regresa a auto, médico regresa a médico y cada pago aprobado emite la póliza ficticia correspondiente; el autor verificó los recorridos. | Validar fechas pasadas y vencimientos ficticios. |
 | 18/11/2026 | Se centralizaron las validaciones de fechas y vencimiento ficticio. | Vigencia y cancelación rechazan fechas pasadas; la tarjeta rechaza meses expirados; el autor verificó los límites. | Manejar identificadores de póliza inexistentes. |
+| 18/11/2026 | Se agregó una página 404 y se eliminaron respaldos silenciosos para pólizas desconocidas. | Rutas, pólizas y cancelaciones inexistentes muestran un error explícito; el autor verificó rutas válidas e inválidas. | Registrar la corrección y preparar la persistencia mínima. |
 
