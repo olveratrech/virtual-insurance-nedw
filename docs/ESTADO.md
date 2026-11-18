@@ -88,6 +88,10 @@
 - `PaymentForm` valida vigencia, modalidad, tarjeta ficticia, vencimiento, CVV y términos.
 - `paymentRules.js` permite demostrar pagos aprobados y rechazados sin procesar cargos reales.
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
+- `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
+- `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
+- `policyData.js` contiene pólizas ficticias diferenciadas para auto y seguro médico.
+- La descarga de documentos está simulada y no genera todavía archivos PDF reales.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
@@ -95,14 +99,16 @@
 - Los formularios de auto y médico, sus validaciones, reglas provisionales y recorridos de aprobación y rechazo aprobaron la revisión visual y las pruebas manuales del autor.
 - Las páginas de resultado aprobado y rechazado de ambos seguros aprobaron la revisión visual y las pruebas manuales del autor.
 - La contratación, las validaciones y los pagos simulados aprobado y rechazado aprobaron la revisión visual y las pruebas manuales del autor.
+- Las pólizas de auto y médica, pagos, documentos simulados y diseño adaptable aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend
 
-- Implementar detalle de póliza y cancelación.
+- Implementar solicitud de cancelación.
 - Incorporar estados de carga, validación y error.
 - Sustituir posteriormente los datos simulados por servicios HTTP.
 - Conectar acceso y registro con Spring Security y eliminar la simulación local.
 - Sustituir `quoteRules.js` por estrategias del backend y reglas definitivas documentadas.
+- Generar pólizas y comprobantes PDF reales desde el backend.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 - Conservar los valores capturados cuando el usuario selecciona “Revisar datos” desde una cotización rechazada; actualmente el formulario se reinicia al montarse nuevamente.
 
@@ -193,7 +199,7 @@
 
 ## Próxima acción
 
-Revisar validaciones y resultados aprobado y rechazado del pago simulado. Después, explicar y aprobar el detalle de póliza.
+Revisar pólizas de auto y médica, pagos, documentos y diseño adaptable. Después, explicar y aprobar la solicitud de cancelación.
 
 ## Bitácora breve
 
@@ -213,4 +219,6 @@ Revisar validaciones y resultados aprobado y rechazado del pago simulado. Despu�
 | 17/11/2026 | El autor probó los cuatro resultados, acciones y diseño visual. | Aprobación, rechazo y navegación funcionan conforme al alcance actual. | Preservar datos al revisar una cotización rechazada y registrar el incremento. |
 | 17/11/2026 | Se implementó contratación y pago simulado con tarjetas de demostración. | Un pago aprobado continúa a póliza y uno rechazado permanece sin emitirla. | Revisión manual y detalle de póliza. |
 | 18/11/2026 | El autor probó validaciones, pago aprobado, pago rechazado y adaptación visual. | El flujo impide emitir una póliza cuando el simulador rechaza el pago. | Registrar el incremento y construir el detalle de póliza. |
+| 18/11/2026 | Se implementó el detalle de póliza para auto y médico, pagos y documentos simulados. | La ruta dinámica muestra la póliza correspondiente y conserva únicamente el resultado del pago. | Revisión manual y solicitud de cancelación. |
+| 18/11/2026 | El autor probó ambas pólizas, emisión posterior al pago, documentos y adaptación visual. | El detalle funciona conforme al alcance actual y no expone datos de tarjeta. | Registrar el incremento y construir cancelación. |
 

@@ -20,7 +20,8 @@ function PaymentPage() {
       return
     }
 
-    navigate('/polizas/802145', {
+    const policyId = quoteType === 'MEDICAL' ? '802146' : '802145'
+    navigate(`/polizas/${policyId}`, {
       state: { quoteType, quote, payment: { ...result, paymentMode: values.paymentMode, coverageStart: values.coverageStart } },
     })
   }

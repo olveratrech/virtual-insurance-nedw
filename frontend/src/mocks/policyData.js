@@ -1,0 +1,38 @@
+export const policyData = {
+  '802145': {
+    policyNumber: 'VI-802145',
+    status: 'ACTIVA',
+    type: 'AUTO',
+    productName: 'Seguro de auto',
+    coverageName: 'Cobertura amplia',
+    validFrom: '26 de noviembre de 2026',
+    validUntil: '25 de noviembre de 2027',
+    insuredLabel: 'Vehículo asegurado',
+    insuredValue: 'Mazda 3 · 2024',
+    paymentMode: 'Mensual',
+    nextPayment: '26 de diciembre de 2026',
+    lastPayment: '$1,040.00 MXN · APLICADO',
+    documents: [
+      { id: 'policy-pdf', name: 'Póliza de seguro', format: 'PDF' },
+      { id: 'payment-receipt', name: 'Comprobante de pago', format: 'PDF' },
+    ],
+  },
+  '802146': {
+    policyNumber: 'VI-802146',
+    status: 'ACTIVA',
+    type: 'MEDICAL',
+    productName: 'Seguro médico',
+    coverageName: 'Cobertura médica individual',
+    validFrom: '26 de noviembre de 2026',
+    validUntil: '25 de noviembre de 2027',
+    insuredLabel: 'Persona asegurada',
+    insuredValue: 'Emmanuel Trejo Olvera',
+    paymentMode: 'Mensual',
+    nextPayment: '26 de diciembre de 2026',
+    lastPayment: '$1,550.00 MXN · APLICADO',
+    documents: [
+      { id: 'policy-pdf', name: 'Póliza de seguro', format: 'PDF' },
+      { id: 'payment-receipt', name: 'Comprobante de pago', format: 'PDF' },
+    ],
+  },
+}
