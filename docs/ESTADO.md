@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 18 de noviembre de 2026  
+**Última actualización:** 19 de noviembre de 2026
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -8,9 +8,9 @@
 
 - El alcance prioritario de NEDW está definido.
 - El anteproyecto y el prototipo navegable existen.
-- Existe una primera versión del modelo relacional, todavía en revisión lógica.
+- El modelo relacional reducido para NEDW y el contrato inicial de la API están definidos.
 - El entorno Oracle Database 26ai está disponible en Docker.
-- El frontend React está en desarrollo; el backend Spring Boot y la integración con Oracle todavía no han comenzado.
+- El recorrido principal de React funciona con datos simulados; Spring Boot y la integración con Oracle todavía no han comenzado.
 
 ## Estado por área
 
@@ -18,11 +18,12 @@
 |---|---|---|
 | Anteproyecto | Terminado | Documento base disponible en `anteproyecto/`. |
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
-| Modelo relacional | Parcial | Primera versión modular; faltan ajustes y reglas para el recorrido web. |
-| Oracle | Entorno disponible | Software funcional; falta desplegar el esquema definitivo del proyecto. |
-| Frontend React | En desarrollo | Base Vite sustituida por rutas, layout compartido, página de inicio y marcadores de pantallas pendientes. |
-| Backend Spring Boot | No iniciado | Se implementará después de estabilizar contratos y modelo mínimo. |
-| Spring Security | No iniciado | Falta decidir y documentar el mecanismo concreto de autenticación. |
+| Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
+| Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
+| Oracle | Entorno verificado | CDB `FREE`, PDB `ETOBDA_S1` y servicio accesible desde macOS por `localhost:1522`; falta desplegar el esquema. |
+| Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
+| Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
+| Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | No iniciadas | Se definirán junto con cada módulo y el recorrido integral. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
@@ -35,6 +36,8 @@
 - `RESUMEN-ASPECTOS-GENERALES.md`: diagnóstico previo del proyecto.
 - `docs/ROADMAP.md`: fases, entregables y fechas objetivo.
 - `docs/ESTADO.md`: registro vivo del avance.
+- `docs/MODELO-RELACIONAL-NEDW.md`: tablas, relaciones, cardinalidades y reglas del modelo aprobado.
+- `docs/CONTRATO-API.md`: contrato entre React y Spring Boot.
 - `anteproyecto/`: documentación entregable del anteproyecto.
 
 ### Diseño de interfaz
@@ -147,29 +150,30 @@
 
 ### Modelo relacional
 
-- Incluye clientes, cotizaciones, pólizas, pagos y atención a siniestros.
-- Se encuentra separado visualmente en módulos funcionales.
-- El discriminante del tipo de siniestro se obtiene por medio de póliza y cotización.
+- Modelo lógico para NEDW aprobado a partir del diagrama Mermaid revisado por el autor.
+- Conserva género, sexo, tarjetas ficticias y tipos de tarjeta.
+- Sustituye pago por intento de pago y ubica la emisión de póliza después de un intento aprobado.
+- Obtiene la cotización de una póliza por medio del intento de pago, sin una segunda relación directa.
+- Incorpora estados e historial de póliza, solicitudes de cancelación y documentos.
+- Excluye biometría, siniestros y drogas del alcance NEDW.
 
-#### Pendientes del modelo
+#### Pendientes del modelo físico
 
-- Cerrar la separación lógica de módulos.
 - Traducir tipos de ER/Studio a tipos apropiados de Oracle Database 26ai.
-- Definir identidades o secuencias, índices y restricciones `UNIQUE`.
+- Definir columnas identidad, índices y restricciones.
+- Diseñar el cifrado de números de tarjeta sin persistir CVV.
 - Implementar reglas que involucran varias tablas.
-- Agregar estados e historial mínimo de póliza.
-- Modelar intentos y resultados de pago.
-- Modelar solicitud y resolución de cancelación.
-- Preparar DDL y datos ficticios reproducibles.
+- Preparar DDL, catálogos, datos ficticios y pruebas reproducibles.
 
 ### Entorno Oracle
 
 - Oracle Database 26ai está instalado en Oracle Linux dentro de Docker.
-- El entorno está preparado para crear la CDB desde cero.
+- La CDB `FREE` y la PDB `ETOBDA_S1` están abiertas y verificadas.
+- El servicio `etobda_s1.fi.unam` es accesible desde macOS mediante `localhost:1522`.
 
 #### Pendientes de Oracle para NEDW
 
-- Crear o confirmar CDB/PDB y usuarios requeridos.
+- Crear el usuario local y esquema `VI_APP` en `ETOBDA_S1`.
 - Desplegar el esquema mínimo de la aplicación.
 - Probar restricciones y operaciones principales.
 - Documentar comandos reproducibles de creación y carga.
@@ -202,6 +206,9 @@
 - No se integrarán pagos reales.
 - Se implementarán patrones solamente cuando resuelvan necesidades concretas.
 - La aplicación se desarrollará individualmente.
+- La autenticación usará sesiones administradas por Spring Security mediante cookie `HttpOnly` y protección CSRF.
+- La API utilizará DTO explícitos y no devolverá entidades JPA directamente.
+- Solo se admitirán números de tarjeta ficticios documentados; el número se almacenará cifrado y el CVV nunca se persistirá.
 - `docs/ESTADO.md` será el registro operativo y la base de contexto entre fases.
 - Antes de implementar una sección se explicarán sus componentes, archivos, responsabilidades y relaciones para permitir que el autor pueda modificarlos con autonomía.
 
@@ -232,7 +239,7 @@
 
 ## Próxima acción
 
-Preparar la base de datos mínima para NEDW y definir el contrato inicial de la API antes de crear el backend Spring Boot.
+Revisar el contrato API definido y preparar el DDL reproducible para Oracle Database 26ai.
 
 ## Bitácora breve
 
@@ -262,4 +269,6 @@ Preparar la base de datos mínima para NEDW y definir el contrato inicial de la 
 | 18/11/2026 | Se conservó la cotización y su tipo al volver desde pago. | Auto regresa a auto, médico regresa a médico y cada pago aprobado emite la póliza ficticia correspondiente; el autor verificó los recorridos. | Validar fechas pasadas y vencimientos ficticios. |
 | 18/11/2026 | Se centralizaron las validaciones de fechas y vencimiento ficticio. | Vigencia y cancelación rechazan fechas pasadas; la tarjeta rechaza meses expirados; el autor verificó los límites. | Manejar identificadores de póliza inexistentes. |
 | 18/11/2026 | Se agregó una página 404 y se eliminaron respaldos silenciosos para pólizas desconocidas. | Rutas, pólizas y cancelaciones inexistentes muestran un error explícito; el autor verificó rutas válidas e inválidas. | Registrar la corrección y preparar la persistencia mínima. |
+| 19/11/2026 | Se aprobó el modelo relacional reducido para NEDW. | Quedaron definidas las tablas, relaciones, cardinalidades, estados, pagos, cancelaciones y tratamiento de tarjetas ficticias. | Traducir el modelo aprobado a DDL de Oracle. |
+| 19/11/2026 | Se definió el contrato REST inicial entre React y Spring Boot. | Se documentaron autenticación, catálogos, registro, cotizaciones, intentos de pago, pólizas, documentos, cancelaciones, errores y transacciones. | Revisar el contrato y crear el DDL reproducible. |
 
