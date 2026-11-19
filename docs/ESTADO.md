@@ -20,7 +20,7 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Entorno verificado | CDB `FREE`, PDB `ETOBDA_S1` y servicio accesible desde macOS por `localhost:1522`; falta desplegar el esquema. |
+| Oracle | Esquema de aplicación verificado | Usuario local `VI_APP` operativo en `ETOBDA_S1`, con conexión, cuota y privilegios comprobados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
@@ -173,7 +173,6 @@
 
 #### Pendientes de Oracle para NEDW
 
-- Crear el usuario local y esquema `VI_APP` en `ETOBDA_S1`.
 - Desplegar el esquema mínimo de la aplicación.
 - Probar restricciones y operaciones principales.
 - Documentar comandos reproducibles de creación y carga.
@@ -239,7 +238,7 @@
 
 ## Próxima acción
 
-Revisar el contrato API definido y preparar el DDL reproducible para Oracle Database 26ai.
+Preparar y probar las tablas de catálogo del esquema `VI_APP`.
 
 ## Bitácora breve
 
@@ -271,4 +270,7 @@ Revisar el contrato API definido y preparar el DDL reproducible para Oracle Data
 | 18/11/2026 | Se agregó una página 404 y se eliminaron respaldos silenciosos para pólizas desconocidas. | Rutas, pólizas y cancelaciones inexistentes muestran un error explícito; el autor verificó rutas válidas e inválidas. | Registrar la corrección y preparar la persistencia mínima. |
 | 19/11/2026 | Se aprobó el modelo relacional reducido para NEDW. | Quedaron definidas las tablas, relaciones, cardinalidades, estados, pagos, cancelaciones y tratamiento de tarjetas ficticias. | Traducir el modelo aprobado a DDL de Oracle. |
 | 19/11/2026 | Se definió el contrato REST inicial entre React y Spring Boot. | Se documentaron autenticación, catálogos, registro, cotizaciones, intentos de pago, pólizas, documentos, cancelaciones, errores y transacciones. | Revisar el contrato y crear el DDL reproducible. |
+| 19/11/2026 | Se preparó el primer incremento de Oracle. | Se documentó la estructura reproducible y se creó el script administrativo no destructivo para `VI_APP`. | Ejecutar el script, probar la conexión y registrar el resultado antes de crear tablas. |
+| 19/11/2026 | Se ejecutó el script administrativo en `ETOBDA_S1`. | El usuario local `VI_APP` quedó creado, abierto y con `USERS` como tablespace predeterminado. | Verificar conexión, cuota y privilegios efectivos antes del primer DDL. |
+| 19/11/2026 | Se verificó la sesión de `VI_APP`. | La conexión a `ETOBDA_S1`, la cuota de `USERS` y los privilegios mínimos son correctos. | Crear y probar las tablas de catálogo. |
 
