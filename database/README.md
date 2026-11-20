@@ -28,11 +28,58 @@ database/
 ## Orden previsto de ejecución
 
 1. `admin/01_crear_usuario.sql`
-2. Scripts futuros de `schema/`, en orden numérico.
-3. Scripts futuros de `seed/`, en orden numérico.
-4. Scripts futuros de `tests/`, en orden numérico.
+2. `admin/02_ajustar_privilegios.sql`, solo para instalaciones creadas antes de incorporar `create sequence`.
+3. Scripts de `schema/`, en orden numérico.
+4. Scripts de `seed/`, en orden numérico.
+5. Scripts de `tests/`, en orden numérico.
 
 No existe un script automático para eliminar el esquema. Cualquier limpieza destructiva se documentará y ejecutará manualmente después de confirmar su objetivo.
+
+## Estilo SQL
+
+- Las palabras reservadas, tablas, columnas, restricciones y variables se escriben en minúsculas.
+- Los identificadores no se encierran entre comillas dobles.
+- Oracle almacena los identificadores no entrecomillados en mayúsculas dentro del diccionario de datos; esto no cambia la forma de escribir las consultas.
+- Los nombres físicos permanecen en español y las claves de catálogo siguen el contrato API.
+
+## Ejecución desde SQL Developer en VS Code
+
+La conexión principal de desarrollo es `VI_APP@ETOBDA_S1`. Antes de cada incremento puede verificarse con:
+
+```sql
+show con_name;
+show user;
+```
+
+Ejecuta los archivos completos mediante la opción **Run Script**, respetando el orden:
+
+```text
+schema/01_catalogos.sql
+seed/01_catalogos.sql
+tests/01_catalogos.sql
+```
+
+Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si un script de estructura falla parcialmente, revisa primero el error y los objetos alcanzados. Después de corregir la causa puede ejecutarse nuevamente: conservará las tablas existentes y continuará con las faltantes.
+
+## Política de repetibilidad
+
+- Los scripts de creación consultan el diccionario de Oracle antes de crear cada objeto.
+- Si una tabla ya existe, se conserva y el script continúa con las siguientes.
+- Una tabla existente no se elimina, reemplaza ni modifica silenciosamente.
+- Los datos iniciales se cargan con `merge`; volver a ejecutarlos actualiza descripciones y agrega claves faltantes sin duplicarlas.
+- Los scripts de pruebas son de solo lectura y pueden ejecutarse cuantas veces sea necesario.
+- Las pruebas verifican que los objetos conservados tengan las identidades, PK, claves únicas y datos esperados.
+- Un error diferente a la existencia previa de un objeto debe conservarse visible y detener la revisión del incremento.
+- Los cambios posteriores usarán comprobaciones específicas antes de cada `alter`.
+
+Esta estrategia permite continuar después de un fallo intermedio sin convertir los scripts en procesos destructivos. No pretende reparar automáticamente una tabla que haya sido alterada manualmente; una diferencia estructural debe detectarse, revisarse y corregirse mediante un cambio explícito.
+
+Después de actualizar los scripts del repositorio, conserva la copia operativa:
+
+```bash
+mkdir -p /Users/olveratrech/unam/nedw/scripts
+cp -R database/. /Users/olveratrech/unam/nedw/scripts/
+```
 
 ## Primera ejecución: crear `VI_APP`
 
@@ -45,6 +92,8 @@ El script administrativo:
 - asigna `USERS` como tablespace predeterminado y `TEMP` como temporal;
 - limita su cuota a 500 MiB;
 - concede únicamente los privilegios necesarios para construir el esquema.
+
+Las columnas `identity` requieren que el propietario pueda crear su generador de secuencia interno. Por ello `VI_APP` recibe tanto `create table` como `create sequence`.
 
 ### Sincronizar los scripts con el directorio compartido
 

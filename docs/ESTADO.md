@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 19 de noviembre de 2026
+**Última actualización:** 20 de noviembre de 2026
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -20,12 +20,12 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Esquema de aplicación verificado | Usuario local `VI_APP` operativo en `ETOBDA_S1`, con conexión, cuota y privilegios comprobados. |
+| Oracle | Catálogos desplegados y verificados | Siete catálogos creados en `VI_APP`; creación y carga repetibles, restricciones y conteos comprobados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
-| Pruebas | No iniciadas | Se definirán junto con cada módulo y el recorrido integral. |
+| Pruebas | Parciales | El incremento de catálogos cuenta con pruebas SQL aprobadas; faltan entidades transaccionales y pruebas de aplicación. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -174,6 +174,7 @@
 #### Pendientes de Oracle para NEDW
 
 - Desplegar el esquema mínimo de la aplicación.
+- Ejecutar y verificar el incremento de catálogos desde SQL Developer en VS Code.
 - Probar restricciones y operaciones principales.
 - Documentar comandos reproducibles de creación y carga.
 
@@ -238,7 +239,7 @@
 
 ## Próxima acción
 
-Preparar y probar las tablas de catálogo del esquema `VI_APP`.
+Preparar las tablas `CLIENTE` y `TARJETA`, sus relaciones, datos ficticios y pruebas reproducibles.
 
 ## Bitácora breve
 
@@ -273,4 +274,7 @@ Preparar y probar las tablas de catálogo del esquema `VI_APP`.
 | 19/11/2026 | Se preparó el primer incremento de Oracle. | Se documentó la estructura reproducible y se creó el script administrativo no destructivo para `VI_APP`. | Ejecutar el script, probar la conexión y registrar el resultado antes de crear tablas. |
 | 19/11/2026 | Se ejecutó el script administrativo en `ETOBDA_S1`. | El usuario local `VI_APP` quedó creado, abierto y con `USERS` como tablespace predeterminado. | Verificar conexión, cuota y privilegios efectivos antes del primer DDL. |
 | 19/11/2026 | Se verificó la sesión de `VI_APP`. | La conexión a `ETOBDA_S1`, la cuota de `USERS` y los privilegios mínimos son correctos. | Crear y probar las tablas de catálogo. |
+| 19/11/2026 | Se preparó el incremento de catálogos. | Siete tablas, datos iniciales repetibles y pruebas de estructura quedaron documentados en scripts separados. | Ejecutar los tres scripts desde la conexión `VI_APP@ETOBDA_S1`. |
+| 19/11/2026 | La primera ejecución de catálogos devolvió `ORA-01031`. | Se identificó la falta de `create sequence`, requerido por las columnas `identity`; no se creó la primera tabla. | Conceder y verificar el privilegio, después repetir el script de estructura. |
+| 20/11/2026 | Se concedió `create sequence` y se repitió el incremento de catálogos. | La creación repetible, la carga mediante `merge` y todas las pruebas de tablas, columnas, identidades, restricciones y conteos finalizaron correctamente. | Registrar el incremento y continuar con clientes y tarjetas. |
 
