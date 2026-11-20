@@ -77,12 +77,18 @@ El registro utiliza `multipart/form-data` y requiere un token CSRF obtenido prev
 ```text
 GET  /auth/csrf
 POST /auth/registro
+POST /auth/login
 GET  /auth/me
+POST /auth/logout
 ```
 
 La parte `data` contiene el JSON de registro con `Content-Type: application/json`; la parte `photo` contiene un JPEG o PNG de hasta 2 MiB. Un registro correcto crea una sesión mediante cookie `JSESSIONID` con `HttpOnly` y `SameSite=Lax`.
 
 `GET /auth/me` responde `200` con la cookie de sesión y `401` sin ella. La URL `/clientes/me/foto` ya forma parte de las respuestas, pero su descarga se implementará junto con los recursos protegidos del cliente.
+
+El login recibe JSON con `email` y `password`. Normaliza el correo, verifica el hash BCrypt almacenado y devuelve el mismo problema `401 INVALID_CREDENTIALS` tanto para un correo inexistente como para una contraseña incorrecta. Un login correcto crea una sesión autenticada.
+
+Login y logout requieren el encabezado CSRF. `POST /auth/logout` invalida la sesión, elimina la cookie `JSESSIONID` y responde `204` sin cuerpo.
 
 ## Compilar y probar
 

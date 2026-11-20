@@ -9,8 +9,8 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 9 pruebas automatizadas | 9 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
-| API REST | 6 comprobaciones HTTP manuales | Aprobado |
+| Spring Boot | 16 pruebas automatizadas | 16 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación y recorridos funcionales manuales | Aprobado para la fase con datos simulados |
 
 ## Oracle Database
@@ -56,8 +56,15 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `RegistrationIntegrationTests.rejectsTermsNotAccepted` | Validación/integración | Rechazo cuando no se aceptan los términos | Aprobada |
 | `RegistrationIntegrationTests.rejectsUnknownGender` | Validación/integración | Rechazo de un género inexistente | Aprobada |
 | `RegistrationIntegrationTests.rejectsRegistrationWithoutCsrfToken` | Seguridad/integración | Protección CSRF del registro | Aprobada |
+| `AuthenticationIntegrationTests.logsInWithValidCredentialsAndCreatesSession` | Autenticación/integración | Login BCrypt correcto, respuesta y sesión autenticada | Aprobada |
+| `AuthenticationIntegrationTests.rejectsIncorrectPasswordWithGenericResponse` | Seguridad/integración | Rechazo genérico de contraseña incorrecta | Aprobada |
+| `AuthenticationIntegrationTests.rejectsUnknownEmailWithSameGenericResponse` | Seguridad/integración | Mismo rechazo genérico para un correo inexistente | Aprobada |
+| `AuthenticationIntegrationTests.rejectsLoginWithoutCsrfToken` | Seguridad/integración | Protección CSRF del login | Aprobada |
+| `AuthenticationIntegrationTests.normalizesEmailBeforeAuthentication` | Autenticación/integración | Eliminación de espacios y normalización de mayúsculas del correo | Aprobada |
+| `AuthenticationIntegrationTests.logsOutAndInvalidatesSession` | Sesión/integración | Logout, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
+| `AuthenticationIntegrationTests.rejectsSessionCheckAfterLogout` | Seguridad/integración | Rechazo de consulta de sesión después del logout | Aprobada |
 
-Última ejecución confirmada: **9 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **16 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -69,6 +76,9 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `POST /catalogos/generos` | Seguridad HTTP | `403` |
 | `POST /auth/registro` con multipart, CSRF y datos válidos | E2E parcial HTTP | `201`, cliente persistido y sesión creada |
 | `GET /auth/me` | Sesión HTTP | `200` con cookie; `401` sin cookie |
+| `POST /auth/login` con cuenta académica y CSRF | Autenticación HTTP | `200`, datos básicos y sesión autenticada |
+| `POST /auth/logout` con sesión y CSRF | Seguridad HTTP | `204`, cuerpo vacío y expiración de `JSESSIONID` |
+| `GET /auth/me` después del logout | Regresión de sesión HTTP | `401`; la sesión anterior dejó de autenticar |
 
 No se registran contraseñas, tokens CSRF, identificadores de sesión ni otros secretos como evidencia.
 
@@ -97,10 +107,10 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 - Oracle devolvió `ORA-01031` al crear columnas `identity`; se agregó el privilegio mínimo `create sequence` a `VI_APP` y se repitió exitosamente el incremento.
 - Oracle devolvió `ORA-25006` porque un BLOB aparecía en `update of`; se corrigió el trigger de intentos de pago y las pruebas posteriores aprobaron.
 - La primera prueba del catálogo asumía un orden semántico distinto al orden real de las identidades. Se corrigió para verificar los registros y el orden por ID sin imponer significado comercial a la PK.
+- La validación inicial del login rechazaba con `422` un correo con espacios exteriores antes de normalizarlo. La limpieza se trasladó al constructor del DTO y las 16 pruebas aprobaron.
 
 ## Pendientes de prueba
 
-- Login y logout con BCrypt, sesión y CSRF.
 - Descarga protegida de la fotografía del cliente.
 - Integración de React con la API real, sustituyendo los mocks.
 - Autorización por propietario sobre cotizaciones, pagos, pólizas, documentos y cancelaciones.

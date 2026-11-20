@@ -9,8 +9,8 @@
 - El alcance prioritario de NEDW está definido.
 - El anteproyecto y el prototipo navegable existen.
 - El modelo relacional reducido para NEDW y el contrato inicial de la API están definidos.
-- El entorno Oracle Database 26ai está disponible en Docker.
-- El recorrido principal de React funciona con datos simulados; Spring Boot y la integración con Oracle todavía no han comenzado.
+- El esquema funcional está desplegado y probado en Oracle Database 26ai dentro de Docker.
+- El recorrido principal de React funciona con datos simulados; Spring Boot ya está conectado con Oracle y la integración con React todavía no ha comenzado.
 
 ## Estado por área
 
@@ -22,8 +22,8 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
-| Backend Spring Boot | Registro aprobado | Nueve pruebas pasan; registro multipart, BCrypt, Oracle, sesión y `/auth/me` fueron verificados manualmente. |
-| Spring Security | Sesión parcial verificada | CSRF, rotación de sesión, cookie `HttpOnly`, `SameSite=Lax`, autorización y `401` funcionan; falta login y logout. |
+| Backend Spring Boot | Login y logout aprobados | Las 16 pruebas automatizadas y el recorrido HTTP manual pasan correctamente. |
+| Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Implementar login y logout con BCrypt, sesión, errores uniformes y pruebas contra la cuenta académica registrada.
+Integrar en React la obtención de CSRF, login, consulta de sesión y logout reales.
 
 ## Bitácora breve
 
@@ -296,4 +296,7 @@ Implementar login y logout con BCrypt, sesión, errores uniformes y pruebas cont
 | 20/11/2026 | Se preparó el registro seguro de clientes. | Entidad y repositorio, validaciones, fotografía, BCrypt, errores uniformes, CSRF, sesión explícita y siete pruebas de integración compilan correctamente. | Ejecutar pruebas con Oracle y realizar el recorrido HTTP multipart. |
 | 20/11/2026 | Se verificó el registro seguro de clientes. | Nueve pruebas pasaron; el registro respondió `201`, `/auth/me` respondió `200` con sesión y `401` sin cookie, sin exponer datos sensibles. | Registrar el incremento; implementar login, logout y posteriormente la descarga de fotografía. |
 | 20/11/2026 | Se consolidó el inventario de pruebas en `docs/PRUEBAS.md`. | Oracle, Spring Boot, API REST y React cuentan con nombres, tipos, alcances y resultados confirmados en un solo documento. | Mantener el registro en cada incremento e implementar login y logout. |
+| 20/11/2026 | Se preparó el incremento de login y logout. | Adaptador de usuarios, autenticación BCrypt, sesión, errores genéricos, logout estándar y siete pruebas nuevas compilan con `BUILD SUCCESS`. | Ejecutar las dieciséis pruebas contra Oracle y verificar el recorrido HTTP manual. |
+| 20/11/2026 | Se ejecutaron las pruebas de login y logout. | Después de corregir la normalización previa a `@Email`, las 16 pruebas terminaron sin fallos, errores ni omisiones. | Verificar login, sesión y logout mediante solicitudes HTTP reales. |
+| 20/11/2026 | Se verificó manualmente el recorrido HTTP de autenticación. | Login y consulta de sesión respondieron `200`, logout respondió `204` y la sesión invalidada recibió `401`; `JSESSIONID` quedó expirada. | Registrar el incremento e integrar la autenticación real en React. |
 

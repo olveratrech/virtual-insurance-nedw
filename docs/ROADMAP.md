@@ -127,7 +127,7 @@ Patrones que se aplicarán cuando aporten valor:
 - [ ] Implementar Strategy para cotizaciones de auto y médicas.
 - [ ] Implementar transiciones válidas de estados.
 - [ ] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
-- [ ] Configurar registro, autenticación y autorización con Spring Security.
+- [x] Configurar registro, autenticación y autorización inicial con Spring Security.
 - [ ] Exponer endpoints del recorrido prioritario.
 - [ ] Documentar el contrato básico de la API.
 

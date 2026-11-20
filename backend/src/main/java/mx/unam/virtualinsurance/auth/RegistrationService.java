@@ -76,29 +76,6 @@ public class RegistrationService {
 		);
 	}
 
-	@Transactional(readOnly = true)
-	public AuthenticationStatusResponse findAuthenticatedClient(Long clientId) {
-		Client client = clientRepository.findById(clientId)
-			.orElseThrow(() -> new ApiException(
-				HttpStatus.UNAUTHORIZED,
-				"INVALID_CREDENTIALS",
-				"La sesion no es valida",
-				"No existe un cliente para la sesion actual.",
-				"invalid-session"
-			));
-
-		SessionClientResponse response = new SessionClientResponse(
-			client.getClientId(),
-			client.getName(),
-			client.getPaternalSurname(),
-			client.getMaternalSurname(),
-			client.getEmail(),
-			PHOTO_URL
-		);
-
-		return new AuthenticationStatusResponse(true, response);
-	}
-
 	private void validateAdult(LocalDate birthDate) {
 		if (birthDate.isAfter(LocalDate.now().minusYears(18))) {
 			throw validation("El cliente debe ser mayor de edad.");
