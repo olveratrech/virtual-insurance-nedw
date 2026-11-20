@@ -20,7 +20,7 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Cotizaciones verificadas | Cotizaciones, subtipos, triggers de especialización e historial automático desplegados y probados. |
+| Oracle | Pagos y pólizas verificados | Intentos, pólizas, historial y documentos desplegados; reglas cruzadas, concurrencia y rollback probados correctamente. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Preparar intentos de pago, pólizas, historial de póliza y documentos con sus pruebas reproducibles.
+Preparar solicitudes de cancelación, sincronización de estados y pruebas reproducibles.
 
 ## Bitácora breve
 
@@ -281,4 +281,7 @@ Preparar intentos de pago, pólizas, historial de póliza y documentos con sus p
 | 20/11/2026 | Se ejecutó y verificó el incremento de clientes y tarjetas. | La segunda ejecución conservó los objetos, la carga actualizó sin duplicar y las pruebas confirmaron relaciones, índices, hash y fotografía de 70 bytes. | Registrar el incremento y continuar con cotizaciones. |
 | 20/11/2026 | Se preparó el incremento de cotizaciones. | Cuatro tablas, especialización protegida, historial automático, cuatro casos académicos y pruebas repetibles quedaron listos. | Ejecutar dos veces estructura y carga, y después las pruebas. |
 | 20/11/2026 | Se ejecutó y verificó el incremento de cotizaciones. | Estructura y carga repetibles, cuatro triggers válidos, subtipos exclusivos e historial inicial pasaron todas las pruebas. | Registrar el incremento y continuar con pagos y pólizas. |
+| 20/11/2026 | Se preparó el incremento de pagos y pólizas. | Cuatro tablas, reglas concurrentes de aprobación, emisión controlada, historial, documentos y pruebas con rollback quedaron listos. | Ejecutar dos veces la estructura y después las pruebas transaccionales. |
+| 20/11/2026 | El primer trigger de pagos devolvió `ORA-25006`. | Oracle no admite el BLOB `comprobante_pdf` en `update of`; el trigger se cambió para ejecutarse ante cualquier actualización. | Repetir el script idempotente y ejecutar las pruebas. |
+| 20/11/2026 | Se repitió y verificó el incremento de pagos y pólizas. | Los tres triggers quedaron válidos; aprobación única, emisión, modalidad, costo, historial, documento y rollback pasaron todas las pruebas. | Registrar el incremento y continuar con cancelaciones. |
 
