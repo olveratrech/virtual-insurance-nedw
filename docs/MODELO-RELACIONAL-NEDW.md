@@ -473,13 +473,9 @@ Para ajustarse al modelo conservado, el frontend deberá recibir mantenimiento e
 - El CVV no se almacenará, ni siquiera cifrado.
 - Las contraseñas se protegerán mediante hash de una sola vía; no mediante cifrado reversible.
 - Las claves criptográficas y contraseñas de Oracle se proporcionarán mediante variables de entorno o un mecanismo de secretos y se excluirán de Git.
-- La estrategia concreta de cifrado de `NUMERO_TARJETA` se definirá antes de crear el DDL físico para que el tipo Oracle sea compatible con el valor cifrado.
+- Spring cifrará `NUMERO_TARJETA` con AES-256-GCM y Oracle almacenará el paquete binario en `RAW(128)`.
 
 ## 9. Decisiones pendientes antes del DDL
 
-- Definir los valores exactos permitidos para `SEXO` y el catálogo inicial de `GENERO`.
-- Decidir cómo se capturará y almacenará `FOTO` en el registro.
-- Elegir cifrado en la aplicación o cifrado transparente de Oracle para `NUMERO_TARJETA`.
-- Definir tipos físicos, tamaños, columnas identidad, índices y restricciones para Oracle Database 26ai.
 - Diseñar la restricción que garantice un solo intento aprobado utilizable por cotización.
 

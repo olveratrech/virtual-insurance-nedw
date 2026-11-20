@@ -57,6 +57,10 @@ Ejecuta los archivos completos mediante la opción **Run Script**, respetando el
 schema/01_catalogos.sql
 seed/01_catalogos.sql
 tests/01_catalogos.sql
+
+schema/02_clientes_tarjetas.sql
+seed/02_clientes.sql
+tests/02_clientes_tarjetas.sql
 ```
 
 Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si un script de estructura falla parcialmente, revisa primero el error y los objetos alcanzados. Después de corregir la causa puede ejecutarse nuevamente: conservará las tablas existentes y continuará con las faltantes.
@@ -202,7 +206,27 @@ SERVICIO = etobda_s1.fi.unam
 | Fotografía y PDF | `BLOB` |
 | Factura JSON | `JSON` |
 | Factura XML | `XMLTYPE` |
-| Número de tarjeta cifrado | `RAW`, tamaño final por confirmar con la implementación AES-GCM |
+| Número de tarjeta cifrado | `RAW(128)` con cifrado AES-256-GCM en Spring |
 
 Las columnas identidad pueden tener saltos por concurrencia, caché o transacciones revertidas. La continuidad visible se resuelve con los folios y números de negocio, no con las PK.
+
+## Cifrado del número de tarjeta
+
+- Spring cifrará el número ficticio antes de enviarlo a Oracle.
+- El algoritmo previsto es `AES/GCM/NoPadding` con una clave de 256 bits.
+- Cada cifrado utilizará un IV aleatorio nuevo; cifrar dos veces el mismo número no producirá el mismo valor.
+- El valor binario empaquetará una versión de formato, el IV y el texto cifrado con su etiqueta de autenticación.
+- `raw(128)` ofrece espacio suficiente para ese paquete y permite versionar el formato sin cambiar la tabla.
+- La clave se proporcionará mediante una variable de entorno y nunca se almacenará en Oracle o Git.
+- No se aplica una restricción `unique` al valor cifrado porque el IV aleatorio hace que valores iguales produzcan bytes diferentes.
+- La API no devolverá el número completo y el CVV nunca llegará a la base.
+
+## Cliente académico inicial
+
+```text
+Correo: emmanuel.demo@virtual-insurance.test
+Contraseña: Virtual2026!
+```
+
+El script almacena únicamente el hash BCrypt. La fotografía es una imagen PNG mínima válida. No se carga una tarjeta desde SQL: debe crearse desde Spring para garantizar que pase por el servicio de cifrado.
 
