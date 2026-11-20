@@ -71,6 +71,8 @@ tests/04_pagos_polizas.sql
 
 schema/05_cancelaciones.sql
 tests/05_cancelaciones.sql
+
+tests/99_recorrido_completo.sql
 ```
 
 Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si un script de estructura falla parcialmente, revisa primero el error y los objetos alcanzados. Después de corregir la causa puede ejecutarse nuevamente: conservará las tablas existentes y continuará con las faltantes.
@@ -87,6 +89,18 @@ Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si
 - Los cambios posteriores usarán comprobaciones específicas antes de cada `alter`.
 
 Esta estrategia permite continuar después de un fallo intermedio sin convertir los scripts en procesos destructivos. No pretende reparar automáticamente una tabla que haya sido alterada manualmente; una diferencia estructural debe detectarse, revisarse y corregirse mediante un cambio explícito.
+
+## Prueba E2E transaccional
+
+`tests/99_recorrido_completo.sql` es la prueba de aceptación integral de Oracle. Utiliza el esquema y los catálogos ya desplegados, crea un cliente temporal y recorre:
+
+- cotizaciones de auto y médicas aprobadas y rechazadas;
+- pagos aprobados y rechazados;
+- emisión de pólizas y documentos;
+- cancelaciones aprobadas y rechazadas;
+- errores de negocio críticos y transiciones no permitidas.
+
+El script termina con `rollback` tanto al aprobar como al fallar. Las consultas finales deben devolver cero y confirman que no quedaron datos E2E persistidos.
 
 Después de actualizar los scripts del repositorio, conserva la copia operativa:
 

@@ -25,7 +25,7 @@
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
-| Pruebas | Parciales | El incremento de catálogos cuenta con pruebas SQL aprobadas; faltan entidades transaccionales y pruebas de aplicación. |
+| Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Definir y crear el esqueleto del backend Spring Boot antes de implementar el primer módulo vertical.
+Definir y crear el esqueleto del backend Spring Boot antes de implementar el primer módulo vertical conectado con Oracle.
 
 ## Bitácora breve
 
@@ -286,4 +286,6 @@ Definir y crear el esqueleto del backend Spring Boot antes de implementar el pri
 | 20/11/2026 | Se repitió y verificó el incremento de pagos y pólizas. | Los tres triggers quedaron válidos; aprobación única, emisión, modalidad, costo, historial, documento y rollback pasaron todas las pruebas. | Registrar el incremento y continuar con cancelaciones. |
 | 20/11/2026 | Se preparó el incremento de cancelaciones. | La tabla, restricciones, índices, sincronización de estados, exclusión concurrente y pruebas con rollback quedaron listas. | Ejecutar dos veces la estructura y después las pruebas transaccionales. |
 | 20/11/2026 | Se ejecutó y verificó el incremento de cancelaciones. | La repetibilidad, fechas, exclusión de duplicados, resoluciones, sincronización con póliza, historial y rollback pasaron correctamente. | Registrar el cierre de Oracle e iniciar la preparación de Spring Boot. |
+| 20/11/2026 | Se preparó la prueba E2E transaccional de Oracle. | Se cubren seis recorridos de auto y médico, resultados positivos y negativos, emisión, documentos, cancelaciones y rollback integral. | Ejecutar la prueba de aceptación y revisar cualquier diferencia antes de Spring Boot. |
+| 20/11/2026 | Se ejecutó y aprobó la prueba E2E transaccional de Oracle. | Los seis recorridos, ocho rechazos esperados, relaciones, historiales y conteos fueron correctos; las cinco comprobaciones posteriores al rollback devolvieron cero. | Registrar la prueba y preparar la estructura de Spring Boot. |
 
