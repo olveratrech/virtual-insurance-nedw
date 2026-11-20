@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 16 pruebas automatizadas | 16 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 17 pruebas automatizadas | 17 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación real y recorridos funcionales | Aprobado; autenticación integrada y módulos comerciales todavía simulados |
 
@@ -20,7 +20,7 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 | Prueba | Tipo | Alcance principal | Resultado |
 |---|---|---|---|
 | `tests/01_catalogos.sql` | Estructura e integración | Tablas de catálogo, columnas, identidades, PK, restricciones únicas, checks y datos iniciales | Aprobada |
-| `tests/02_clientes_tarjetas.sql` | Estructura e integración | Cliente, género y sexo, BCrypt, fotografía BLOB de 70 bytes, tarjetas, tipos e índices de FK | Aprobada |
+| `tests/02_clientes_tarjetas.sql` | Estructura e integración | Cliente, género y sexo, BCrypt, fotografía BLOB opcional, conservación de 70 bytes en la cuenta académica, tarjetas, tipos e índices de FK | Aprobada |
 | `tests/03_cotizaciones.sql` | Integración transaccional | Cotizaciones de auto y médicas, especialización exclusiva, estados e historial automático | Aprobada |
 | `tests/04_pagos_polizas.sql` | Integración transaccional | Intentos de pago, aprobación única, emisión de póliza, modalidad, costo, documentos e historial | Aprobada |
 | `tests/05_cancelaciones.sql` | Integración transaccional | Fechas, solicitudes duplicadas, resolución, sincronización de estado, historial y protección contra borrado | Aprobada |
@@ -50,6 +50,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `VirtualInsuranceApiApplicationTests.contextLoads` | Contexto/integración | Arranque del contexto de Spring y configuración del datasource | Aprobada |
 | `GenderRepositoryIntegrationTests.findsAllSeededGendersOrderedById` | Repositorio/integración | Lectura de los cinco géneros reales y orden ascendente por ID | Aprobada |
 | `RegistrationIntegrationTests.registersClientHashesPasswordStoresPhotoAndCreatesSession` | API/integración | Alta del cliente, hash BCrypt, BLOB de fotografía y creación de sesión | Aprobada |
+| `RegistrationIntegrationTests.registersClientWithoutOptionalPhoto` | API/integración | Alta multipart sin fotografía, `FOTO = NULL`, `photoUrl = null` y sesión | Aprobada |
 | `RegistrationIntegrationTests.rejectsDuplicateEmail` | Regla de negocio/integración | Rechazo de correo duplicado | Aprobada |
 | `RegistrationIntegrationTests.rejectsUnderageClient` | Validación/integración | Rechazo de cliente menor de edad | Aprobada |
 | `RegistrationIntegrationTests.rejectsContentThatDoesNotMatchDeclaredPhotoType` | Seguridad/integración | Validación del contenido real de la fotografía frente a su tipo declarado | Aprobada |
@@ -64,7 +65,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `AuthenticationIntegrationTests.logsOutAndInvalidatesSession` | Sesión/integración | Logout, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
 | `AuthenticationIntegrationTests.rejectsSessionCheckAfterLogout` | Seguridad/integración | Rechazo de consulta de sesión después del logout | Aprobada |
 
-Última ejecución confirmada: **16 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **17 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 

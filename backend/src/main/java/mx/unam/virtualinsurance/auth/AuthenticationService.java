@@ -66,7 +66,7 @@ public class AuthenticationService {
 			client.getPaternalSurname(),
 			client.getMaternalSurname(),
 			client.getEmail(),
-			PHOTO_URL
+			client.hasPhoto() ? PHOTO_URL : null
 		);
 
 		return new AuthenticationStatusResponse(true, response);

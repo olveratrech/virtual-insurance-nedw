@@ -36,7 +36,7 @@ public class AuthenticationController {
 	@PostMapping("/registro")
 	public ResponseEntity<RegistrationResponse> register(
 		@RequestPart("data") @Valid RegistrationRequest data,
-		@RequestPart("photo") MultipartFile photo,
+		@RequestPart(value = "photo", required = false) MultipartFile photo,
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {

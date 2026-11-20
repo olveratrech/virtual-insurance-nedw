@@ -254,5 +254,5 @@ Correo: emmanuel.demo@virtual-insurance.test
 Contraseña: Virtual2026!
 ```
 
-El script almacena únicamente el hash BCrypt. La fotografía es una imagen PNG mínima válida. No se carga una tarjeta desde SQL: debe crearse desde Spring para garantizar que pase por el servicio de cifrado.
+El script almacena únicamente el hash BCrypt. La cuenta académica conserva una imagen PNG mínima válida, aunque `CLIENTE.FOTO` permite `NULL` para nuevos clientes que no proporcionen fotografía. No se carga una tarjeta desde SQL: debe crearse desde Spring para garantizar que pase por el servicio de cifrado.
 

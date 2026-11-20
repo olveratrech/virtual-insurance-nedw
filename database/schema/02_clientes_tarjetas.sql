@@ -46,6 +46,33 @@ declare
             dbms_output.put_line('conservado: ' || lower(p_indice));
         end if;
     end crear_indice_si_falta;
+
+    procedure permitir_nulos_si_requerido(
+        p_tabla   varchar2,
+        p_columna varchar2
+    ) is
+        v_no_nula number;
+    begin
+        select count(*)
+          into v_no_nula
+          from user_tab_columns
+         where table_name = upper(p_tabla)
+           and column_name = upper(p_columna)
+           and nullable = 'N';
+
+        if v_no_nula = 1 then
+            execute immediate
+                'alter table ' || dbms_assert.simple_sql_name(p_tabla)
+                || ' modify (' || dbms_assert.simple_sql_name(p_columna) || ' null)';
+            dbms_output.put_line(
+                'columna ahora opcional: ' || lower(p_tabla) || '.' || lower(p_columna)
+            );
+        else
+            dbms_output.put_line(
+                'columna opcional conservada: ' || lower(p_tabla) || '.' || lower(p_columna)
+            );
+        end if;
+    end permitir_nulos_si_requerido;
 begin
     v_usuario := sys_context('USERENV', 'CURRENT_USER');
     v_contenedor := sys_context('USERENV', 'CON_NAME');
@@ -73,7 +100,7 @@ begin
                 identificador_fiscal varchar2(40 char)  not null,
                 email                varchar2(250 char) not null,
                 contrasena           varchar2(255 char) not null,
-                foto                 blob               not null,
+                foto                 blob,
                 genero_id            number(12),
                 constraint pk_cliente primary key (cliente_id),
                 constraint uk_cliente_identificador_fiscal unique (identificador_fiscal),
@@ -93,6 +120,8 @@ begin
             )
         ~'
     );
+
+    permitir_nulos_si_requerido('cliente', 'foto');
 
     crear_tabla_si_falta(
         'tarjeta',

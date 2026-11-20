@@ -63,7 +63,7 @@ Cardinalidad:
 | `IDENTIFICADOR_FISCAL` | No nulo, único |
 | `EMAIL` | No nulo, único |
 | `CONTRASENA` | No nulo; contendrá el hash, nunca texto plano |
-| `FOTO` | No nulo |
+| `FOTO` | BLOB opcional; `NULL` cuando el cliente no proporciona fotografía |
 | `GENERO_ID` | FK a `GENERO`, nulo permitido |
 
 Cardinalidades:
@@ -460,7 +460,7 @@ Para ajustarse al modelo conservado, el frontend deberá recibir mantenimiento e
 - Capturar fecha de nacimiento.
 - Capturar sexo y género, respetando que género sea opcional según el modelo.
 - Capturar identificador fiscal.
-- Incorporar fotografía o definir un valor inicial controlado si continúa siendo obligatoria.
+- Permitir fotografía opcional y mostrar un avatar de interfaz cuando no exista.
 - Permitir seleccionar una tarjeta almacenada o registrar una nueva durante la contratación.
 - Enviar el CVV únicamente con la solicitud del intento de pago y nunca volver a recibirlo en una respuesta.
 - Mostrar el resultado persistido del intento aprobado o rechazado.

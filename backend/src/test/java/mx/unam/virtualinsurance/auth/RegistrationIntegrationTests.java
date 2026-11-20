@@ -1,6 +1,7 @@
 package mx.unam.virtualinsurance.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -72,6 +73,21 @@ class RegistrationIntegrationTests {
 			.andExpect(jsonPath("$.authenticated").value(true))
 			.andExpect(jsonPath("$.client.id").value(client.getClientId()))
 			.andExpect(jsonPath("$.client.email").value(EMAIL));
+	}
+
+	@Test
+	void registersClientWithoutOptionalPhoto() throws Exception {
+		mockMvc.perform(registrationRequest(
+			registrationJson(EMAIL, FISCAL_ID, adultBirthDate(), true, null),
+			null
+		).with(csrf()))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.email").value(EMAIL))
+			.andExpect(jsonPath("$.photoUrl").value(nullValue()));
+
+		var client = clientRepository.findByEmail(EMAIL).orElseThrow();
+		assertThat(client.hasPhoto()).isFalse();
+		assertThat(client.getPhoto()).isNull();
 	}
 
 	@Test
@@ -155,7 +171,8 @@ class RegistrationIntegrationTests {
 			MediaType.APPLICATION_JSON_VALUE,
 			json.getBytes(StandardCharsets.UTF_8)
 		);
-		return multipart("/auth/registro").file(data).file(photo);
+		var request = multipart("/auth/registro").file(data);
+		return photo == null ? request : request.file(photo);
 	}
 
 	private String registrationJson(

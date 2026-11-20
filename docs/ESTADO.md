@@ -20,9 +20,9 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
+| Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
 | Frontend React | Login real aprobado | Contexto de sesión, cliente HTTP, CSRF, panel protegido, encabezado y logout consumen Spring y fueron verificados. |
-| Backend Spring Boot | Login y logout aprobados | Las 16 pruebas automatizadas y el recorrido HTTP manual pasan correctamente. |
+| Backend Spring Boot | Registro y autenticación aprobados | Las 17 pruebas automatizadas pasan; fotografía opcional, login, sesión y logout están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Adaptar el formulario ampliado de registro al contrato multipart real y a los catálogos de Oracle.
+Adaptar el formulario ampliado de registro en React al contrato multipart con fotografía opcional y catálogos reales.
 
 ## Bitácora breve
 
@@ -301,4 +301,6 @@ Adaptar el formulario ampliado de registro al contrato multipart real y a los ca
 | 20/11/2026 | Se verificó manualmente el recorrido HTTP de autenticación. | Login y consulta de sesión respondieron `200`, logout respondió `204` y la sesión invalidada recibió `401`; `JSESSIONID` quedó expirada. | Registrar el incremento e integrar la autenticación real en React. |
 | 20/11/2026 | Se preparó la integración de autenticación en React. | Cliente HTTP con CSRF y cookies, contexto de sesión, login real, panel protegido, encabezado y logout compilan; `lint` y `build` pasan. | Ejecutar las pruebas manuales en el navegador antes de registrar el incremento. |
 | 20/11/2026 | Se verificó la autenticación real desde React. | Redirección, rechazo de credenciales, login, saludo, persistencia tras recarga, acceso autenticado, logout, protección posterior y diseño adaptable pasaron correctamente. | Registrar el incremento y conectar el formulario ampliado de registro. |
+| 20/11/2026 | Se preparó el cambio de fotografía obligatoria a opcional. | DDL idempotente, entidad nullable, multipart opcional, respuesta condicional, contrato y una prueba nueva compilan correctamente. | Ejecutar el DDL y su prueba en Oracle antes de correr las 17 pruebas de Spring. |
+| 20/11/2026 | Se verificó la fotografía opcional en Oracle y Spring. | La migración y su repetición pasaron, la fotografía académica persistió y las 17 pruebas de Spring terminaron correctamente. | Registrar el incremento y construir el formulario ampliado de React. |
 

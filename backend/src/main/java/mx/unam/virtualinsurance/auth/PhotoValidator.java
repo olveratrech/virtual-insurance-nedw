@@ -17,7 +17,7 @@ public class PhotoValidator {
 
 	public byte[] validateAndRead(MultipartFile photo) {
 		if (photo == null || photo.isEmpty()) {
-			throw unsupported("La fotografia es obligatoria.");
+			return null;
 		}
 		if (photo.getSize() > MAX_SIZE) {
 			throw unsupported("La fotografia supera el tamano permitido de 2 MiB.");

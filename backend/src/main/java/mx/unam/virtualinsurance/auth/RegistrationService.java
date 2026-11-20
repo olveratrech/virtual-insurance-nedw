@@ -120,7 +120,7 @@ public class RegistrationService {
 			gender,
 			client.getFiscalIdentifier(),
 			client.getEmail(),
-			PHOTO_URL
+			client.hasPhoto() ? PHOTO_URL : null
 		);
 	}
 

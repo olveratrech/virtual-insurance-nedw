@@ -15,7 +15,7 @@ Este documento define el límite entre React y Spring Boot antes de implementar 
 
 - JSON: `application/json`.
 - Errores: `application/problem+json`.
-- Registro con fotografía: `multipart/form-data`.
+- Registro con fotografía opcional: `multipart/form-data`.
 - Fechas: `YYYY-MM-DD`.
 - Fecha y hora: ISO 8601 con zona, por ejemplo `2026-11-19T14:30:00-06:00`.
 - Importes: números JSON, sin `$`, comas ni texto de moneda.
@@ -187,7 +187,7 @@ Respuesta `200`:
 No requiere sesión previa. Usa `multipart/form-data`:
 
 - Parte `data`: JSON con tipo `application/json`.
-- Parte `photo`: archivo JPEG o PNG.
+- Parte opcional `photo`: archivo JPEG o PNG.
 
 Contenido de `data`:
 
@@ -216,7 +216,7 @@ Validaciones iniciales:
 - La contraseña tiene como mínimo 8 caracteres.
 - La confirmación de contraseña se valida exclusivamente en React y no se envía a la API.
 - `acceptsTerms` debe ser `true` y no se almacena como atributo de `CLIENTE` en esta versión.
-- La fotografía es obligatoria, JPEG o PNG, con máximo de 2 MiB.
+- La fotografía es opcional. Si se proporciona, debe ser JPEG o PNG, coincidir con el tipo declarado y tener un máximo de 2 MiB.
 
 Respuesta `201`:
 
@@ -240,6 +240,8 @@ Respuesta `201`:
 ```
 
 El registro crea la sesión automáticamente.
+
+`photoUrl` es `null` cuando el cliente no proporciona fotografía. No se almacena un BLOB vacío ni una imagen predeterminada.
 
 ### `POST /auth/login`
 
@@ -698,7 +700,7 @@ La resolución administrativa de una cancelación no forma parte de la interfaz 
 
 ### Registro
 
-Una transacción crea `CLIENTE`, guarda la fotografía y establece la sesión. Ante cualquier error no debe quedar un cliente incompleto.
+Una transacción crea `CLIENTE`, guarda la fotografía cuando se proporciona y establece la sesión. Ante cualquier error no debe quedar un cliente incompleto.
 
 ### Cotización
 

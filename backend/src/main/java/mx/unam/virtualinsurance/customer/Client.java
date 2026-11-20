@@ -51,7 +51,7 @@ public class Client {
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
-	@Column(name = "FOTO", nullable = false)
+	@Column(name = "FOTO")
 	private byte[] photo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -81,7 +81,7 @@ public class Client {
 		this.fiscalIdentifier = fiscalIdentifier;
 		this.email = email;
 		this.passwordHash = passwordHash;
-		this.photo = photo.clone();
+		this.photo = photo == null ? null : photo.clone();
 		this.gender = gender;
 	}
 
@@ -122,7 +122,11 @@ public class Client {
 	}
 
 	public byte[] getPhoto() {
-		return photo.clone();
+		return photo == null ? null : photo.clone();
+	}
+
+	public boolean hasPhoto() {
+		return photo != null;
 	}
 
 	public Gender getGender() {

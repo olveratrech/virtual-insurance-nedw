@@ -82,7 +82,7 @@ GET  /auth/me
 POST /auth/logout
 ```
 
-La parte `data` contiene el JSON de registro con `Content-Type: application/json`; la parte `photo` contiene un JPEG o PNG de hasta 2 MiB. Un registro correcto crea una sesión mediante cookie `JSESSIONID` con `HttpOnly` y `SameSite=Lax`.
+La parte `data` contiene el JSON de registro con `Content-Type: application/json`. La parte opcional `photo` puede contener un JPEG o PNG de hasta 2 MiB; si se omite, Oracle conserva `FOTO` como `NULL` y `photoUrl` se devuelve como `null`. Un registro correcto crea una sesión mediante cookie `JSESSIONID` con `HttpOnly` y `SameSite=Lax`.
 
 `GET /auth/me` responde `200` con la cookie de sesión y `401` sin ella. La URL `/clientes/me/foto` ya forma parte de las respuestas, pero su descarga se implementará junto con los recursos protegidos del cliente.
 

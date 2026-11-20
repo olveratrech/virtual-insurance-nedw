@@ -109,8 +109,9 @@ begin
       from user_tab_columns
      where table_name = 'CLIENTE'
        and column_name = 'FOTO'
-       and data_type = 'BLOB';
-    verificar(v_actual = 1, 'foto debe ser blob');
+       and data_type = 'BLOB'
+       and nullable = 'Y';
+    verificar(v_actual = 1, 'foto debe ser blob y permitir nulos');
 
     select count(*)
       into v_actual
