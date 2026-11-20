@@ -20,7 +20,7 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Pagos y pólizas verificados | Intentos, pólizas, historial y documentos desplegados; reglas cruzadas, concurrencia y rollback probados correctamente. |
+| Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
@@ -157,13 +157,13 @@
 - Incorpora estados e historial de póliza, solicitudes de cancelación y documentos.
 - Excluye biometría, siniestros y drogas del alcance NEDW.
 
-#### Pendientes del modelo físico
+#### Resultado del modelo físico para NEDW
 
-- Traducir tipos de ER/Studio a tipos apropiados de Oracle Database 26ai.
-- Definir columnas identidad, índices y restricciones.
-- Diseñar el cifrado de números de tarjeta sin persistir CVV.
-- Implementar reglas que involucran varias tablas.
-- Preparar DDL, catálogos, datos ficticios y pruebas reproducibles.
+- Tipos de ER/Studio traducidos a tipos apropiados de Oracle Database 26ai.
+- Columnas identidad, índices y restricciones esenciales implementados.
+- Tratamiento del número ficticio de tarjeta diseñado para AES-GCM en Spring, sin persistir CVV.
+- Reglas entre tablas implementadas mediante restricciones y triggers.
+- DDL, catálogos, datos ficticios y pruebas reproducibles disponibles en `database/`.
 
 ### Entorno Oracle
 
@@ -171,12 +171,12 @@
 - La CDB `FREE` y la PDB `ETOBDA_S1` están abiertas y verificadas.
 - El servicio `etobda_s1.fi.unam` es accesible desde macOS mediante `localhost:1522`.
 
-#### Pendientes de Oracle para NEDW
+#### Resultado de Oracle para NEDW
 
-- Desplegar el esquema mínimo de la aplicación.
-- Ejecutar y verificar el incremento de catálogos desde SQL Developer en VS Code.
-- Probar restricciones y operaciones principales.
-- Documentar comandos reproducibles de creación y carga.
+- Esquema mínimo desplegado en `VI_APP@ETOBDA_S1`.
+- Cinco incrementos ejecutados de forma repetible desde SQL Developer en VS Code.
+- Restricciones, triggers, estados y operaciones principales verificados.
+- Comandos reproducibles de creación, carga y prueba documentados.
 
 ## Componentes todavía no iniciados
 
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Preparar solicitudes de cancelación, sincronización de estados y pruebas reproducibles.
+Definir y crear el esqueleto del backend Spring Boot antes de implementar el primer módulo vertical.
 
 ## Bitácora breve
 
@@ -284,4 +284,6 @@ Preparar solicitudes de cancelación, sincronización de estados y pruebas repro
 | 20/11/2026 | Se preparó el incremento de pagos y pólizas. | Cuatro tablas, reglas concurrentes de aprobación, emisión controlada, historial, documentos y pruebas con rollback quedaron listos. | Ejecutar dos veces la estructura y después las pruebas transaccionales. |
 | 20/11/2026 | El primer trigger de pagos devolvió `ORA-25006`. | Oracle no admite el BLOB `comprobante_pdf` en `update of`; el trigger se cambió para ejecutarse ante cualquier actualización. | Repetir el script idempotente y ejecutar las pruebas. |
 | 20/11/2026 | Se repitió y verificó el incremento de pagos y pólizas. | Los tres triggers quedaron válidos; aprobación única, emisión, modalidad, costo, historial, documento y rollback pasaron todas las pruebas. | Registrar el incremento y continuar con cancelaciones. |
+| 20/11/2026 | Se preparó el incremento de cancelaciones. | La tabla, restricciones, índices, sincronización de estados, exclusión concurrente y pruebas con rollback quedaron listas. | Ejecutar dos veces la estructura y después las pruebas transaccionales. |
+| 20/11/2026 | Se ejecutó y verificó el incremento de cancelaciones. | La repetibilidad, fechas, exclusión de duplicados, resoluciones, sincronización con póliza, historial y rollback pasaron correctamente. | Registrar el cierre de Oracle e iniciar la preparación de Spring Boot. |
 

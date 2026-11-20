@@ -108,12 +108,12 @@ Patrones que se aplicarán cuando aporten valor:
 
 **Fecha objetivo:** 20–21 de noviembre
 
-- [ ] Cerrar las entidades y atributos necesarios para el recorrido prioritario.
-- [ ] Definir estados y transiciones de cotización, pago, póliza y cancelación.
-- [ ] Preparar tipos de datos, PK, FK, `UNIQUE`, `CHECK` e índices esenciales para Oracle.
-- [ ] Crear scripts reproducibles de esquema y datos ficticios.
-- [ ] Ejecutar y verificar los scripts en Oracle Database 26ai.
-- [ ] Documentar decisiones que se terminarán posteriormente en BDA.
+- [x] Cerrar las entidades y atributos necesarios para el recorrido prioritario.
+- [x] Definir estados y transiciones de cotización, pago, póliza y cancelación.
+- [x] Preparar tipos de datos, PK, FK, `UNIQUE`, `CHECK` e índices esenciales para Oracle.
+- [x] Crear scripts reproducibles de esquema y datos ficticios.
+- [x] Ejecutar y verificar los scripts en Oracle Database 26ai.
+- [x] Documentar decisiones que se terminarán posteriormente en BDA.
 
 **Entregable:** esquema Oracle reproducible y suficiente para la aplicación web.
 

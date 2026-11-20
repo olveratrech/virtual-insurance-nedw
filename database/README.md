@@ -68,6 +68,9 @@ tests/03_cotizaciones.sql
 
 schema/04_pagos_polizas.sql
 tests/04_pagos_polizas.sql
+
+schema/05_cancelaciones.sql
+tests/05_cancelaciones.sql
 ```
 
 Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si un script de estructura falla parcialmente, revisa primero el error y los objetos alcanzados. Después de corregir la causa puede ejecutarse nuevamente: conservará las tablas existentes y continuará con las faltantes.
@@ -78,7 +81,7 @@ Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si
 - Si una tabla ya existe, se conserva y el script continúa con las siguientes.
 - Una tabla existente no se elimina, reemplaza ni modifica silenciosamente.
 - Los datos iniciales se cargan con `merge`; volver a ejecutarlos actualiza descripciones y agrega claves faltantes sin duplicarlas.
-- Los scripts de pruebas son de solo lectura y pueden ejecutarse cuantas veces sea necesario.
+- Los scripts de pruebas pueden ejecutar operaciones transaccionales y terminan con `rollback`; pueden repetirse sin conservar sus datos temporales.
 - Las pruebas verifican que los objetos conservados tengan las identidades, PK, claves únicas y datos esperados.
 - Un error diferente a la existencia previa de un objeto debe conservarse visible y detener la revisión del incremento.
 - Los cambios posteriores usarán comprobaciones específicas antes de cada `alter`.
