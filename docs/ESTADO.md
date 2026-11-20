@@ -22,7 +22,7 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
-| Backend Spring Boot | Esqueleto compilable | Proyecto Maven generado con Spring Boot 4.2.0 y Java 21; falta configurar Oracle e implementar el primer módulo vertical. |
+| Backend Spring Boot | Conectado con Oracle | Configuración segura, Hikari, JPA no destructivo y Actuator arrancan contra `VI_APP`; falta implementar el primer módulo vertical. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Configurar Oracle mediante variables de entorno y comprobar el primer recorrido vertical `HTTP → servicio → repositorio → Oracle` con un catálogo.
+Implementar y probar el primer recorrido vertical `HTTP → servicio → repositorio JPA → Oracle` con el catálogo de géneros.
 
 ## Bitácora breve
 
@@ -289,4 +289,6 @@ Configurar Oracle mediante variables de entorno y comprobar el primer recorrido 
 | 20/11/2026 | Se preparó la prueba E2E transaccional de Oracle. | Se cubren seis recorridos de auto y médico, resultados positivos y negativos, emisión, documentos, cancelaciones y rollback integral. | Ejecutar la prueba de aceptación y revisar cualquier diferencia antes de Spring Boot. |
 | 20/11/2026 | Se ejecutó y aprobó la prueba E2E transaccional de Oracle. | Los seis recorridos, ocho rechazos esperados, relaciones, historiales y conteos fueron correctos; las cinco comprobaciones posteriores al rollback devolvieron cero. | Registrar la prueba y preparar la estructura de Spring Boot. |
 | 20/11/2026 | Se generó el backend desde Spring Initializr. | Spring Boot 4.2.0, Java 21, Maven, Web MVC, JPA, Validation, Security, Oracle y Actuator compilaron con `BUILD SUCCESS`. | Configurar el datasource sin versionar secretos y probar la conexión real. |
+| 20/11/2026 | Se preparó la configuración segura de Oracle. | Variables externas, Hikari, JPA no destructivo, salud sin detalles y denegación temporal de rutas compilaron con `BUILD SUCCESS`. | Probar arranque, salud y contexto con la contraseña proporcionada localmente. |
+| 20/11/2026 | Se verificó la conexión Spring Boot–Oracle. | La aplicación inició, `/actuator/health` respondió `200 UP` y `contextLoads()` terminó con una prueba aprobada y `BUILD SUCCESS`. | Implementar la lectura del primer catálogo mediante una ruta vertical. |
 

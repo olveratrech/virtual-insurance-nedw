@@ -122,7 +122,7 @@ Patrones que se aplicarán cuando aporten valor:
 **Fecha objetivo:** 21–23 de noviembre
 
 - [x] Crear el proyecto Spring Boot dentro de `backend/`.
-- [ ] Configurar la conexión con Oracle.
+- [x] Configurar la conexión con Oracle.
 - [ ] Crear entidades, DTO, repositorios, servicios y controladores.
 - [ ] Implementar Strategy para cotizaciones de auto y médicas.
 - [ ] Implementar transiciones válidas de estados.
