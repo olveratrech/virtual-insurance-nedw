@@ -42,8 +42,6 @@ begin
         || v_usuario || '@' || v_contenedor
     );
 
-    savepoint prueba_pagos_polizas;
-
     select count(*) into v_actual
       from user_tables
      where table_name in (
@@ -337,11 +335,11 @@ begin
      where poliza_id = v_poliza_id;
     verificar(v_actual = 2, 'el cambio de estatus debe generar un segundo historico');
 
-    rollback to prueba_pagos_polizas;
+    rollback;
     dbms_output.put_line('pruebas de pagos y polizas completadas correctamente.');
 exception
     when others then
-        rollback to prueba_pagos_polizas;
+        rollback;
         raise;
 end;
 /
