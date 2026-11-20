@@ -70,6 +70,20 @@ curl -i http://localhost:8080/catalogos/generos
 
 La respuesta utiliza el contrato `{ "items": [...] }`. Solo `GET` es público; cualquier otro método o ruta continúa denegado hasta implementar la autenticación.
 
+## Registro y sesión
+
+El registro utiliza `multipart/form-data` y requiere un token CSRF obtenido previamente:
+
+```text
+GET  /auth/csrf
+POST /auth/registro
+GET  /auth/me
+```
+
+La parte `data` contiene el JSON de registro con `Content-Type: application/json`; la parte `photo` contiene un JPEG o PNG de hasta 2 MiB. Un registro correcto crea una sesión mediante cookie `JSESSIONID` con `HttpOnly` y `SameSite=Lax`.
+
+`GET /auth/me` responde `200` con la cookie de sesión y `401` sin ella. La URL `/clientes/me/foto` ya forma parte de las respuestas, pero su descarga se implementará junto con los recursos protegidos del cliente.
+
 ## Compilar y probar
 
 ```bash

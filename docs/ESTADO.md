@@ -22,8 +22,8 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
-| Backend Spring Boot | Primer recorrido vertical aprobado | `GET /catalogos/generos` consulta Oracle mediante controlador, servicio, DTO y repositorio; pruebas y seguridad por método están verificadas. |
-| Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
+| Backend Spring Boot | Registro aprobado | Nueve pruebas pasan; registro multipart, BCrypt, Oracle, sesión y `/auth/me` fueron verificados manualmente. |
+| Spring Security | Sesión parcial verificada | CSRF, rotación de sesión, cookie `HttpOnly`, `SameSite=Lax`, autorización y `401` funcionan; falta login y logout. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Definir el siguiente incremento del backend a partir del contrato REST, priorizando registro y autenticación por sesión.
+Implementar login y logout con BCrypt, sesión, errores uniformes y pruebas contra la cuenta académica registrada.
 
 ## Bitácora breve
 
@@ -293,4 +293,6 @@ Definir el siguiente incremento del backend a partir del contrato REST, prioriza
 | 20/11/2026 | Se verificó la conexión Spring Boot–Oracle. | La aplicación inició, `/actuator/health` respondió `200 UP` y `contextLoads()` terminó con una prueba aprobada y `BUILD SUCCESS`. | Implementar la lectura del primer catálogo mediante una ruta vertical. |
 | 20/11/2026 | Se preparó el primer recorrido vertical del backend. | El catálogo de géneros separa entidad, Repository, Service Layer, DTO y controlador; seguridad permite solo su lectura y todo compila. | Ejecutar la prueba de integración y revisar la respuesta HTTP real. |
 | 20/11/2026 | Se verificó el catálogo público de géneros. | Dos pruebas pasaron; `GET /catalogos/generos` respondió `200` con los cinco registros de Oracle y `POST` fue rechazado con `403`. | Registrar el incremento y preparar registro/autenticación. |
+| 20/11/2026 | Se preparó el registro seguro de clientes. | Entidad y repositorio, validaciones, fotografía, BCrypt, errores uniformes, CSRF, sesión explícita y siete pruebas de integración compilan correctamente. | Ejecutar pruebas con Oracle y realizar el recorrido HTTP multipart. |
+| 20/11/2026 | Se verificó el registro seguro de clientes. | Nueve pruebas pasaron; el registro respondió `201`, `/auth/me` respondió `200` con sesión y `401` sin cookie, sin exponer datos sensibles. | Registrar el incremento; implementar login, logout y posteriormente la descarga de fotografía. |
 

@@ -6,7 +6,7 @@ public record GenderResponse(
 	String description
 ) {
 
-	static GenderResponse from(Gender gender) {
+	public static GenderResponse from(Gender gender) {
 		return new GenderResponse(
 			gender.getGeneroId(),
 			gender.getKey(),
