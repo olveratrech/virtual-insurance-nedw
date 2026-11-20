@@ -102,6 +102,8 @@ Esta estrategia permite continuar después de un fallo intermedio sin convertir 
 
 El script termina con `rollback` tanto al aprobar como al fallar. Las consultas finales deben devolver cero y confirman que no quedaron datos E2E persistidos.
 
+El inventario de pruebas incrementales, caminos E2E y resultados confirmados se encuentra en el [registro consolidado de pruebas](../docs/PRUEBAS.md).
+
 Después de actualizar los scripts del repositorio, conserva la copia operativa:
 
 ```bash

@@ -6,11 +6,12 @@ Proyecto final de **Negocios Electrónicos y Desarrollo Web** de la Facultad de 
 
 - Anteproyecto terminado.
 - Prototipo navegable elaborado en Figma.
-- Primera versión del modelo relacional en revisión.
-- Entorno Oracle Database 26ai disponible en Docker.
-- Implementación de React y Spring Boot todavía no iniciada.
+- Esquema funcional desplegado y probado en Oracle Database 26ai.
+- Recorrido E2E transaccional de base de datos aprobado.
+- Frontend React funcional con datos simulados.
+- Backend Spring Boot conectado a Oracle, con catálogo, registro y sesión inicial.
 
-Consulta el [roadmap](docs/ROADMAP.md) y el [estado detallado](docs/ESTADO.md).
+Consulta el [roadmap](docs/ROADMAP.md), el [estado detallado](docs/ESTADO.md) y el [registro consolidado de pruebas](docs/PRUEBAS.md).
 
 ## Tecnologías propuestas
 
@@ -33,11 +34,11 @@ proyecto-final/
 └── RESUMEN-ASPECTOS-GENERALES.md
 ```
 
-Las carpetas de implementación comenzarán vacías y se completarán de forma incremental. Cada cambio funcional deberá acompañarse de pruebas y de una actualización breve de `docs/ESTADO.md`.
+Cada cambio funcional debe acompañarse de pruebas y de una actualización breve de `docs/ESTADO.md` y `docs/PRUEBAS.md`.
 
 ## Ejecución
 
-Los comandos de instalación y ejecución se documentarán cuando se creen el frontend, el backend y el esquema de base de datos.
+Consulta las instrucciones particulares en `frontend/`, [backend/README.md](backend/README.md) y [database/README.md](database/README.md).
 
 ## Autor
 

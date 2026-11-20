@@ -92,3 +92,5 @@ La parte `data` contiene el JSON de registro con `Content-Type: application/json
 ```
 
 Las pruebas que cargan el contexto requieren que `VI_DB_PASSWORD` esté disponible y que Oracle sea accesible.
+
+El nombre, tipo, alcance y último resultado confirmado de cada prueba se encuentran en el [registro consolidado de pruebas](../docs/PRUEBAS.md).
