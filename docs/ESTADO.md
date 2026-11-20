@@ -21,7 +21,7 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
-| Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
+| Frontend React | Login real aprobado | Contexto de sesión, cliente HTTP, CSRF, panel protegido, encabezado y logout consumen Spring y fueron verificados. |
 | Backend Spring Boot | Login y logout aprobados | Las 16 pruebas automatizadas y el recorrido HTTP manual pasan correctamente. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Integrar en React la obtención de CSRF, login, consulta de sesión y logout reales.
+Adaptar el formulario ampliado de registro al contrato multipart real y a los catálogos de Oracle.
 
 ## Bitácora breve
 
@@ -299,4 +299,6 @@ Integrar en React la obtención de CSRF, login, consulta de sesión y logout rea
 | 20/11/2026 | Se preparó el incremento de login y logout. | Adaptador de usuarios, autenticación BCrypt, sesión, errores genéricos, logout estándar y siete pruebas nuevas compilan con `BUILD SUCCESS`. | Ejecutar las dieciséis pruebas contra Oracle y verificar el recorrido HTTP manual. |
 | 20/11/2026 | Se ejecutaron las pruebas de login y logout. | Después de corregir la normalización previa a `@Email`, las 16 pruebas terminaron sin fallos, errores ni omisiones. | Verificar login, sesión y logout mediante solicitudes HTTP reales. |
 | 20/11/2026 | Se verificó manualmente el recorrido HTTP de autenticación. | Login y consulta de sesión respondieron `200`, logout respondió `204` y la sesión invalidada recibió `401`; `JSESSIONID` quedó expirada. | Registrar el incremento e integrar la autenticación real en React. |
+| 20/11/2026 | Se preparó la integración de autenticación en React. | Cliente HTTP con CSRF y cookies, contexto de sesión, login real, panel protegido, encabezado y logout compilan; `lint` y `build` pasan. | Ejecutar las pruebas manuales en el navegador antes de registrar el incremento. |
+| 20/11/2026 | Se verificó la autenticación real desde React. | Redirección, rechazo de credenciales, login, saludo, persistencia tras recarga, acceso autenticado, logout, protección posterior y diseño adaptable pasaron correctamente. | Registrar el incremento y conectar el formulario ampliado de registro. |
 

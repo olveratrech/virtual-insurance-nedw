@@ -10,25 +10,29 @@ import PaymentPage from '../pages/PaymentPage/PaymentPage.jsx'
 import PolicyPage from '../pages/PolicyPage/PolicyPage.jsx'
 import CancellationPage from '../pages/CancellationPage/CancellationPage.jsx'
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage.jsx'
+import ProtectedRoute from '../components/auth/ProtectedRoute/ProtectedRoute.jsx'
+import { AuthProvider } from '../contexts/AuthContext.jsx'
 
 function AppRouter() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="acceso" element={<AccessPage />} />
-          <Route path="panel" element={<DashboardPage />} />
-          <Route path="cotizar/auto" element={<AutoQuotePage />} />
-          <Route path="cotizar/medico" element={<MedicalQuotePage />} />
-          <Route path="cotizaciones/aprobada" element={<QuoteResultPage outcome="approved" />} />
-          <Route path="cotizaciones/rechazada" element={<QuoteResultPage outcome="rejected" />} />
-          <Route path="contratacion/pago" element={<PaymentPage />} />
-          <Route path="polizas/:polizaId" element={<PolicyPage />} />
-          <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="acceso" element={<AccessPage />} />
+            <Route path="panel" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="cotizar/auto" element={<AutoQuotePage />} />
+            <Route path="cotizar/medico" element={<MedicalQuotePage />} />
+            <Route path="cotizaciones/aprobada" element={<QuoteResultPage outcome="approved" />} />
+            <Route path="cotizaciones/rechazada" element={<QuoteResultPage outcome="rejected" />} />
+            <Route path="contratacion/pago" element={<PaymentPage />} />
+            <Route path="polizas/:polizaId" element={<PolicyPage />} />
+            <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

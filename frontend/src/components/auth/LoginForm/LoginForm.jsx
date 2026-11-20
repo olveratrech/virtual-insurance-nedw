@@ -5,13 +5,15 @@ import '../authForms.css'
 function LoginForm({ onSuccess }) {
   const [values, setValues] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   function updateField(event) {
     const { name, value } = event.target
     setValues((currentValues) => ({ ...currentValues, [name]: value }))
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
     const nextErrors = {}
@@ -19,7 +21,21 @@ function LoginForm({ onSuccess }) {
     if (!values.password) nextErrors.password = 'Ingresa tu contraseña.'
 
     setErrors(nextErrors)
-    if (Object.keys(nextErrors).length === 0) onSuccess('login')
+    setSubmitError('')
+    if (Object.keys(nextErrors).length > 0) return
+
+    setIsSubmitting(true)
+    try {
+      await onSuccess({
+        email: values.email,
+        password: values.password,
+      })
+    } catch (error) {
+      setSubmitError(error.message)
+      setValues((currentValues) => ({ ...currentValues, password: '' }))
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -50,8 +66,10 @@ function LoginForm({ onSuccess }) {
         error={errors.password}
       />
 
-      <button className="button button--primary auth-form__submit" type="submit">
-        Entrar
+      {submitError && <p className="auth-form__error" role="alert">{submitError}</p>}
+
+      <button className="button button--primary auth-form__submit" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Ingresando…' : 'Entrar'}
       </button>
     </form>
   )

@@ -137,8 +137,9 @@ Patrones que se aplicarán cuando aporten valor:
 
 **Fecha objetivo:** 23–24 de noviembre
 
-- [ ] Sustituir los mocks del frontend por llamadas HTTP.
-- [ ] Integrar registro e inicio de sesión.
+- [ ] Sustituir progresivamente los mocks del frontend por llamadas HTTP.
+- [x] Integrar inicio de sesión, persistencia de sesión y logout.
+- [ ] Integrar el registro ampliado con fotografía y catálogos reales.
 - [ ] Integrar ambas cotizaciones y sus resultados.
 - [ ] Integrar pago simulado y emisión de póliza.
 - [ ] Integrar consulta y solicitud de cancelación.

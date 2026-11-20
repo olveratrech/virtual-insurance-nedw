@@ -1,18 +1,20 @@
 import { useLocation } from 'react-router-dom'
 import ActivityList from '../../components/dashboard/ActivityList/ActivityList.jsx'
 import DashboardActionCard from '../../components/dashboard/DashboardActionCard/DashboardActionCard.jsx'
+import useAuth from '../../hooks/useAuth.js'
 import { dashboardData } from '../../mocks/dashboardData.js'
 import './DashboardPage.css'
 
 function DashboardPage() {
   const location = useLocation()
+  const { client } = useAuth()
   const confirmationMessage = location.state?.message
 
   return (
     <div className="dashboard-page page-container">
       <header className="dashboard-page__heading">
         <p className="eyebrow">Mi cuenta</p>
-        <h1>Hola, {dashboardData.customerName}</h1>
+        <h1>Hola, {client.name}</h1>
         <p>Consulta tus operaciones o inicia una nueva cotización.</p>
       </header>
 

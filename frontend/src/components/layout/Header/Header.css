@@ -5,10 +5,13 @@
 .site-header__navigation { display: flex; gap: var(--space-sm); }
 .site-header__navigation a { border-radius: var(--radius-sm); color: var(--color-text); padding: 0.5rem 0.75rem; text-decoration: none; }
 .site-header__navigation a:hover, .site-header__navigation a.active { background: var(--color-primary-soft); color: var(--color-primary-dark); }
-.site-header__content > .button { justify-self: end; }
+.site-header__session { align-items: center; display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-self: end; justify-content: flex-end; }
+.site-header__customer { color: var(--color-text); font-size: 0.9rem; font-weight: 700; }
+.site-header__error { color: var(--color-danger); flex-basis: 100%; font-size: 0.75rem; text-align: right; }
 
 @media (max-width: 760px) {
   .site-header__content { grid-template-columns: 1fr auto; padding-block: var(--space-md); }
   .site-header__navigation { grid-column: 1 / -1; grid-row: 2; justify-content: center; }
   .site-header__brand span:last-child { display: none; }
+  .site-header__customer { display: none; }
 }

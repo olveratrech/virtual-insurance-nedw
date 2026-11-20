@@ -11,7 +11,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
 | Spring Boot | 16 pruebas automatizadas | 16 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
-| React | Análisis estático, compilación y recorridos funcionales manuales | Aprobado para la fase con datos simulados |
+| React | Análisis estático, compilación, autenticación real y recorridos funcionales | Aprobado; autenticación integrada y módulos comerciales todavía simulados |
 
 ## Oracle Database
 
@@ -101,6 +101,14 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Rechazo de fechas pasadas y tarjetas ficticias vencidas | Regresión manual | Aprobado |
 | Rutas y pólizas inexistentes | Regresión manual | Aprobado; muestran 404 explícito |
 | Adaptación visual de las pantallas implementadas | Revisión visual | Aprobada |
+| Acceso directo a `/panel` sin sesión | Integración manual React–Spring | Aprobado; redirige a `/acceso` |
+| Login con contraseña incorrecta | Integración manual React–Spring | Aprobado; conserva el acceso bloqueado y muestra el error |
+| Login con cuenta académica | E2E parcial navegador–Oracle | Aprobado; abre el panel y muestra los datos del cliente |
+| Recarga del panel autenticado | Regresión de sesión | Aprobada; reconstruye la sesión mediante `/auth/me` |
+| Acceso a `/acceso` con sesión | Navegación autenticada | Aprobado; regresa al panel |
+| Logout desde el encabezado | Integración manual React–Spring | Aprobado; vuelve al inicio y actualiza el encabezado |
+| Acceso a `/panel` después del logout | Regresión de autorización | Aprobado; redirige nuevamente a `/acceso` |
+| Integración de autenticación en diseño adaptable | Revisión visual | Aprobada |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

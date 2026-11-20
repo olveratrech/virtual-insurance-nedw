@@ -1,7 +1,28 @@
-import { Link, NavLink } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import useAuth from '../../../hooks/useAuth.js'
 import './Header.css'
 
 function Header() {
+  const navigate = useNavigate()
+  const { client, logout, sessionStatus } = useAuth()
+  const [logoutError, setLogoutError] = useState('')
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  async function handleLogout() {
+    setLogoutError('')
+    setIsLoggingOut(true)
+
+    try {
+      await logout()
+      navigate('/', { replace: true })
+    } catch (error) {
+      setLogoutError(error.message)
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
+
   return (
     <header className="site-header">
       <div className="site-header__content">
@@ -14,7 +35,24 @@ function Header() {
           <NavLink to="/cotizar/auto">Cotizar</NavLink>
           <NavLink to="/panel">Mi cuenta</NavLink>
         </nav>
-        <Link className="button button--secondary" to="/acceso">Iniciar sesión</Link>
+        <div className="site-header__session">
+          {sessionStatus === 'authenticated' && client ? (
+            <>
+              <span className="site-header__customer">Hola, {client.name}</span>
+              <button
+                className="button button--secondary"
+                type="button"
+                disabled={isLoggingOut}
+                onClick={handleLogout}
+              >
+                {isLoggingOut ? 'Cerrando…' : 'Cerrar sesión'}
+              </button>
+            </>
+          ) : (
+            <Link className="button button--secondary" to="/acceso">Iniciar sesión</Link>
+          )}
+          {logoutError && <span className="site-header__error" role="alert">{logoutError}</span>}
+        </div>
       </div>
     </header>
   )
