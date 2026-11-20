@@ -61,6 +61,10 @@ tests/01_catalogos.sql
 schema/02_clientes_tarjetas.sql
 seed/02_clientes.sql
 tests/02_clientes_tarjetas.sql
+
+schema/03_cotizaciones.sql
+seed/03_cotizaciones.sql
+tests/03_cotizaciones.sql
 ```
 
 Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si un script de estructura falla parcialmente, revisa primero el error y los objetos alcanzados. Después de corregir la causa puede ejecutarse nuevamente: conservará las tablas existentes y continuará con las faltantes.

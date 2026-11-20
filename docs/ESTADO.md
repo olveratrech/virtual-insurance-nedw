@@ -20,7 +20,7 @@
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Clientes y tarjetas verificados | `CLIENTE` y `TARJETA` desplegadas; repetibilidad, relaciones, índices, BCrypt y fotografía BLOB comprobados. |
+| Oracle | Cotizaciones verificadas | Cotizaciones, subtipos, triggers de especialización e historial automático desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
 | Backend Spring Boot | No iniciado | Modelo y contrato REST definidos antes de generar el proyecto. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Preparar cotizaciones, subtipos, historial de estados y sus pruebas reproducibles.
+Preparar intentos de pago, pólizas, historial de póliza y documentos con sus pruebas reproducibles.
 
 ## Bitácora breve
 
@@ -279,4 +279,6 @@ Preparar cotizaciones, subtipos, historial de estados y sus pruebas reproducible
 | 20/11/2026 | Se concedió `create sequence` y se repitió el incremento de catálogos. | La creación repetible, la carga mediante `merge` y todas las pruebas de tablas, columnas, identidades, restricciones y conteos finalizaron correctamente. | Registrar el incremento y continuar con clientes y tarjetas. |
 | 20/11/2026 | Se preparó el incremento de clientes y tarjetas. | Estructura repetible, índices de FK, cliente BCrypt, fotografía BLOB y estrategia AES-GCM quedaron definidos con sus pruebas. | Ejecutar dos veces estructura y carga, y después las pruebas. |
 | 20/11/2026 | Se ejecutó y verificó el incremento de clientes y tarjetas. | La segunda ejecución conservó los objetos, la carga actualizó sin duplicar y las pruebas confirmaron relaciones, índices, hash y fotografía de 70 bytes. | Registrar el incremento y continuar con cotizaciones. |
+| 20/11/2026 | Se preparó el incremento de cotizaciones. | Cuatro tablas, especialización protegida, historial automático, cuatro casos académicos y pruebas repetibles quedaron listos. | Ejecutar dos veces estructura y carga, y después las pruebas. |
+| 20/11/2026 | Se ejecutó y verificó el incremento de cotizaciones. | Estructura y carga repetibles, cuatro triggers válidos, subtipos exclusivos e historial inicial pasaron todas las pruebas. | Registrar el incremento y continuar con pagos y pólizas. |
 
