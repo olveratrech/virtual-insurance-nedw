@@ -22,7 +22,7 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Catálogos, clientes, tarjetas, cotizaciones, pagos, pólizas, documentos y cancelaciones están desplegados y probados. |
 | Frontend React | Recorrido principal completo con mocks | Falta adaptarlo al registro ampliado y sustituir simulaciones por servicios HTTP. |
-| Backend Spring Boot | Conectado con Oracle | Configuración segura, Hikari, JPA no destructivo y Actuator arrancan contra `VI_APP`; falta implementar el primer módulo vertical. |
+| Backend Spring Boot | Primer recorrido vertical aprobado | `GET /catalogos/generos` consulta Oracle mediante controlador, servicio, DTO y repositorio; pruebas y seguridad por método están verificadas. |
 | Spring Security | Decidido, no implementado | Usará sesión de servidor, cookie `HttpOnly` y protección CSRF. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Implementar y probar el primer recorrido vertical `HTTP → servicio → repositorio JPA → Oracle` con el catálogo de géneros.
+Definir el siguiente incremento del backend a partir del contrato REST, priorizando registro y autenticación por sesión.
 
 ## Bitácora breve
 
@@ -291,4 +291,6 @@ Implementar y probar el primer recorrido vertical `HTTP → servicio → reposit
 | 20/11/2026 | Se generó el backend desde Spring Initializr. | Spring Boot 4.2.0, Java 21, Maven, Web MVC, JPA, Validation, Security, Oracle y Actuator compilaron con `BUILD SUCCESS`. | Configurar el datasource sin versionar secretos y probar la conexión real. |
 | 20/11/2026 | Se preparó la configuración segura de Oracle. | Variables externas, Hikari, JPA no destructivo, salud sin detalles y denegación temporal de rutas compilaron con `BUILD SUCCESS`. | Probar arranque, salud y contexto con la contraseña proporcionada localmente. |
 | 20/11/2026 | Se verificó la conexión Spring Boot–Oracle. | La aplicación inició, `/actuator/health` respondió `200 UP` y `contextLoads()` terminó con una prueba aprobada y `BUILD SUCCESS`. | Implementar la lectura del primer catálogo mediante una ruta vertical. |
+| 20/11/2026 | Se preparó el primer recorrido vertical del backend. | El catálogo de géneros separa entidad, Repository, Service Layer, DTO y controlador; seguridad permite solo su lectura y todo compila. | Ejecutar la prueba de integración y revisar la respuesta HTTP real. |
+| 20/11/2026 | Se verificó el catálogo público de géneros. | Dos pruebas pasaron; `GET /catalogos/generos` respondió `200` con los cinco registros de Oracle y `POST` fue rechazado con `403`. | Registrar el incremento y preparar registro/autenticación. |
 

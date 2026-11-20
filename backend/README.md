@@ -60,6 +60,16 @@ El resultado esperado es HTTP `200` con un cuerpo equivalente a:
 
 Actuator no expone detalles de la conexión. Mientras se implementa la autenticación, las demás rutas permanecen denegadas.
 
+## Catálogo público de géneros
+
+El primer recorrido vertical consulta el catálogo real de Oracle:
+
+```bash
+curl -i http://localhost:8080/catalogos/generos
+```
+
+La respuesta utiliza el contrato `{ "items": [...] }`. Solo `GET` es público; cualquier otro método o ruta continúa denegado hasta implementar la autenticación.
+
 ## Compilar y probar
 
 ```bash
