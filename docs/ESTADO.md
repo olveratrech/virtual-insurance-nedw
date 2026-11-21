@@ -38,6 +38,7 @@
 - `docs/ESTADO.md`: registro vivo del avance.
 - `docs/MODELO-RELACIONAL-NEDW.md`: tablas, relaciones, cardinalidades y reglas del modelo aprobado.
 - `docs/CONTRATO-API.md`: contrato entre React y Spring Boot.
+- `docs/PATRONES-DISENO.md`: patrones implementados, planificados y criterio de incorporación.
 - `anteproyecto/`: documentación entregable del anteproyecto.
 
 ### Diseño de interfaz
@@ -75,7 +76,7 @@
 - `AccessPage` implementa acceso y registro con formularios separados.
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
-- El envío correcto navega al panel, pero la autenticación continúa siendo simulada y no persiste usuarios.
+- Registro, login, recuperación de sesión y logout ya consumen Spring Security y persisten clientes en Oracle.
 - `DashboardPage` implementa el panel del cliente con saludo, accesos rápidos y actividad reciente.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
 - `dashboardData.js` separa los datos ficticios de los componentes que los presentan.
@@ -305,4 +306,5 @@ Preparar el siguiente recorrido vertical para sustituir mocks: cotizaciones de a
 | 20/11/2026 | Se verificó la fotografía opcional en Oracle y Spring. | La migración y su repetición pasaron, la fotografía académica persistió y las 17 pruebas de Spring terminaron correctamente. | Registrar el incremento y construir el formulario ampliado de React. |
 | 20/11/2026 | Se preparó el registro real en React. | Cliente HTTP compartido, catálogo de géneros, multipart, campos completos, fotografía opcional, validaciones y sesión automática pasan `lint` y `build`. | Ejecutar el recorrido manual antes de registrar el incremento. |
 | 20/11/2026 | Se verificó el registro real desde React. | Catálogo, validaciones, alta sin fotografía, datos nullable, sesión automática, recarga, nuevo login, duplicados y diseño adaptable pasaron correctamente. | Registrar el incremento y continuar con el siguiente recorrido comercial real. |
+| 20/11/2026 | Se documentaron los patrones de diseño y arquitectura. | Patrones implementados, planificados, ubicaciones, límites y criterios quedaron diferenciados sin atribuir mecanismos internos del framework como implementaciones propias. | Mantener el inventario al implementar Strategy o transiciones de estado. |
 

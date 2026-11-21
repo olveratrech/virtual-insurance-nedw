@@ -45,15 +45,20 @@ React
   -> Oracle Database 26ai
 ```
 
-Patrones que se aplicarán cuando aporten valor:
+Patrones implementados cuando aportan valor:
 
 - Arquitectura por capas en el backend.
 - Component Composition en React.
-- Container–Presentational en formularios y páginas con lógica.
-- Service Layer en frontend y backend.
-- Adapter para desacoplar React de los DTO del backend.
+- Service Layer, Repository y DTO en el backend.
+- Adapter entre el dominio y Spring Security.
+- Provider / Context, facade de servicios y Route Guard en React.
+
+Patrones previstos para los módulos comerciales:
+
 - Strategy para las reglas de cotización por tipo de seguro.
 - State simplificado mediante estados y transiciones validadas.
+
+La justificación, ubicación y estado de cada patrón se mantienen en `docs/PATRONES-DISENO.md`.
 
 ## Plan de trabajo
 
