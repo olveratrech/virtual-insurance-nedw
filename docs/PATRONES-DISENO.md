@@ -20,6 +20,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Facade de servicios | Frontend | Implementado | Ocultar `fetch`, cookies, CSRF, multipart y rutas HTTP |
 | Route Guard | Frontend | Implementado | Impedir acceso visual a rutas que requieren sesión |
 | Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
+| Ports and Adapters | Backend | Implementado | Aislar el caso de uso de pago de la pasarela académica |
 | State simplificado | Backend y Oracle | Planificado | Controlar transiciones válidas de estados comerciales |
 
 ## Flujo arquitectónico actual
@@ -168,6 +169,12 @@ Auto y médico comparten el caso de uso de cotización, pero tienen datos y regl
 `QuoteStrategy<T>` define la evaluación común. `AutoQuoteStrategy` y `MedicalQuoteStrategy` producen una `QuoteDecision` sin depender de HTTP, sesión o persistencia; `QuoteService` coordina la transacción y el subtipo. Las pruebas cubren decisiones aprobadas y rechazadas de ambas estrategias.
 
 No se crean estrategias adicionales para reglas idénticas.
+
+## Puerto y adaptador de pagos
+
+`PaymentGateway` es el puerto requerido por el caso de uso y `SimulatedPaymentGateway` es el adaptador que consulta el procesador ficticio en Oracle. `PaymentService` depende del contrato, no de la implementación concreta, por lo que una pasarela externa podría sustituir al simulador sin mover sus detalles al controlador ni al frontend.
+
+La abstracción no oculta la transacción: el servicio coordina idempotencia, intento, débito, póliza, historial y documentos. Las respuestas del procesador se representan con `GatewayPaymentResult` y nunca exponen el número completo ni el CVV.
 
 ## Patrones planificados
 

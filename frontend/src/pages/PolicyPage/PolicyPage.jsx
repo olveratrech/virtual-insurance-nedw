@@ -12,8 +12,8 @@ function PolicyPage() {
   const { polizaId } = useParams()
   const location = useLocation()
   const [downloadMessage, setDownloadMessage] = useState('')
-  const policy = policyData[polizaId]
-  const issuedAfterPayment = location.state?.payment?.status === 'APPROVED'
+  const policy = location.state?.policy ?? policyData[polizaId]
+  const issuedAfterPayment = ['APPROVED', 'APROBADO'].includes(location.state?.payment?.status)
   const cancellationRequested = location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
 
   if (!policy) {

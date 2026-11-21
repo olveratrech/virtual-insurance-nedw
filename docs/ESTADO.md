@@ -10,7 +10,7 @@
 - El anteproyecto y el prototipo navegable existen.
 - El modelo relacional reducido para NEDW y el contrato inicial de la API están definidos.
 - El esquema funcional está desplegado y probado en Oracle Database 26ai dentro de Docker.
-- Registro, autenticación y cotizaciones ya recorren React, Spring Boot y Oracle; pago, pólizas y cancelaciones todavía utilizan datos simulados en el frontend.
+- Registro, autenticación, cotizaciones, pago académico y emisión de póliza ya recorren React, Spring Boot y Oracle.
 
 ## Estado por área
 
@@ -21,11 +21,11 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
-| Frontend React | Cotizaciones aprobadas | Formularios, decisiones, resultados persistentes, recarga, revisión de datos, rutas protegidas y enlace a pago consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Cotizaciones aprobadas | Las 26 pruebas y el recorrido HTTP pasan; Strategy, persistencia, historial, propiedad y seguridad están verificados. |
+| Frontend React | Pagos aprobados | Registro, autenticación, cotizaciones, pasarela académica y emisión visual de póliza consumen la API real y fueron verificados manualmente. |
+| Backend Spring Boot | Pagos aprobados | Las 36 pruebas pasan; cotizaciones, pasarela, saldos, idempotencia, emisión, propiedad y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
-| Integración completa | En curso | Registro, autenticación y cotizaciones están integrados; faltan pago, pólizas, documentos y cancelaciones reales. |
-| Pruebas | Parciales aprobadas | Oracle, 26 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro y cotizaciones están aprobados. |
+| Integración completa | En curso | Registro, autenticación, cotizaciones, pago y emisión están integrados; faltan consulta persistente de pólizas, descarga de documentos y cancelaciones reales. |
+| Pruebas | Parciales aprobadas | Oracle, 36 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones y pagos están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -87,9 +87,9 @@
 - `quoteApi.js` encapsula la creación y consulta autenticada de cotizaciones mediante la API REST.
 - `QuoteResultPage` consulta por identificador y presenta resultados persistidos, aprobados o rechazados, mediante renderizado condicional.
 - Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
-- `PaymentPage` implementa contratación y pago simulado con resumen separado del formulario.
+- `PaymentPage` integra la contratación con la pasarela académica de Spring y Oracle.
 - `PaymentForm` valida vigencia, modalidad, tarjeta ficticia, vencimiento, CVV y términos.
-- `paymentRules.js` permite demostrar pagos aprobados y rechazados sin procesar cargos reales.
+- `paymentApi.js` envía CSRF e idempotencia y evita que los componentes conozcan detalles del transporte.
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
@@ -112,7 +112,7 @@
 
 #### Pendientes del frontend
 
-- Sustituir progresivamente los mocks restantes de pago, pólizas, documentos y cancelaciones por servicios HTTP.
+- Sustituir progresivamente los mocks restantes de consulta de pólizas, documentos y cancelaciones por servicios HTTP.
 - Generar pólizas y comprobantes PDF reales desde el backend.
 - Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Integrar el pago simulado con Spring Boot y Oracle para emitir una póliza únicamente después de un intento aprobado.
+Integrar la consulta persistente de pólizas para conservar el resultado después de recargar o acceder mediante su URL.
 
 ## Bitácora breve
 
@@ -306,4 +306,7 @@ Integrar el pago simulado con Spring Boot y Oracle para emitir una póliza únic
 | 20/11/2026 | Se verificó manualmente la API de cotizaciones. | Auto aprobado y médica rechazada respondieron `201`, la consulta propia `200` y la consulta sin sesión `401`, con datos persistidos coherentes. | Registrar el incremento e integrar las cotizaciones en React. |
 | 20/11/2026 | Se preparó la integración de cotizaciones en React. | Formularios reales, CSRF compartido, resultado por ID, recarga, revisión de datos, rutas protegidas y enlace a pago pasan `lint` y `build`. | Ejecutar los recorridos manuales de auto y médico antes del commit. |
 | 20/11/2026 | Se verificó la integración de cotizaciones en React. | Ambos productos, decisiones, recarga, revisión de datos, regreso a pago, validaciones, diseño adaptable y resultado inexistente funcionan; se separaron las rutas SPA y API para evitar que el proxy intercepte `/cotizaciones/:id`. | Registrar el incremento e integrar pago y emisión de póliza. |
+| 20/11/2026 | Se preparó la integración real de pagos. | Pasarela académica con seis instrumentos, saldos, bloqueo, idempotencia, AES-GCM, intentos, emisión transaccional, póliza, documentos, diez pruebas Spring y frontend real compilan correctamente. | Ejecutar DDL, seed y prueba Oracle; después ejecutar las 36 pruebas Spring. |
+| 20/11/2026 | Se verificó la pasarela en Oracle y Spring. | El DDL, los seis instrumentos y la prueba Oracle fueron correctos; las 36 pruebas Spring terminaron sin fallos, errores ni omisiones. | Ejecutar los recorridos manuales de pago desde React. |
+| 20/11/2026 | Se verificó el pago real desde React. | Aprobación, fondos insuficientes, bloqueo, rechazo del procesador, CVV incorrecto, instrumento desconocido, saldo exacto, doble envío y validaciones locales pasaron correctamente. | Registrar el incremento e integrar la consulta persistente de pólizas. |
 

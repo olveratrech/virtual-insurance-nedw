@@ -72,6 +72,10 @@ tests/04_pagos_polizas.sql
 schema/05_cancelaciones.sql
 tests/05_cancelaciones.sql
 
+schema/06_simulador_pagos.sql
+seed/04_instrumentos_pago.sql
+tests/06_simulador_pagos.sql
+
 tests/99_recorrido_completo.sql
 ```
 
@@ -93,6 +97,12 @@ Esta estrategia permite continuar después de un fallo intermedio sin convertir 
 ## Numeración de cotizaciones
 
 `SEQ_NUMERO_COTIZACION` reserva números de negocio entre `1000` y `9999` para las cotizaciones creadas por la aplicación. Las cotizaciones académicas `0002` a `0005` permanecen separadas. La secuencia evita colisiones entre solicitudes concurrentes; sus saltos por caché, reinicios o transacciones revertidas son válidos y no afectan las PK.
+
+## Pasarela académica
+
+`INSTRUMENTO_PAGO_PRUEBA` representa un procesador externo ficticio. Conserva únicamente hash SHA-256 del PAN de prueba, últimos cuatro, saldo, estado y versión de concurrencia. Los saldos no pertenecen a `TARJETA` porque una aseguradora real no administra la cuenta bancaria del cliente.
+
+`SEQ_NUMERO_PAGO` y `SEQ_FOLIO_POLIZA` generan referencias concurrentes. `INTENTO_PAGO.IDEMPOTENCY_KEY` impide registrar dos veces una misma operación. Volver a ejecutar `seed/04_instrumentos_pago.sql` restablece los seis escenarios académicos y sus saldos iniciales.
 
 ## Prueba E2E transaccional
 

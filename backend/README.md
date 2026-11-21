@@ -19,6 +19,7 @@ La aplicación obtiene la conexión mediante variables de entorno:
 | `VI_DB_URL` | No | `jdbc:oracle:thin:@//localhost:1522/etobda_s1.fi.unam` |
 | `VI_DB_USERNAME` | No | `VI_APP` |
 | `VI_DB_PASSWORD` | Sí | Ninguno |
+| `VI_CARD_ENCRYPTION_KEY` | Sí para procesar pagos | Ninguno |
 
 `.env.example` documenta estas variables, pero Spring Boot no carga archivos `.env` automáticamente. No guardes una contraseña real en ese archivo ni en `application.properties`.
 
@@ -30,6 +31,14 @@ read -s "VI_DB_PASSWORD?Contraseña de VI_APP: "
 export VI_DB_PASSWORD
 echo
 ```
+
+Genera una clave local AES-256 para los números exclusivamente ficticios y expórtala en la misma terminal:
+
+```bash
+export VI_CARD_ENCRYPTION_KEY="$(openssl rand -base64 32)"
+```
+
+No cambies la clave mientras necesites descifrar tarjetas guardadas y nunca la agregues al repositorio. El CVV no se almacena.
 
 Si la URL o el usuario cambian, expórtalos también:
 
@@ -114,3 +123,9 @@ GET  /cotizaciones/{quoteId}
 Las reglas de auto y médico se encuentran en estrategias separadas. Una creación persiste la cotización, su único subtipo y el historial inicial dentro de una transacción. La consulta combina `quoteId` con el cliente autenticado y responde `404` cuando el recurso no existe o pertenece a otra cuenta.
 
 Los costos son valores académicos fijos por producto; no representan un cálculo actuarial ni una oferta comercial real.
+
+## Pasarela académica de pagos
+
+`POST /cotizaciones/{quoteId}/intentos-pago` requiere sesión, CSRF e `Idempotency-Key`. La pasarela usa exclusivamente los instrumentos de `database/seed/04_instrumentos_pago.sql`, bloquea el registro durante el débito y emite intento, póliza, historial y documentos dentro de una sola transacción.
+
+Un rechazo de negocio también responde `201` y conserva el intento, pero no descuenta saldo ni emite póliza. Repetir una clave de idempotencia devuelve el resultado previo sin un segundo cargo.

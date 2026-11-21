@@ -80,6 +80,10 @@ public class Quote {
 		return quoteId;
 	}
 
+	public Client getClient() {
+		return client;
+	}
+
 	public Integer getQuoteNumber() {
 		return quoteNumber;
 	}

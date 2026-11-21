@@ -26,8 +26,8 @@ function AppRouter() {
             <Route path="cotizar/medico" element={<ProtectedRoute><MedicalQuotePage /></ProtectedRoute>} />
             <Route path="cotizaciones/:quoteId" element={<ProtectedRoute><QuoteResultPage /></ProtectedRoute>} />
             <Route path="contratacion/pago" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
-            <Route path="polizas/:polizaId" element={<PolicyPage />} />
-            <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
+            <Route path="polizas/:polizaId" element={<ProtectedRoute><PolicyPage /></ProtectedRoute>} />
+            <Route path="polizas/:polizaId/cancelacion" element={<ProtectedRoute><CancellationPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

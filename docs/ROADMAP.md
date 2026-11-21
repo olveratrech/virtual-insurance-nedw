@@ -146,7 +146,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Integrar inicio de sesión, persistencia de sesión y logout.
 - [x] Integrar el registro ampliado con fotografía opcional y catálogos reales.
 - [x] Integrar ambas cotizaciones y sus resultados.
-- [ ] Integrar pago simulado y emisión de póliza.
+- [x] Integrar pago simulado y emisión de póliza.
 - [ ] Integrar consulta y solicitud de cancelación.
 - [ ] Comprobar que un cliente no pueda consultar datos de otro.
 

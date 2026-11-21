@@ -8,10 +8,10 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
-| Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 26 pruebas automatizadas | 26 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
+| Spring Boot | 36 pruebas automatizadas | 36 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
-| React | Análisis estático, compilación, autenticación, registro y cotizaciones reales | Aprobado; pago, pólizas, documentos y cancelaciones todavía simulados |
+| React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
 ## Oracle Database
 
@@ -24,6 +24,7 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 | `tests/03_cotizaciones.sql` | Integración transaccional | Secuencia de números, cotizaciones de auto y médicas, especialización exclusiva, estados e historial automático | Aprobada |
 | `tests/04_pagos_polizas.sql` | Integración transaccional | Intentos de pago, aprobación única, emisión de póliza, modalidad, costo, documentos e historial | Aprobada |
 | `tests/05_cancelaciones.sql` | Integración transaccional | Fechas, solicitudes duplicadas, resolución, sincronización de estado, historial y protección contra borrado | Aprobada |
+| `tests/06_simulador_pagos.sql` | Estructura e integración | Pasarela académica, columnas de idempotencia, secuencias y seis instrumentos con saldos y respuestas controladas | Aprobada |
 | `tests/99_recorrido_completo.sql` | E2E transaccional | Recorrido completo del caso de estudio y reglas negativas, con rollback integral | Aprobada |
 
 Los scripts de estructura y carga también se ejecutaron dos veces durante cada incremento para verificar su idempotencia o repetibilidad sin duplicar datos.
@@ -73,8 +74,18 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `QuoteIntegrationTests.rejectsVehicleYearAfterNextCalendarYear` | Validación/integración | Rechazo de año posterior al siguiente calendario | Aprobada |
 | `QuoteIntegrationTests.rejectsQuoteCreationWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para crear cotizaciones | Aprobada |
 | `QuoteIntegrationTests.hidesQuoteFromAnotherClient` | Autorización/integración | Ocultamiento mediante `quoteId + clientId` | Aprobada |
+| `PaymentIntegrationTests.approvesPaymentDebitsBalanceAndIssuesPolicy` | E2E transaccional | Débito, intento aprobado, póliza, historial y dos documentos | Aprobada |
+| `PaymentIntegrationTests.rejectsInsufficientFundsWithoutDebitingOrIssuingPolicy` | Regla transaccional | Rechazo sin débito ni póliza | Aprobada |
+| `PaymentIntegrationTests.rejectsBlockedCard` | Regla de pasarela | Rechazo de instrumento bloqueado | Aprobada |
+| `PaymentIntegrationTests.rejectsProcessorDecline` | Regla de pasarela | Rechazo forzado del procesador | Aprobada |
+| `PaymentIntegrationTests.rejectsExpiredInstrumentEvenWhenSubmittedExpirationLooksCurrent` | Regla de pasarela | Vencimiento determinado por el instrumento del procesador | Aprobada |
+| `PaymentIntegrationTests.acceptsExactBalanceAndLeavesItAtZero` | Límite transaccional | Débito con saldo exacto sin producir saldo negativo | Aprobada |
+| `PaymentIntegrationTests.rejectsInvalidSecurityCodeWithoutStoringIt` | Seguridad | Rechazo de CVV y ausencia de columna persistente | Aprobada |
+| `PaymentIntegrationTests.repeatsIdempotentPaymentWithoutSecondDebitOrPolicy` | Idempotencia | Misma respuesta sin segundo débito ni póliza | Aprobada |
+| `PaymentIntegrationTests.rejectsPaymentWithoutAuthentication` | Seguridad | Sesión obligatoria para pagar | Aprobada |
+| `PaymentIntegrationTests.validatesTermsBeforeCreatingAttempt` | Validación | Términos obligatorios antes de persistir | Aprobada |
 
-Última ejecución confirmada: **26 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **36 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -138,6 +149,13 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Continuación a pago y regreso al resultado | Integración manual | Aprobado; conserva la cotización seleccionada |
 | Cotizaciones integradas en diseño adaptable | Revisión visual | Aprobada |
 | Consulta de una cotización inexistente | Integración de error React–Spring | Aprobada; muestra la página React, el detalle del `404` y acciones de recuperación |
+| Pago con fondos suficientes y emisión de póliza | E2E parcial React–Spring–Oracle | Aprobado; descuenta saldo, registra el intento y muestra la póliza activa |
+| Pago con fondos insuficientes | Regla transaccional manual | Aprobado; conserva la pantalla, no descuenta ni emite póliza |
+| Tarjeta bloqueada y rechazo del procesador | Regla de pasarela manual | Aprobados; muestran motivos controlados y permiten reintentar |
+| CVV incorrecto e instrumento no registrado | Seguridad y error manual | Aprobados; no exponen datos ni emiten póliza |
+| Pago con saldo exacto | Prueba de límite E2E | Aprobado; emite póliza y deja saldo en cero |
+| Doble envío del formulario de pago | Regresión de idempotencia | Aprobado; bloquea el botón y genera una sola póliza |
+| Validaciones locales de pago | Regresión manual | Aprobadas; fecha, PAN, vencimiento, CVV y términos |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -150,7 +168,7 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 ## Pendientes de prueba
 
 - Descarga protegida de la fotografía del cliente.
-- Integración de los módulos restantes de React con la API real, sustituyendo los mocks de pago, pólizas, documentos y cancelaciones.
+- Integración de los módulos restantes de React con la API real, sustituyendo los mocks de consulta de pólizas, documentos y cancelaciones.
 - Autorización por propietario sobre cotizaciones, pagos, pólizas, documentos y cancelaciones.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.

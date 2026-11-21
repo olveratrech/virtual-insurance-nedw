@@ -83,8 +83,14 @@ Códigos de negocio previstos:
 - `RESOURCE_NOT_OWNED`
 - `QUOTE_NOT_APPROVED`
 - `QUOTE_EXPIRED`
-- `QUOTE_ALREADY_ISSUED`
-- `PAYMENT_REJECTED`
+- `QUOTE_ALREADY_PAID`
+- `INVALID_IDEMPOTENCY_KEY`
+- `TEST_CARD_NOT_FOUND`
+- `INSUFFICIENT_FUNDS`
+- `EXPIRED_CARD`
+- `BLOCKED_CARD`
+- `INVALID_SECURITY_CODE`
+- `PROCESSOR_DECLINED`
 - `POLICY_NOT_ACTIVE`
 - `CANCELLATION_ALREADY_PENDING`
 - `UNSUPPORTED_FILE`
@@ -469,20 +475,18 @@ La primera versión no requiere paginación con cursor porque el panel solamente
 
 La operación registra la tarjeta ficticia, crea el intento y, si se aprueba, emite la póliza dentro de una sola transacción.
 
+Requiere el encabezado `Idempotency-Key` con una clave aleatoria de 16 a 64 caracteres. Repetir la misma clave devuelve el intento anterior sin descontar saldo ni emitir otra póliza.
+
 Petición:
 
 ```json
 {
   "coverageStart": "2026-11-26",
-  "paymentModeId": 1,
-  "card": {
-    "cardTypeId": 1,
-    "cardholderName": "Emmanuel Trejo Olvera",
-    "number": "4242424242424242",
-    "expirationYear": 2028,
-    "expirationMonth": 12,
-    "cvv": "123"
-  },
+  "paymentMode": "MONTHLY",
+  "cardholderName": "Emmanuel Trejo Olvera",
+  "cardNumber": "4242424242421111",
+  "expiration": "12/30",
+  "cvv": "123",
   "acceptsTerms": true
 }
 ```
@@ -491,40 +495,42 @@ Validaciones:
 
 - La cotización debe pertenecer al cliente, estar aprobada y vigente.
 - `coverageStart` no puede estar en el pasado ni superar la vigencia de la cotización.
-- La modalidad y el tipo de tarjeta deben existir.
+- `paymentMode` admite `MONTHLY` o `ANNUAL`.
 - La tarjeta debe tener 16 dígitos y pertenecer a la lista académica de demostración.
-- La fecha de expiración debe ser futura.
+- La fecha de expiración debe coincidir con el instrumento ficticio y no estar vencida.
 - El CVV tiene tres dígitos, se usa para la simulación y no se almacena.
 - `acceptsTerms` debe ser `true` y no se persiste.
 - `cardholderName` se usa para validación de entrada, pero no se persiste porque no existe en el modelo de `TARJETA`.
 
-Números de demostración:
+Instrumentos de demostración, todos con CVV `123` y vencimiento `12/30`, salvo el escenario vencido:
 
-- `4242424242424242`: intento aprobado.
-- `4000000000000000`: intento rechazado.
-- Cualquier otro número: `422`, código `DEMO_CARD_NOT_ALLOWED`.
+| Número exclusivamente ficticio | Escenario |
+|---|---|
+| `4242424242421111` | Fondos suficientes; saldo inicial de $50,000 |
+| `4000000000002222` | Fondos insuficientes; saldo inicial de $100 |
+| `4000000000003333` | Tarjeta bloqueada |
+| `4000000000004444` | Tarjeta vencida en `01/25`; se prueba por API porque React impide enviarla |
+| `4000000000005555` | Rechazo forzado del procesador |
+| `4242424242426666` | Saldo exacto de $1,040 para probar un débito hasta cero |
+
+Cualquier otro número produce un intento rechazado con `TEST_CARD_NOT_FOUND`; no se emite póliza.
 
 Respuesta aprobada `201`:
 
 ```json
 {
-  "paymentAttempt": {
-    "id": 401,
-    "paymentNumber": "0001",
-    "status": "APROBADO",
-    "attemptedAt": "2026-11-19T15:10:00-06:00",
-    "amount": 1040.00,
-    "currency": "MXN",
-    "rejectionReason": null
-  },
-  "policy": {
-    "id": 301,
-    "policyNumber": "VI-802145",
-    "status": "ACTIVA",
-    "type": "AUTO",
-    "validFrom": "2026-11-26",
-    "validUntil": "2027-11-25"
-  }
+  "attemptId": 401,
+  "status": "APROBADO",
+  "responseCode": "APPROVED",
+  "message": "El pago fue aprobado por la pasarela academica.",
+  "authorizationCode": "AUTH-0000001000",
+  "lastFour": "1111",
+  "amount": 1040.00,
+  "currency": "MXN",
+  "policyId": 301,
+  "policyNumber": "VI-2026-001000",
+  "coverageStart": "2026-11-26",
+  "coverageEnd": "2027-11-26"
 }
 ```
 
@@ -534,22 +540,26 @@ Respuesta rechazada `201`:
 
 ```json
 {
-  "paymentAttempt": {
-    "id": 402,
-    "paymentNumber": "0002",
-    "status": "RECHAZADO",
-    "attemptedAt": "2026-11-19T15:12:00-06:00",
-    "amount": 1040.00,
-    "currency": "MXN",
-    "rejectionReason": "El pago fue rechazado por el simulador. No se emitió ninguna póliza."
-  },
-  "policy": null
+  "attemptId": 402,
+  "status": "RECHAZADO",
+  "responseCode": "INSUFFICIENT_FUNDS",
+  "message": "La tarjeta ficticia no tiene fondos suficientes.",
+  "authorizationCode": null,
+  "lastFour": "2222",
+  "amount": 1040.00,
+  "currency": "MXN",
+  "policyId": null,
+  "policyNumber": null,
+  "coverageStart": "2026-11-26",
+  "coverageEnd": null
 }
 ```
 
 El rechazo es un resultado de negocio, no una falla HTTP. Por eso también responde `201` y queda registrado.
 
-Si la cotización ya produjo una póliza responde `409` con `QUOTE_ALREADY_ISSUED`.
+Si la cotización ya produjo una póliza responde `409` con `QUOTE_ALREADY_PAID`.
+
+El saldo pertenece exclusivamente a `INSTRUMENTO_PAGO_PRUEBA`, que representa al banco simulado. No se devuelve por la API. El número ficticio se cifra con AES-GCM antes de almacenarse en `TARJETA`; el CVV no se persiste.
 
 ## 9. Pólizas
 

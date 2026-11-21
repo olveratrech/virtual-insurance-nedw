@@ -8,7 +8,7 @@ import './PaymentForm.css'
 
 const initialValues = { coverageStart: '', paymentMode: 'MONTHLY', cardholderName: '', cardNumber: '', expiration: '', cvv: '', acceptsTerms: false }
 
-function PaymentForm({ onPay, paymentError, backDestination }) {
+function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const today = getTodayInputValue()
@@ -31,7 +31,7 @@ function PaymentForm({ onPay, paymentError, backDestination }) {
     if (!/^\d{3}$/.test(values.cvv)) errorsFound.cvv = 'Ingresa 3 dígitos.'
     if (!values.acceptsTerms) errorsFound.acceptsTerms = 'Debes aceptar los términos para continuar.'
     setErrors(errorsFound)
-    if (Object.keys(errorsFound).length === 0) onPay(values)
+    if (Object.keys(errorsFound).length === 0 && !isSubmitting) onPay(values)
   }
 
   return (
@@ -55,7 +55,9 @@ function PaymentForm({ onPay, paymentError, backDestination }) {
       {paymentError && <p className="payment-form__error" role="alert">{paymentError}</p>}
       <div className="payment-form__actions">
         <Link className="button button--secondary" to={backDestination}>Volver</Link>
-        <button className="button button--primary" type="submit">Pagar y emitir póliza</button>
+        <button className="button button--primary" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Procesando pago…' : 'Pagar y emitir póliza'}
+        </button>
       </div>
     </form>
   )
