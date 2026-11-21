@@ -20,6 +20,8 @@ import mx.unam.virtualinsurance.auth.ClientPrincipal;
 import mx.unam.virtualinsurance.customer.Client;
 import mx.unam.virtualinsurance.customer.ClientRepository;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -126,6 +128,71 @@ class AdminCancellationIntegrationTests {
 			.andExpect(jsonPath("$.policy.status").value("ACTIVA"));
 
 		assertThat(policyStatus(policyId)).isEqualTo("ACTIVA");
+	}
+
+	@Test
+	void approvedResolutionIsVisibleInClientPolicyPanelPdfAndHistory() throws Exception {
+		Long cancellationId = createCancellation();
+		Long policyId = policyId(cancellationId);
+		String observation = "Cancelacion aprobada para integracion final";
+		resolve(cancellationId, "APROBADA", observation).andExpect(status().isOk());
+
+		mockMvc.perform(get("/polizas/{policyId}", policyId)
+			.with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.status").value("CANCELADA"))
+			.andExpect(jsonPath("$.coverageActive").value(false))
+			.andExpect(jsonPath("$.cancellation.id").value(cancellationId))
+			.andExpect(jsonPath("$.cancellation.status").value("APROBADA"))
+			.andExpect(jsonPath("$.cancellation.resolutionObservation").value(observation))
+			.andExpect(jsonPath("$.cancellation.resolvedAt").isNotEmpty());
+
+		mockMvc.perform(get("/panel").with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath(
+				"$.recentActivity[?(@.id == 'policy-%s')].status".formatted(policyId)
+			).value(org.hamcrest.Matchers.hasItem("CANCELADA")))
+			.andExpect(jsonPath(
+				"$.recentActivity[?(@.id == 'policy-%s')].detail".formatted(policyId)
+			).value(org.hamcrest.Matchers.hasItem("Cobertura cancelada")));
+
+		assertThat(latestHistoryStatus(policyId)).isEqualTo("CANCELADA");
+		assertPolicyPdfContains(
+			policyId,
+			"Estatus: Cancelada",
+			"Estado de solicitud: Cancelacion aprobada",
+			"Observacion de resolucion: " + observation
+		);
+	}
+
+	@Test
+	void rejectedResolutionIsVisibleInClientPolicyPanelPdfAndHistory() throws Exception {
+		Long cancellationId = createCancellation();
+		Long policyId = policyId(cancellationId);
+		String observation = "La cobertura debe permanecer activa";
+		resolve(cancellationId, "RECHAZADA", observation).andExpect(status().isOk());
+
+		mockMvc.perform(get("/polizas/{policyId}", policyId)
+			.with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.status").value("ACTIVA"))
+			.andExpect(jsonPath("$.coverageActive").value(true))
+			.andExpect(jsonPath("$.cancellation.status").value("RECHAZADA"))
+			.andExpect(jsonPath("$.cancellation.resolutionObservation").value(observation));
+
+		mockMvc.perform(get("/panel").with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath(
+				"$.recentActivity[?(@.id == 'policy-%s')].status".formatted(policyId)
+			).value(org.hamcrest.Matchers.hasItem("ACTIVA")));
+
+		assertThat(latestHistoryStatus(policyId)).isEqualTo("ACTIVA");
+		assertPolicyPdfContains(
+			policyId,
+			"Estatus: Activa",
+			"Estado de solicitud: Cancelacion rechazada",
+			"Observacion de resolucion: " + observation
+		);
 	}
 
 	@Test
@@ -319,6 +386,42 @@ class AdminCancellationIntegrationTests {
 			Integer.class,
 			policyId
 		);
+	}
+
+	private String latestHistoryStatus(Long policyId) {
+		return jdbcTemplate.queryForObject(
+			"""
+			select ep.clave
+			  from historico_estatus_poliza h
+			  join estatus_poliza ep on ep.estatus_poliza_id = h.estatus_poliza_id
+			 where h.poliza_id = ?
+			 order by h.numero_cambio desc
+			 fetch first 1 row only
+			""",
+			String.class,
+			policyId
+		);
+	}
+
+	private void assertPolicyPdfContains(Long policyId, String... expectedTexts) throws Exception {
+		Long documentId = jdbcTemplate.queryForObject(
+			"""
+			select documento_poliza_id
+			  from documento_poliza
+			 where poliza_id = ? and tipo_documento = 'POLICY_PDF'
+			""",
+			Long.class,
+			policyId
+		);
+		MvcResult result = mockMvc.perform(get(
+			"/polizas/{policyId}/documentos/{documentId}/contenido", policyId, documentId
+		).with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andReturn();
+
+		try (var document = Loader.loadPDF(result.getResponse().getContentAsByteArray())) {
+			assertThat(new PDFTextStripper().getText(document)).contains(expectedTexts);
+		}
 	}
 
 	private RequestPostProcessor authenticatedAdmin() {

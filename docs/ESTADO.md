@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
 | Frontend React | Panel administrativo aprobado | Acceso interno, filtros, detalle y resolución de cancelaciones complementan el recorrido comercial y fueron verificados manualmente. |
-| Backend Spring Boot | Resolución administrativa aprobada | Las 83 pruebas pasan; consulta, aprobación y rechazo de cancelaciones complementan el recorrido comercial verificado. |
+| Backend Spring Boot | Ciclo administrativo completo | Las 85 pruebas pasan; aprobación y rechazo se reflejan en póliza, panel, PDF e historial. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
-| Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 83 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
+| Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
+| Pruebas | Parciales aprobadas | Oracle, 85 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -235,7 +235,7 @@
 
 ## Próxima acción
 
-Integrar y verificar el resultado administrativo en póliza, PDF, panel e historial del cliente.
+Ejecutar la estabilización final y preparar el recorrido de demostración de extremo a extremo.
 
 ## Bitácora breve
 
@@ -327,4 +327,5 @@ Integrar y verificar el resultado administrativo en póliza, PDF, panel e histor
 | 21/11/2026 | Se implementó y verificó la autenticación administrativa. | Proveedores separados, roles internos, sesión, CSRF, logout y aislamiento entre rutas de clientes y administradores quedaron aprobados en la suite completa de 71 pruebas. | Implementar la API administrativa de consulta y resolución de cancelaciones. |
 | 21/11/2026 | Se implementó y verificó la API administrativa de cancelaciones. | Listado, filtros, detalle, aprobación, rechazo, bloqueo transaccional, responsable, cambio de póliza e historial quedaron aprobados en la suite completa de 83 pruebas. | Construir el panel administrativo en React. |
 | 21/11/2026 | Se implementó y verificó el panel administrativo en React. | Acceso interno, sesión aislada, filtros, detalle, aprobación, rechazo, recarga, logout y diseño adaptable funcionan; la póliza cancelada se muestra en rojo, sin cobertura ni nueva acción de cancelación. | Completar la integración final del resultado administrativo en las vistas del cliente y documentos. |
+| 21/11/2026 | Se completó y verificó el ciclo administrativo de cancelaciones. | Las 85 pruebas, `lint`, `build` y los recorridos manuales aprobaron; la solicitud usa labels legibles y aprobación o rechazo aparecen en póliza, historial visible, panel y PDF regenerado. | Ejecutar estabilización final y preparar la demostración E2E. |
 

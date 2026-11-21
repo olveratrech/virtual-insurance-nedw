@@ -21,7 +21,11 @@ public record PolicyPdfData(
 	BigDecimal paymentAmount,
 	String authorizationCode,
 	String invoiceNumber,
-	String cancellationNumber
+	String cancellationNumber,
+	String cancellationStatus,
+	LocalDate cancellationRequestedDate,
+	LocalDate cancellationResolvedDate,
+	String cancellationResolutionObservation
 ) {
 }
 

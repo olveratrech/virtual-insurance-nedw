@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import DocumentList from '../../components/policy/DocumentList/DocumentList.jsx'
 import PaymentOverview from '../../components/policy/PaymentOverview/PaymentOverview.jsx'
 import PolicyDetails from '../../components/policy/PolicyDetails/PolicyDetails.jsx'
+import CancellationHistory from '../../components/policy/CancellationHistory/CancellationHistory.jsx'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
 import { downloadPolicyDocument, getPolicy } from '../../services/policyApi.js'
 import './PolicyPage.css'
@@ -131,6 +132,8 @@ function PolicyPage() {
         <PolicyDetails policy={policy} />
         <PaymentOverview policy={policy} />
       </div>
+
+      <CancellationHistory cancellation={policy.cancellation} />
 
       <DocumentList documents={policy.documents} onDownload={handleDownload} downloadingId={downloadingId} />
       {downloadMessage && <p className="prototype-notice" role="status">{downloadMessage}</p>}

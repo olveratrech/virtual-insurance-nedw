@@ -749,10 +749,17 @@ Cuando existe una solicitud pendiente:
     "id": 601,
     "requestNumber": "CAN-0001",
     "status": "SOLICITADA",
-    "requestedDate": "2026-11-21"
+    "reason": "FINANCIAL",
+    "requestedDate": "2026-11-21",
+    "comments": "Solicitud del cliente",
+    "createdAt": "2026-11-21T09:30:00-06:00",
+    "resolvedAt": null,
+    "resolutionObservation": null
   }
 }
 ```
+
+Después de una resolución, `cancellation.status` es `APROBADA` o `RECHAZADA`; `resolvedAt` y `resolutionObservation` contienen el resultado administrativo. Una aprobación cambia la póliza a `CANCELADA` y `coverageActive` a `false`; un rechazo devuelve la póliza a `ACTIVA` y permite una solicitud posterior.
 
 ### `GET /polizas/{policyId}/documentos/{documentId}/contenido`
 
@@ -766,7 +773,7 @@ Content-Disposition: attachment; filename="poliza-VI-2026-001000.pdf"
 Cache-Control: no-store
 ```
 
-El cuerpo contiene un PDF generado desde los datos persistidos. La póliza incluye identificación, asegurado, vigencia, costo, cobertura y secciones contractuales académicas versionables; el comprobante incluye importe y autorización simulada. Ninguno contiene PAN, CVV, contraseña o identificador de sesión.
+El cuerpo contiene un PDF generado desde los datos persistidos. La póliza incluye identificación, asegurado, vigencia, costo, cobertura y secciones contractuales académicas versionables. Cuando existe una cancelación, también incluye folio, estado localizado, fecha solicitada y, después de resolverla, fecha y observación. El comprobante incluye importe y autorización simulada. Ninguno contiene PAN, CVV, contraseña o identificador de sesión.
 
 La representación anterior muestra únicamente los campos que cambian; la respuesta real conserva todos los campos del detalle.
 

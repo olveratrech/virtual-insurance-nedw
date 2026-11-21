@@ -15,6 +15,7 @@ public record PolicyResponse(
 	LocalDate validUntil,
 	PolicyInsuredResponse insured,
 	PolicyPaymentResponse payment,
+	PolicyCancellationResponse cancellation,
 	List<PolicyDocumentResponse> documents
 ) {
 	public PolicyResponse {

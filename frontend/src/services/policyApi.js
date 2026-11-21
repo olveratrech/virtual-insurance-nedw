@@ -6,12 +6,24 @@ function formatDate(value) {
   return new Date(`${value}T12:00:00`).toLocaleDateString('es-MX', { dateStyle: 'long' })
 }
 
+const policyStatusLabels = {
+  ACTIVA: 'Activa',
+  CANCELACION_SOLICITADA: 'Cancelación solicitada',
+  CANCELADA: 'Cancelada',
+  VENCIDA: 'Vencida',
+}
+
+export function getPolicyStatusLabel(status) {
+  return policyStatusLabels[status] ?? status
+}
+
 export async function getPolicy(policyId) {
   const response = await apiRequest(`/api/polizas/${policyId}`)
   return {
     id: response.id,
     policyNumber: response.policyNumber,
     status: response.status,
+    statusLabel: getPolicyStatusLabel(response.status),
     coverageActive: response.coverageActive,
     type: response.type,
     productName: response.productName,
@@ -28,6 +40,20 @@ export async function getPolicy(policyId) {
       : 'No aplica',
     lastPayment: `${formatMxn(response.payment.lastPaymentAmount)} · ${response.payment.lastPaymentStatus}`,
     authorizationCode: response.payment.authorizationCode,
+    cancellation: response.cancellation ? {
+      ...response.cancellation,
+      requestedDateLabel: formatDate(response.cancellation.requestedDate),
+      createdAtLabel: new Date(response.cancellation.createdAt).toLocaleString('es-MX', {
+        dateStyle: 'long',
+        timeStyle: 'short',
+      }),
+      resolvedAtLabel: response.cancellation.resolvedAt
+        ? new Date(response.cancellation.resolvedAt).toLocaleString('es-MX', {
+            dateStyle: 'long',
+            timeStyle: 'short',
+          })
+        : null,
+    } : null,
     documents: response.documents,
   }
 }

@@ -2,6 +2,8 @@ package mx.unam.virtualinsurance.policy;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import mx.unam.virtualinsurance.shared.error.ApiException;
@@ -97,6 +99,7 @@ public class PolicyService {
 		LocalDate nextPaymentDate = "MONTHLY".equals(summary.paymentMode())
 			? summary.validFrom().plusMonths(1)
 			: null;
+		PolicyCancellationResponse cancellation = findLatestCancellation(policyId);
 
 		return new PolicyResponse(
 			summary.id(),
@@ -117,8 +120,44 @@ public class PolicyService {
 				summary.authorizationCode(),
 				"MXN"
 			),
+			cancellation,
 			documents
 		);
+	}
+
+	private PolicyCancellationResponse findLatestCancellation(Long policyId) {
+		List<PolicyCancellationResponse> cancellations = jdbcTemplate.query(
+			"""
+			select sc.solicitud_cancelacion_id, sc.folio, ec.clave estatus,
+			       sc.motivo, sc.fecha_solicitada, sc.comentarios,
+			       sc.fecha_creacion, sc.fecha_resolucion, sc.observacion_resolucion
+			  from solicitud_cancelacion sc
+			  join estatus_cancelacion ec
+			    on ec.estatus_cancelacion_id = sc.estatus_cancelacion_id
+			 where sc.poliza_id = ?
+			 order by sc.solicitud_cancelacion_id desc
+			 fetch first 1 row only
+			""",
+			(rs, rowNumber) -> new PolicyCancellationResponse(
+				rs.getLong("solicitud_cancelacion_id"),
+				rs.getString("folio"),
+				rs.getString("estatus"),
+				rs.getString("motivo"),
+				rs.getDate("fecha_solicitada").toLocalDate(),
+				rs.getString("comentarios"),
+				toOffsetDateTime(rs.getTimestamp("fecha_creacion")),
+				toOffsetDateTime(rs.getTimestamp("fecha_resolucion")),
+				rs.getString("observacion_resolucion")
+			),
+			policyId
+		);
+		return cancellations.isEmpty() ? null : cancellations.getFirst();
+	}
+
+	private OffsetDateTime toOffsetDateTime(java.sql.Timestamp timestamp) {
+		return timestamp == null
+			? null
+			: timestamp.toLocalDateTime().atZone(ZoneId.systemDefault()).toOffsetDateTime();
 	}
 
 	private String fullName(String name, String paternalSurname, String maternalSurname) {

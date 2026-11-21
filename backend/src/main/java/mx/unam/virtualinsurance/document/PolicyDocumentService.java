@@ -105,6 +105,7 @@ public class PolicyDocumentService {
 	}
 
 	private PolicyPdfData loadPolicyData(Long policyId, Long clientId) {
+		CancellationPdfData cancellation = loadLatestCancellation(policyId);
 		String ownershipClause = clientId == null ? "" : " and c.cliente_id = ?";
 		List<Object> arguments = clientId == null ? List.of(policyId) : List.of(policyId, clientId);
 		try {
@@ -115,16 +116,7 @@ public class PolicyDocumentService {
 				       ep.clave estatus, c.tipo_seguro, mp.clave modalidad,
 				       i.importe, i.codigo_autorizacion,
 				       ca.marca, ca.modelo, ca.anio, ca.placas,
-				       cl.nombre, cl.apellido_paterno, cl.apellido_materno,
-				       (
-				           select sc.folio
-				             from solicitud_cancelacion sc
-				             join estatus_cancelacion ec
-				               on ec.estatus_cancelacion_id = sc.estatus_cancelacion_id
-				            where sc.poliza_id = p.poliza_id
-				              and ec.clave = 'SOLICITADA'
-				            fetch first 1 row only
-				       ) folio_cancelacion
+				       cl.nombre, cl.apellido_paterno, cl.apellido_materno
 				  from poliza p
 				  join estatus_poliza ep on ep.estatus_poliza_id = p.estatus_poliza_id
 				  join intento_pago i on i.intento_pago_id = p.intento_pago_id
@@ -164,7 +156,11 @@ public class PolicyDocumentService {
 						rs.getBigDecimal("importe"),
 						rs.getString("codigo_autorizacion"),
 						rs.getString("folio_factura"),
-						rs.getString("folio_cancelacion")
+						cancellation == null ? null : cancellation.number(),
+						cancellation == null ? null : cancellation.status(),
+						cancellation == null ? null : cancellation.requestedDate(),
+						cancellation == null ? null : cancellation.resolvedDate(),
+						cancellation == null ? null : cancellation.observation()
 					);
 				},
 				arguments.toArray()
@@ -172,6 +168,32 @@ public class PolicyDocumentService {
 		} catch (EmptyResultDataAccessException exception) {
 			throw documentNotFound();
 		}
+	}
+
+	private CancellationPdfData loadLatestCancellation(Long policyId) {
+		List<CancellationPdfData> cancellations = jdbcTemplate.query(
+			"""
+			select sc.folio, ec.clave estatus, sc.fecha_solicitada,
+			       sc.fecha_resolucion, sc.observacion_resolucion
+			  from solicitud_cancelacion sc
+			  join estatus_cancelacion ec
+			    on ec.estatus_cancelacion_id = sc.estatus_cancelacion_id
+			 where sc.poliza_id = ?
+			 order by sc.solicitud_cancelacion_id desc
+			 fetch first 1 row only
+			""",
+			(rs, rowNumber) -> new CancellationPdfData(
+				rs.getString("folio"),
+				rs.getString("estatus"),
+				rs.getDate("fecha_solicitada").toLocalDate(),
+				rs.getTimestamp("fecha_resolucion") == null
+					? null
+					: rs.getTimestamp("fecha_resolucion").toLocalDateTime().toLocalDate(),
+				rs.getString("observacion_resolucion")
+			),
+			policyId
+		);
+		return cancellations.isEmpty() ? null : cancellations.getFirst();
 	}
 
 	private String fullName(String name, String paternalSurname, String maternalSurname) {
@@ -188,6 +210,15 @@ public class PolicyDocumentService {
 			"No existe un documento accesible con los identificadores proporcionados.",
 			"not-found"
 		);
+	}
+
+	private record CancellationPdfData(
+		String number,
+		String status,
+		java.time.LocalDate requestedDate,
+		java.time.LocalDate resolvedDate,
+		String observation
+	) {
 	}
 }
 

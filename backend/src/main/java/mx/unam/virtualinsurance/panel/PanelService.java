@@ -61,6 +61,11 @@ public class PanelService {
 	}
 
 	private String policyDetail(PanelRepository.ActivityRow row) {
-		return "Vigencia hasta el " + row.validUntil().format(DATE);
+		return switch (row.status()) {
+			case "CANCELACION_SOLICITADA" -> "Solicitud de cancelación en revisión · cobertura activa";
+			case "CANCELADA" -> "Cobertura cancelada";
+			case "VENCIDA" -> "Cobertura vencida";
+			default -> "Vigencia hasta el " + row.validUntil().format(DATE);
+		};
 	}
 }

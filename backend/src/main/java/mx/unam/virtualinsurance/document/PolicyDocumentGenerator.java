@@ -49,8 +49,28 @@ public class PolicyDocumentGenerator {
 				writer.keyValue("Folio", data.policyNumber());
 				writer.keyValue("Estatus", policyStatusLabel(data.status()));
 				if (data.cancellationNumber() != null) {
+					writer.sectionTitle("Cancelacion");
 					writer.keyValue("Folio de cancelacion", data.cancellationNumber());
+					writer.keyValue(
+						"Estado de solicitud",
+						cancellationStatusLabel(data.cancellationStatus())
+					);
+					writer.keyValue(
+						"Fecha solicitada",
+						formatDate(data.cancellationRequestedDate())
+					);
+					if (data.cancellationResolvedDate() != null) {
+						writer.keyValue(
+							"Fecha de resolucion",
+							formatDate(data.cancellationResolvedDate())
+						);
+						writer.keyValue(
+							"Observacion de resolucion",
+							data.cancellationResolutionObservation()
+						);
+					}
 				}
+				writer.sectionTitle("Datos de cobertura");
 				writer.keyValue("Producto", data.productName());
 				writer.keyValue("Cobertura", data.coverageName());
 				writer.keyValue("Contratante", data.clientName());
@@ -136,6 +156,15 @@ public class PolicyDocumentGenerator {
 			case "CANCELACION_SOLICITADA" -> "Cancelacion solicitada";
 			case "CANCELADA" -> "Cancelada";
 			case "VENCIDA" -> "Vencida";
+			default -> status;
+		};
+	}
+
+	private String cancellationStatusLabel(String status) {
+		return switch (status) {
+			case "SOLICITADA" -> "Cancelacion solicitada";
+			case "APROBADA" -> "Cancelacion aprobada";
+			case "RECHAZADA" -> "Cancelacion rechazada";
 			default -> status;
 		};
 	}

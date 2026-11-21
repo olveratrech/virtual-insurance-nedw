@@ -103,7 +103,7 @@ function CancellationPage() {
       <header className="cancellation-page__heading">
         <p className="eyebrow">Gestión de póliza</p>
         <h1>Solicitar cancelación</h1>
-        <p>{policy.policyNumber} · Estado actual: {policy.status}</p>
+        <p>{policy.policyNumber} · Estado actual: {policy.statusLabel}</p>
       </header>
 
       {status === 'confirmed' && request ? (
@@ -121,6 +121,7 @@ function CancellationPage() {
         <section className="cancellation-confirmation" aria-labelledby="cancellation-pending-title">
           <StatusBadge tone="warning">CANCELACIÓN SOLICITADA</StatusBadge>
           <h2 id="cancellation-pending-title">Esta póliza ya tiene una solicitud en revisión</h2>
+          {policy.cancellation?.requestNumber && <p>Folio: <strong>{policy.cancellation.requestNumber}</strong></p>}
           <p>La cobertura permanece activa mientras se resuelve la solicitud. No es necesario enviarla nuevamente.</p>
           <div className="cancellation-confirmation__actions">
             <Link className="button button--primary" to={`/polizas/${polizaId}`}>Volver a la póliza</Link>

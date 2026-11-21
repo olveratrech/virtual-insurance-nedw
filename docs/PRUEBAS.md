@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 83 pruebas automatizadas | 83 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 85 pruebas automatizadas | 85 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -87,6 +87,8 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `AdminCancellationIntegrationTests.rejectsResolutionWithoutCsrf` | Seguridad/integración | Protección CSRF de la resolución | Aprobada |
 | `AdminCancellationIntegrationTests.rejectsAdministrativeQueryWithoutAuthentication` | Seguridad/integración | Sesión interna obligatoria para consultar | Aprobada |
 | `AdminCancellationIntegrationTests.rejectsClientSessionOnAdministrativeEndpoints` | Autorización/integración | Una sesión de cliente no puede consultar administración | Aprobada |
+| `AdminCancellationIntegrationTests.approvedResolutionIsVisibleInClientPolicyPanelPdfAndHistory` | E2E transaccional | Aprobación visible en detalle, panel, PDF e historial final `CANCELADA` | Aprobada |
+| `AdminCancellationIntegrationTests.rejectedResolutionIsVisibleInClientPolicyPanelPdfAndHistory` | E2E transaccional | Rechazo visible en detalle, panel, PDF e historial final `ACTIVA` | Aprobada |
 | `QuoteIntegrationTests.createsApprovedAutoQuoteWithSubtypeAndHistory` | API/integración | Strategy de auto, costo, subtipo, historial y consulta posterior | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithTwelveNegativePoints` | Regla de negocio/integración | Rechazo de auto por 12 puntos y costo nulo | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithCriminalRecord` | Regla de negocio/integración | Rechazo de auto por antecedentes | Aprobada |
@@ -133,7 +135,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **83 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **85 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -231,6 +233,10 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Logout y aislamiento de sesiones administrativas | Seguridad manual | Aprobados; cliente y usuario interno no comparten identidad simultánea |
 | Panel administrativo adaptable | Revisión visual | Aprobado en listado, detalle y formulario de resolución |
 | Detalle de póliza cancelada | Regresión funcional y visual | Aprobado; usa estado rojo, informa cobertura terminada, elimina próximo pago y oculta otra cancelación |
+| Label de cancelación pendiente | Regresión visual | Aprobado; muestra `Cancelación solicitada` sin exponer `CANCELACION_SOLICITADA` |
+| Historial de cancelación en póliza | Integración manual | Aprobado; presenta folio, motivo, fechas, comentarios y observación final |
+| Resultado aprobado en panel y PDF | E2E parcial React–Spring–Oracle | Aprobado; muestra cobertura cancelada y resolución final en el documento regenerado |
+| Resultado rechazado en panel y PDF | E2E parcial React–Spring–Oracle | Aprobado; conserva la póliza activa y documenta el rechazo y su observación |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
