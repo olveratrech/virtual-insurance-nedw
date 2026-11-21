@@ -113,8 +113,8 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PolicyIntegrationTests.hidesPolicyFromAnotherClient` | Autorización/integración | Ocultamiento mediante `policyId + clientId` | Aprobada |
 | `PolicyIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para identificador inexistente | Aprobada |
 | `PolicyIntegrationTests.rejectsPolicyQueryWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar pólizas | Aprobada |
-| `PolicyIntegrationTests.downloadsOwnedPolicyAsRealPdfWithPolicyData` | PDF/integración | PDF válido con datos de póliza, placas, modalidad localizada y plantilla contractual | Aprobada |
-| `PolicyIntegrationTests.downloadsOwnedPaymentReceiptAsRealPdf` | PDF/integración | Comprobante válido con importe y autorización académica | Aprobada |
+| `PolicyIntegrationTests.downloadsOwnedPolicyAsRealPdfWithPolicyData` | PDF/integración | PDF válido con logotipo institucional, datos de póliza, placas, modalidad localizada y plantilla contractual | Aprobada |
+| `PolicyIntegrationTests.downloadsOwnedPaymentReceiptAsRealPdf` | PDF/integración | Comprobante válido con logotipo institucional, importe y autorización académica | Aprobada |
 | `PolicyIntegrationTests.hidesDocumentFromAnotherClient` | Autorización/integración | Un cliente no puede descargar documentos ajenos | Aprobada |
 | `PolicyIntegrationTests.returnsNotFoundForDocumentOutsidePolicy` | Autorización/integración | Se valida conjuntamente póliza y documento | Aprobada |
 | `PolicyIntegrationTests.rejectsDocumentDownloadWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para descargar | Aprobada |
@@ -237,6 +237,9 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Historial de cancelación en póliza | Integración manual | Aprobado; presenta folio, motivo, fechas, comentarios y observación final |
 | Resultado aprobado en panel y PDF | E2E parcial React–Spring–Oracle | Aprobado; muestra cobertura cancelada y resolución final en el documento regenerado |
 | Resultado rechazado en panel y PDF | E2E parcial React–Spring–Oracle | Aprobado; conserva la póliza activa y documenta el rechazo y su observación |
+| Identidad visual en encabezados | Regresión visual adaptable | Aprobada; logotipo completo en escritorio e isotipo en vista estrecha para cliente y administración |
+| Favicon de Virtual Insurance | Regresión visual | Aprobado; el navegador carga el recurso propio configurado en la aplicación |
+| Logotipo en póliza y comprobante | Regresión automatizada y visual | Aprobado; ambos PDF incluyen la imagen en su primera página sin recorte ni deformación |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

@@ -18,6 +18,8 @@ import mx.unam.virtualinsurance.customer.Client;
 import mx.unam.virtualinsurance.customer.ClientRepository;
 
 import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import org.junit.jupiter.api.Test;
@@ -128,6 +130,7 @@ class PolicyIntegrationTests {
 		org.assertj.core.api.Assertions.assertThat(content).startsWith('%', 'P', 'D', 'F');
 		try (var document = Loader.loadPDF(content)) {
 			String text = new PDFTextStripper().getText(document);
+			org.assertj.core.api.Assertions.assertThat(hasImageOnFirstPage(document)).isTrue();
 			org.assertj.core.api.Assertions.assertThat(text)
 				.contains("Poliza academica " + policyNumber)
 				.contains("DOCUMENTO EXCLUSIVAMENTE ACADEMICO")
@@ -150,11 +153,21 @@ class PolicyIntegrationTests {
 
 		try (var document = Loader.loadPDF(result.getResponse().getContentAsByteArray())) {
 			String text = new PDFTextStripper().getText(document);
+			org.assertj.core.api.Assertions.assertThat(hasImageOnFirstPage(document)).isTrue();
 			org.assertj.core.api.Assertions.assertThat(text)
 				.contains("Comprobante academico de pago")
 				.contains("Seguro medico")
 				.contains("Autorizacion simulada");
 		}
+	}
+
+	private boolean hasImageOnFirstPage(PDDocument document) throws Exception {
+		for (var name : document.getPage(0).getResources().getXObjectNames()) {
+			if (document.getPage(0).getResources().getXObject(name) instanceof PDImageXObject) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Test

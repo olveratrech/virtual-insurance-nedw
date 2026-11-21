@@ -21,8 +21,8 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Panel administrativo aprobado | Acceso interno, filtros, detalle y resolución de cancelaciones complementan el recorrido comercial y fueron verificados manualmente. |
-| Backend Spring Boot | Ciclo administrativo completo | Las 85 pruebas pasan; aprobación y rechazo se reflejan en póliza, panel, PDF e historial. |
+| Frontend React | Identidad visual integrada | El portal del cliente y la zona administrativa usan el logotipo adaptable y el favicon propios; los recorridos comerciales y administrativos continúan aprobados. |
+| Backend Spring Boot | Ciclo administrativo completo | Las 85 pruebas pasan; aprobación y rechazo se reflejan en póliza, panel, PDF e historial, y ambos documentos incorporan la marca institucional. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
 | Pruebas | Parciales aprobadas | Oracle, 85 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
@@ -69,7 +69,7 @@
 - Proyecto creado con React y Vite.
 - React Router configurado con las diez rutas iniciales y una ruta de página no encontrada.
 - `MainLayout` comparte el encabezado y el área de contenido entre páginas.
-- `Header` implementa identidad, navegación principal y acceso.
+- `Header` implementa identidad con logotipo completo en escritorio e isotipo en vista estrecha, navegación principal y acceso.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
 - `NotFoundPage` atiende rutas y pólizas inexistentes; todas las rutas principales tienen pantalla propia.
@@ -94,7 +94,7 @@
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
 - `DocumentList` descarga pólizas y comprobantes PDF reales mediante una ruta protegida.
-- Los PDF se regeneran con una plantilla académica versionable e incluyen datos específicos de auto, como placas, y modalidades presentadas en español.
+- Los PDF se regeneran con una plantilla académica versionable, incorporan el logotipo PNG institucional e incluyen datos específicos de auto, como placas, y modalidades presentadas en español.
 - `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
 - `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
 - `cancellationApi.js` crea solicitudes reales protegidas con CSRF y presenta el folio persistido.
@@ -102,6 +102,7 @@
 - `PolicyPage` oculta la acción de cancelación cuando ya existe una solicitud pendiente.
 - La zona `/admin` utiliza contexto, layout, guardia de rutas y servicios independientes del portal del cliente.
 - El panel administrativo permite filtrar, consultar, aprobar y rechazar solicitudes con confirmación explícita y observación obligatoria.
+- El encabezado administrativo conserva su contexto visual propio y utiliza la misma marca adaptable que el portal del cliente.
 - `PolicyPage` presenta `ACTIVA`, `CANCELACION_SOLICITADA` y `CANCELADA` de forma diferenciada; solo una póliza activa ofrece iniciar una cancelación.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.

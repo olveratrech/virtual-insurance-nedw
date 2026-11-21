@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import brandLogo from '../../../assets/brand/virtual-insurance-logo.svg'
+import brandMark from '../../../assets/brand/virtual-insurance-mark.svg'
 import useAdminAuth from '../../../hooks/useAdminAuth.js'
 import './AdminHeader.css'
 
@@ -26,8 +28,11 @@ function AdminHeader() {
     <header className="admin-header">
       <div className="admin-header__content">
         <Link className="admin-header__brand" to="/admin/cancelaciones" aria-label="Virtual Insurance, administración">
-          <span className="admin-header__brand-mark" aria-hidden="true">VI</span>
-          <span><strong>Virtual Insurance</strong><small>Administración</small></span>
+          <span className="admin-header__brand-image">
+            <img className="admin-header__brand-logo" src={brandLogo} alt="Virtual Insurance" />
+            <img className="admin-header__brand-mark" src={brandMark} alt="" aria-hidden="true" />
+          </span>
+          <small>Administración</small>
         </Link>
         {sessionStatus === 'authenticated' && user && (
           <>

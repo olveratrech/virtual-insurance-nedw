@@ -19,6 +19,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,11 +32,14 @@ public class PolicyDocumentGenerator {
 		new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
 	private static final DateTimeFormatter DATE =
 		DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale.of("es", "MX"));
+	private static final String BRAND_LOGO = "branding/virtual-insurance-logo.png";
 
 	private final AcademicContractContent contractContent;
+	private final byte[] brandLogo;
 
 	public PolicyDocumentGenerator(AcademicContractContent contractContent) {
 		this.contractContent = contractContent;
+		this.brandLogo = loadBrandLogo();
 	}
 
 	public GeneratedDocument generatePolicy(PolicyPdfData data) {
@@ -42,7 +47,7 @@ public class PolicyDocumentGenerator {
 			"poliza-" + safeFilename(data.policyNumber()) + ".pdf",
 			"application/pdf",
 			createPdf("Poliza academica " + data.policyNumber(), writer -> {
-				writer.title("VIRTUAL INSURANCE");
+				writer.brand(brandLogo);
 				writer.subtitle("Poliza academica " + data.policyNumber());
 				writer.notice(contractContent.disclaimer());
 				writer.sectionTitle("Datos de la poliza");
@@ -95,7 +100,7 @@ public class PolicyDocumentGenerator {
 			"comprobante-" + safeFilename(data.policyNumber()) + ".pdf",
 			"application/pdf",
 			createPdf("Comprobante academico " + data.policyNumber(), writer -> {
-				writer.title("VIRTUAL INSURANCE");
+				writer.brand(brandLogo);
 				writer.subtitle("Comprobante academico de pago");
 				writer.notice(contractContent.disclaimer());
 				writer.sectionTitle("Operacion");
@@ -131,6 +136,14 @@ public class PolicyDocumentGenerator {
 			return output.toByteArray();
 		} catch (IOException exception) {
 			throw new IllegalStateException("No fue posible generar el documento PDF.", exception);
+		}
+	}
+
+	private byte[] loadBrandLogo() {
+		try {
+			return new ClassPathResource(BRAND_LOGO).getContentAsByteArray();
+		} catch (IOException exception) {
+			throw new IllegalStateException("No fue posible cargar el logotipo institucional.", exception);
 		}
 	}
 
@@ -199,8 +212,17 @@ public class PolicyDocumentGenerator {
 			newPage();
 		}
 
-		private void title(String value) throws IOException {
-			writeLine(value, BOLD, 20, new Color(22, 45, 84), 26);
+		private void brand(byte[] logo) throws IOException {
+			float logoWidth = 185;
+			PDImageXObject image = PDImageXObject.createFromByteArray(
+				document,
+				logo,
+				"virtual-insurance-logo"
+			);
+			float logoHeight = logoWidth * image.getHeight() / image.getWidth();
+			ensureSpace(logoHeight + 14);
+			stream.drawImage(image, MARGIN, y - logoHeight, logoWidth, logoHeight);
+			y -= logoHeight + 14;
 		}
 
 		private void subtitle(String value) throws IOException {

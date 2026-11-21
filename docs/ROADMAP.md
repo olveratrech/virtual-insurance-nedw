@@ -167,6 +167,19 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** ciclo completo de solicitud y resolución administrativa de cancelaciones.
 
+### Fase 5.2 — Identidad visual y documentos
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Incorporar logotipo e isotipo propios en los encabezados del cliente y administración.
+- [x] Configurar el favicon propio de la aplicación.
+- [x] Integrar el logotipo institucional en la póliza y el comprobante PDF.
+- [x] Verificar la marca en escritorio, vista estrecha y documentos descargados.
+- [ ] Rediseñar la plantilla completa de la póliza y ampliar su contenido contractual.
+- [ ] Unificar el aviso explícito sobre el carácter ficticio y educativo de la aplicación.
+
+**Entregable parcial:** identidad visual compartida por React y los documentos PDF.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre
