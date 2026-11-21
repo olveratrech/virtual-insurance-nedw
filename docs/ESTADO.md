@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
 | Frontend React | Recorrido principal aprobado | Panel, registro, autenticación, cotizaciones, pagos, pólizas, documentos y cancelaciones consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Panel aprobado | Las 61 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
+| Backend Spring Boot | Panel aprobado | Las 62 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 61 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 62 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Preparar y ejecutar un guion reproducible de demostración extremo a extremo.
+Crear el modelo administrativo de usuarios internos, roles y responsabilidad de resolución de cancelaciones.
 
 ## Bitácora breve
 
@@ -319,4 +319,5 @@ Preparar y ejecutar un guion reproducible de demostración extremo a extremo.
 | 21/11/2026 | Se localizó la cancelación en el PDF de póliza. | Las 55 pruebas pasaron; una póliza activa muestra un estado legible sin folio y una póliza en revisión muestra `Cancelacion solicitada` junto con su folio real. | Integrar la actividad reciente del panel con datos persistidos. |
 | 21/11/2026 | Se implementó y verificó la API real del panel. | `GET /panel` limita la actividad al cliente autenticado, combina cotizaciones y pólizas, refleja cancelaciones y ordena los últimos 20 movimientos; las 61 pruebas pasaron. | Conectar `DashboardPage` y retirar su actividad simulada. |
 | 21/11/2026 | Se verificó la integración real del panel en React. | `lint`, `build`, actividad persistente, navegación, recarga, cancelación pendiente, estado vacío y diseño adaptable fueron correctos; `dashboardData.js` fue eliminado. | Preparar el recorrido de demostración y estabilización final. |
+| 21/11/2026 | Se fijó la fecha efectiva de cancelación al día actual. | Las 62 pruebas, la interfaz y Oracle fueron correctos; React impide modificar la fecha y Spring rechaza fechas pasadas o futuras. | Crear el modelo administrativo para resolver solicitudes. |
 

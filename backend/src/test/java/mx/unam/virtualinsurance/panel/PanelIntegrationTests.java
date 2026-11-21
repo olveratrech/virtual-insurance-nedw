@@ -87,7 +87,7 @@ class PanelIntegrationTests {
 				  "reason":"NOT_NEEDED","requestedDate":"%s",
 				  "comments":null,"confirmed":true
 				}
-				""".formatted(LocalDate.now().plusDays(2))))
+				""".formatted(LocalDate.now())))
 			.andExpect(status().isCreated());
 
 		mockMvc.perform(get("/panel").with(authenticatedAcademicClient()))

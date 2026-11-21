@@ -639,7 +639,7 @@ Cuando existe una solicitud pendiente:
     "id": 601,
     "requestNumber": "CAN-0001",
     "status": "SOLICITADA",
-    "requestedDate": "2026-12-01"
+    "requestedDate": "2026-11-21"
   }
 }
 ```
@@ -671,7 +671,7 @@ Petición:
 ```json
 {
   "reason": "FINANCIAL",
-  "requestedDate": "2026-12-01",
+  "requestedDate": "2026-11-21",
   "comments": "Solicito revisar la cancelación.",
   "confirmed": true
 }
@@ -689,7 +689,8 @@ Validaciones:
 - La póliza pertenece al cliente.
 - La póliza se encuentra activa.
 - No existe otra solicitud pendiente.
-- `requestedDate` no está en el pasado.
+- `requestedDate` es obligatoriamente la fecha actual. El cliente no elige una fecha futura.
+- Si la solicitud se aprueba, la cancelación tiene efecto inmediato; no existen cancelaciones programadas en esta versión.
 - `comments` tiene máximo 500 caracteres.
 - `confirmed` debe ser `true` y no se persiste.
 
@@ -702,9 +703,9 @@ Respuesta `201`:
   "policyId": 301,
   "status": "SOLICITADA",
   "reason": "FINANCIAL",
-  "requestedDate": "2026-12-01",
+  "requestedDate": "2026-11-21",
   "comments": "Solicito revisar la cancelación.",
-  "createdAt": "2026-11-19T16:00:00-06:00",
+  "createdAt": "2026-11-21T16:00:00-06:00",
   "coverageActive": true,
   "policyStatus": "CANCELACION_SOLICITADA"
 }

@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 61 pruebas automatizadas | 61 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 62 pruebas automatizadas | 62 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -101,6 +101,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `CancellationIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para un identificador inexistente | Aprobada |
 | `CancellationIntegrationTests.rejectsPolicyThatIsNotActive` | Estado/integración | Rechazo `409 POLICY_NOT_ACTIVE` cuando la póliza no está activa | Aprobada |
 | `CancellationIntegrationTests.validatesPastDateInvalidReasonLongCommentsAndConfirmation` | Validación/integración | Fecha, motivo, longitud de comentarios y confirmación obligatoria | Aprobada |
+| `CancellationIntegrationTests.rejectsFutureRequestedDate` | Validación/integración | Rechazo de una fecha futura aunque se intente omitir la restricción de React | Aprobada |
 | `CancellationIntegrationTests.rejectsRequestWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para solicitar cancelación | Aprobada |
 | `CancellationIntegrationTests.rejectsRequestWithoutCsrf` | Seguridad/integración | Protección CSRF de la operación de escritura | Aprobada |
 | `PanelIntegrationTests.returnsOwnedQuoteWithContractFieldsAndDestination` | API/integración | Cotización propia, contrato de actividad y destino navegable | Aprobada |
@@ -110,7 +111,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **61 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **62 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -199,6 +200,7 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Póliza con cancelación en el panel | Regresión de estado | Aprobada; aparece reciente con `CANCELACIÓN SOLICITADA` y tono de advertencia |
 | Panel sin operaciones | Caso vacío manual | Aprobado; muestra el mensaje de actividad vacía sin datos ficticios |
 | Panel real en diseño adaptable | Revisión visual | Aprobado en escritorio y vista estrecha |
+| Fecha efectiva fija de cancelación | Integración manual React–Spring–Oracle | Aprobada; React muestra el día actual sin permitir cambios y Oracle conserva esa misma fecha |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

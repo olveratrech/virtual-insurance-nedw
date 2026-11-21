@@ -174,7 +174,7 @@ class PolicyIntegrationTests {
 				  "comments":"Solicitud para verificar el PDF",
 				  "confirmed":true
 				}
-				""".formatted(LocalDate.now().plusDays(2))))
+				""".formatted(LocalDate.now())))
 			.andExpect(status().isCreated())
 			.andReturn();
 		String cancellationNumber = JsonPath.read(

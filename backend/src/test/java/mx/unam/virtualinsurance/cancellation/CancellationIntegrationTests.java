@@ -149,6 +149,28 @@ class CancellationIntegrationTests {
 	}
 
 	@Test
+	void rejectsFutureRequestedDate() throws Exception {
+		Long policyId = createPolicy();
+		String futureDateJson = """
+			{
+			  "reason":"FINANCIAL",
+			  "requestedDate":"%s",
+			  "comments":null,
+			  "confirmed":true
+			}
+			""".formatted(LocalDate.now().plusDays(1));
+
+		mockMvc.perform(post("/polizas/{policyId}/solicitudes-cancelacion", policyId)
+			.with(authenticatedAcademicClient())
+			.with(csrf())
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(futureDateJson))
+			.andExpect(status().isUnprocessableContent())
+			.andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
+			.andExpect(jsonPath("$.fieldErrors[0].field").value("requestedDate"));
+	}
+
+	@Test
 	void rejectsRequestWithoutAuthentication() throws Exception {
 		mockMvc.perform(post("/polizas/1/solicitudes-cancelacion")
 			.with(csrf())
@@ -221,7 +243,7 @@ class CancellationIntegrationTests {
 			  "comments":"Solicitud academica de prueba",
 			  "confirmed":true
 			}
-			""".formatted(LocalDate.now().plusDays(2));
+			""".formatted(LocalDate.now());
 	}
 
 	private String policyStatus(Long policyId) {

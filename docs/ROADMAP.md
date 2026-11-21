@@ -154,6 +154,19 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** recorrido funcional React–Spring Boot–Oracle.
 
+### Fase 5.1 — Administración de cancelaciones
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Fijar la fecha efectiva de cancelación al día actual y rechazar fechas distintas en la API.
+- [ ] Crear usuarios internos, roles y auditoría mínima de resolución en Oracle.
+- [ ] Implementar autenticación y autorización administrativa en Spring Security.
+- [ ] Implementar la API de consulta, aprobación y rechazo de cancelaciones.
+- [ ] Construir el panel administrativo en React.
+- [ ] Integrar y verificar el resultado administrativo en póliza, PDF, panel e historial del cliente.
+
+**Entregable:** ciclo completo de solicitud y resolución administrativa de cancelaciones.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre
