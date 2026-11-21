@@ -18,7 +18,7 @@ public class AutoQuoteStrategy implements QuoteStrategy<AutoQuoteRequest> {
 		"Asistencia vial"
 	);
 	private static final String REJECTION_REASON =
-		"Los antecedentes declarados no cumplen las reglas academicas de aceptacion para este producto.";
+		"Los antecedentes declarados no cumplen las reglas de aceptación para este producto.";
 
 	@Override
 	public QuoteDecision evaluate(AutoQuoteRequest request) {

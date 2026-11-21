@@ -73,10 +73,10 @@ function PaymentPage() {
       <header className="payment-page__heading">
         <p className="eyebrow">Contratación</p>
         <h1>Confirma y realiza el pago</h1>
-        <p>Los datos son demostrativos; el prototipo no procesa cargos reales.</p>
+        <p>Revisa la cobertura, la modalidad y los datos de pago antes de confirmar.</p>
       </header>
       <aside className="payment-demo-guide" role="note">
-        Usa CVV <strong>123</strong> y vencimiento <strong>12/30</strong>. Tarjetas: <strong>4242 4242 4242 1111</strong> con fondos,
+        Datos habilitados para evaluación: usa CVV <strong>123</strong> y vencimiento <strong>12/30</strong>. Tarjetas: <strong>4242 4242 4242 1111</strong> con fondos,
         {' '}<strong>4000 0000 0000 2222</strong> sin fondos, <strong>4000 0000 0000 3333</strong> bloqueada o
         {' '}<strong>4000 0000 0000 5555</strong> rechazada por el procesador.
       </aside>

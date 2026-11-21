@@ -1,0 +1,3 @@
+.disclosure-footer { background: #0f2c59; color: white; margin-top: auto; padding: 1rem var(--space-lg); }
+.disclosure-footer p { font-size: 0.78rem; line-height: 1.5; margin: 0 auto; max-width: var(--content-width); text-align: center; }
+.disclosure-footer strong { color: #7dd3fc; }

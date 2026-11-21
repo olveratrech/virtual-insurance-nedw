@@ -107,9 +107,9 @@ public class PolicyDocumentGenerator {
 		return new GeneratedDocument(
 			"comprobante-" + safeFilename(data.policyNumber()) + ".pdf",
 			"application/pdf",
-			createPdf("Comprobante academico " + data.policyNumber(), writer -> {
+			createPdf("Comprobante de pago " + data.policyNumber(), writer -> {
 				writer.brand(brandLogo);
-				writer.subtitle("Comprobante academico de pago");
+				writer.subtitle("Comprobante de pago");
 				writer.notice(contractContent.disclaimer());
 				writer.sectionTitle("Operacion");
 				writer.keyValue("Poliza", data.policyNumber());
@@ -118,12 +118,12 @@ public class PolicyDocumentGenerator {
 				writer.keyValue("Modalidad", paymentModeLabel(data.paymentMode()));
 				writer.keyValue("Importe aplicado", money(data.paymentAmount()));
 				writer.keyValue("Moneda", "MXN");
-				writer.keyValue("Autorizacion simulada", data.authorizationCode());
+				writer.keyValue("Autorización", data.authorizationCode());
 				writer.keyValue("Fecha de vigencia", formatDate(data.validFrom()));
 				writer.sectionTitle("Alcance");
 				writer.paragraph(
-					"El importe fue procesado por una pasarela academica con instrumentos ficticios. "
-						+ "Este comprobante no acredita un cargo bancario ni tiene efectos fiscales."
+					"La operación fue registrada por el procesador de pagos de Virtual Insurance. "
+						+ "El folio de autorización identifica su resultado dentro del expediente de la póliza."
 				);
 				writer.paragraph("Version de plantilla: " + contractContent.version());
 			})
@@ -135,7 +135,7 @@ public class PolicyDocumentGenerator {
 			PDDocumentInformation information = new PDDocumentInformation();
 			information.setTitle(ascii(title));
 			information.setAuthor("Virtual Insurance - UNAM");
-			information.setSubject("Documento academico de demostracion");
+			information.setSubject("Documento de Virtual Insurance");
 			document.setDocumentInformation(information);
 			try (PdfWriter writer = new PdfWriter(document)) {
 				content.write(writer);
@@ -550,7 +550,7 @@ public class PolicyDocumentGenerator {
 			setColor(policyReference == null ? new Color(100, 116, 139) : BODY_TEXT);
 			stream.newLineAtOffset(MARGIN, 30);
 			String text = policyReference == null
-				? "Virtual Insurance - Documento academico - Pagina " + pageNumber
+				? "Virtual Insurance | Comprobante de pago | Página " + pageNumber
 				: "Virtual Insurance | Póliza " + policyReference + " | Página " + pageNumber;
 			stream.showText(text);
 			stream.endText();

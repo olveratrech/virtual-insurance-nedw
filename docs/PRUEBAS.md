@@ -114,7 +114,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PolicyIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para identificador inexistente | Aprobada |
 | `PolicyIntegrationTests.rejectsPolicyQueryWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar pólizas | Aprobada |
 | `PolicyIntegrationTests.downloadsOwnedPolicyAsRealPdfWithPolicyData` | PDF/integración | PDF válido con logotipo, datos, cláusulas ampliadas, aviso único, tipografías embebidas y ausencia de rótulos técnicos anteriores | Aprobada |
-| `PolicyIntegrationTests.downloadsOwnedPaymentReceiptAsRealPdf` | PDF/integración | Comprobante válido con logotipo institucional, importe y autorización académica | Aprobada |
+| `PolicyIntegrationTests.downloadsOwnedPaymentReceiptAsRealPdf` | PDF/integración | Comprobante válido con logotipo, importe, autorización, texto profesional, aviso único y ausencia de rótulos anteriores | Aprobada |
 | `PolicyIntegrationTests.hidesDocumentFromAnotherClient` | Autorización/integración | Un cliente no puede descargar documentos ajenos | Aprobada |
 | `PolicyIntegrationTests.returnsNotFoundForDocumentOutsidePolicy` | Autorización/integración | Se valida conjuntamente póliza y documento | Aprobada |
 | `PolicyIntegrationTests.rejectsDocumentDownloadWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para descargar | Aprobada |
@@ -243,6 +243,9 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Plantilla profesional de póliza | Regresión funcional y visual | Aprobada; presenta carátula, cuadrículas, resumen económico, cancelación condicional y seis cláusulas legibles |
 | Sistema tipográfico del PDF | Regresión visual | Aprobado; Cinzel, Fira Sans y JetBrains Mono se muestran con jerarquía consistente y sin caracteres defectuosos |
 | Colores semánticos de póliza | Regresión visual | Aprobados; activa y aprobada usan verde, solicitud pendiente amarillo, y cancelada o rechazada rojo |
+| Aviso global de la aplicación | Regresión visual adaptable | Aprobado; aparece al final de los layouts de cliente y administración sin desplazar contenido ni dejar avisos redundantes |
+| Lenguaje de cotización y pago | Regresión funcional y visual | Aprobado; formularios, resultados y errores usan términos operativos, y los datos controlados se identifican en una sola guía |
+| Comprobante de pago profesional | Regresión automatizada y visual | Aprobado; muestra comprobante, autorización, alcance y pie localizados sin las expresiones anteriores |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

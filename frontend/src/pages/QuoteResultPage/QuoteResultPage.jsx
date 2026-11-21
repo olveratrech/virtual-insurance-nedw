@@ -67,7 +67,7 @@ function QuoteResultPage() {
         <p className="eyebrow">Resultado de cotización</p>
         <StatusBadge tone={approved ? 'success' : 'danger'}>{quote.status}</StatusBadge>
         <h1>{approved ? 'Tu cotización fue aprobada' : 'No podemos ofrecer esta cobertura'}</h1>
-        <p>{approved ? 'Revisa la cobertura y el costo antes de continuar con la contratación.' : 'La evaluación encontró factores fuera de las reglas académicas de aceptación.'}</p>
+        <p>{approved ? 'Revisa la cobertura y el costo antes de continuar con la contratación.' : 'La evaluación encontró factores fuera de las reglas de aceptación.'}</p>
       </header>
 
       <section className={`quote-result-card quote-result-card--${approved ? 'approved' : 'rejected'}`}>
@@ -98,7 +98,7 @@ function QuoteResultPage() {
                 {quote.benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}
               </ul>
             </div>
-            <p className="result-note">Vigencia de la cotización: {quote.validUntil}. La emisión queda sujeta al pago simulado.</p>
+            <p className="result-note">Vigencia de la cotización: {quote.validUntil}. La emisión queda sujeta a la confirmación del pago.</p>
           </>
         ) : (
           <div className="rejection-explanation">

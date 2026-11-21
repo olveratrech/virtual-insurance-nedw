@@ -77,7 +77,7 @@ function AutoQuoteForm({ onEvaluate, initialValues }) {
           <FormField id="auto-driver-age" label="Edad del conductor" name="driverAge" type="number" min="18" max="90" value={values.driverAge} onChange={updateField} error={errors.driverAge} />
           <FormField id="auto-negative-points" label="Puntos negativos" name="negativePoints" type="number" min="0" value={values.negativePoints} onChange={updateField} error={errors.negativePoints} />
         </div>
-        <CheckboxField id="auto-criminal-record" name="criminalRecord" checked={values.criminalRecord} onChange={updateField} label="Tengo antecedentes penales" description="Esta respuesta forma parte de la evaluación académica del prototipo." />
+        <CheckboxField id="auto-criminal-record" name="criminalRecord" checked={values.criminalRecord} onChange={updateField} label="Tengo antecedentes penales" description="Esta respuesta se considera durante la evaluación del riesgo." />
       </fieldset>
       {submitError && <p className="quote-form__error" role="alert">{submitError}</p>}
       <div className="quote-form__actions">

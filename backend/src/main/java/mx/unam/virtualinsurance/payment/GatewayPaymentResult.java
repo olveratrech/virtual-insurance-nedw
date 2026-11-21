@@ -11,7 +11,7 @@ public record GatewayPaymentResult(
 		return new GatewayPaymentResult(
 			true,
 			"APPROVED",
-			"El pago fue aprobado por la pasarela academica.",
+			"El pago fue aprobado por el procesador de pagos.",
 			authorizationCode,
 			lastFour
 		);

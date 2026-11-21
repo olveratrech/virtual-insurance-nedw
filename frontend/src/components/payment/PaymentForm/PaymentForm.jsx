@@ -27,7 +27,7 @@ function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
     if (!values.cardholderName.trim()) errorsFound.cardholderName = 'Ingresa el nombre de la tarjeta.'
     if (!/^\d{16}$/.test(normalizedCard)) errorsFound.cardNumber = 'Ingresa 16 dígitos.'
     if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(values.expiration)) errorsFound.expiration = 'Utiliza el formato MM/AA.'
-    else if (isCardExpirationExpired(values.expiration)) errorsFound.expiration = 'La tarjeta ficticia está vencida.'
+    else if (isCardExpirationExpired(values.expiration)) errorsFound.expiration = 'La tarjeta está vencida.'
     if (!/^\d{3}$/.test(values.cvv)) errorsFound.cvv = 'Ingresa 3 dígitos.'
     if (!values.acceptsTerms) errorsFound.acceptsTerms = 'Debes aceptar los términos para continuar.'
     setErrors(errorsFound)
@@ -43,10 +43,10 @@ function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
         </SelectField>
       </div>
       <FormField id="cardholder-name" label="Nombre en la tarjeta" name="cardholderName" autoComplete="cc-name" value={values.cardholderName} onChange={updateField} error={errors.cardholderName} />
-      <FormField id="card-number" label="Número de tarjeta ficticia" name="cardNumber" inputMode="numeric" autoComplete="cc-number" placeholder="4242 4242 4242 4242" value={values.cardNumber} onChange={updateField} error={errors.cardNumber} />
+      <FormField id="card-number" label="Número de tarjeta" name="cardNumber" inputMode="numeric" autoComplete="cc-number" placeholder="4242 4242 4242 4242" value={values.cardNumber} onChange={updateField} error={errors.cardNumber} />
       <div className="payment-form__grid">
         <FormField id="card-expiration" label="Vencimiento" name="expiration" autoComplete="cc-exp" placeholder="MM/AA" value={values.expiration} onChange={updateField} error={errors.expiration} />
-        <FormField id="card-cvv" label="CVV ficticio" name="cvv" type="password" inputMode="numeric" autoComplete="cc-csc" value={values.cvv} onChange={updateField} error={errors.cvv} />
+        <FormField id="card-cvv" label="CVV" name="cvv" type="password" inputMode="numeric" autoComplete="cc-csc" value={values.cvv} onChange={updateField} error={errors.cvv} />
       </div>
       <div>
         <CheckboxField id="payment-terms" name="acceptsTerms" checked={values.acceptsTerms} onChange={updateField} label="Acepto términos, condiciones y aviso de privacidad" />

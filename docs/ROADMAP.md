@@ -177,9 +177,9 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Verificar la marca en escritorio, vista estrecha y documentos descargados.
 - [x] Rediseñar la plantilla completa de la póliza y ampliar su contenido contractual.
 - [x] Incorporar tipografías embebidas y estados con color semántico en la póliza.
-- [ ] Unificar el aviso explícito sobre el carácter ficticio y educativo de la aplicación.
+- [x] Unificar el aviso explícito sobre el carácter ficticio y educativo de la aplicación.
 
-**Entregable parcial:** identidad visual compartida por React y documentos PDF, con la póliza profesional terminada.
+**Entregable:** identidad y comunicación compartidas por React y documentos PDF, con póliza y comprobante profesionalizados.
 
 ### Fase 6 — Pruebas, estabilización y entrega
 

@@ -37,11 +37,6 @@ function AccessPage() {
         <h1>Bienvenido a Virtual Insurance</h1>
         <p>Inicia sesión o crea una cuenta para guardar cotizaciones y consultar pólizas.</p>
       </header>
-
-      <aside className="prototype-notice" role="note">
-        El inicio de sesión y el registro utilizan Spring Security y Oracle. Los demás módulos comerciales todavía usan datos simulados.
-      </aside>
-
       <div className="access-page__forms">
         <LoginForm onSuccess={handleLogin} />
         <RegisterForm onSuccess={handleRegister} />

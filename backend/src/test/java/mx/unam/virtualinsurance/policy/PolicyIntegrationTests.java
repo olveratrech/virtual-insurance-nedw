@@ -134,7 +134,7 @@ class PolicyIntegrationTests {
 			org.assertj.core.api.Assertions.assertThat(text)
 				.contains("PÓLIZA DE SEGURO")
 				.contains(policyNumber)
-				.containsOnlyOnce("DOCUMENTO FICTICIO PARA FINES EDUCATIVOS")
+				.containsOnlyOnce("IMPLEMENTACIÓN ACADÉMICA")
 				.contains("Identificación de la póliza")
 				.contains("Objeto del seguro")
 				.contains("Privacidad y tratamiento de datos")
@@ -165,9 +165,12 @@ class PolicyIntegrationTests {
 			String text = new PDFTextStripper().getText(document);
 			org.assertj.core.api.Assertions.assertThat(hasImageOnFirstPage(document)).isTrue();
 			org.assertj.core.api.Assertions.assertThat(text)
-				.contains("Comprobante academico de pago")
+				.contains("Comprobante de pago")
 				.contains("Seguro medico")
-				.contains("Autorizacion simulada");
+				.contains("Autorización")
+				.containsOnlyOnce("IMPLEMENTACIÓN ACADÉMICA")
+				.doesNotContain("académico de pago")
+				.doesNotContain("simulada");
 		}
 	}
 

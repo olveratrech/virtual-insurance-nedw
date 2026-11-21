@@ -41,7 +41,7 @@ public class SimulatedPaymentGateway implements PaymentGateway {
 		if (instruments.isEmpty()) {
 			return GatewayPaymentResult.rejected(
 				"TEST_CARD_NOT_FOUND",
-				"Utiliza uno de los instrumentos ficticios documentados para esta demostracion.",
+				"Utiliza una de las tarjetas habilitadas para el entorno de evaluación.",
 				command.cardNumber().substring(command.cardNumber().length() - 4)
 			);
 		}
@@ -49,23 +49,23 @@ public class SimulatedPaymentGateway implements PaymentGateway {
 		TestInstrument instrument = instruments.getFirst();
 		if (YearMonth.of(instrument.expirationYear(), instrument.expirationMonth())
 			.isBefore(YearMonth.now())) {
-			return rejected("EXPIRED_CARD", "La tarjeta ficticia esta vencida.", instrument);
+			return rejected("EXPIRED_CARD", "La tarjeta está vencida.", instrument);
 		}
 		if (instrument.expirationMonth() != command.expirationMonth()
 			|| instrument.expirationYear() != command.expirationYear()) {
-			return rejected("CARD_DATA_MISMATCH", "El vencimiento no coincide con el instrumento ficticio.", instrument);
+			return rejected("CARD_DATA_MISMATCH", "El vencimiento no coincide con la tarjeta proporcionada.", instrument);
 		}
 		if (!"123".equals(command.securityCode())) {
-			return rejected("INVALID_SECURITY_CODE", "El CVV ficticio no es valido.", instrument);
+			return rejected("INVALID_SECURITY_CODE", "El CVV no es válido.", instrument);
 		}
 		if ("BLOCKED".equals(instrument.status())) {
-			return rejected("BLOCKED_CARD", "La tarjeta ficticia esta bloqueada.", instrument);
+			return rejected("BLOCKED_CARD", "La tarjeta está bloqueada.", instrument);
 		}
 		if (instrument.forcedResponse() != null) {
-			return rejected("PROCESSOR_DECLINED", "El procesador academico rechazo el pago.", instrument);
+			return rejected("PROCESSOR_DECLINED", "El procesador de pagos rechazó la operación.", instrument);
 		}
 		if (instrument.balance().compareTo(command.amount()) < 0) {
-			return rejected("INSUFFICIENT_FUNDS", "La tarjeta ficticia no tiene fondos suficientes.", instrument);
+			return rejected("INSUFFICIENT_FUNDS", "La tarjeta no tiene fondos suficientes.", instrument);
 		}
 
 		int updated = jdbcTemplate.update(
@@ -79,7 +79,7 @@ public class SimulatedPaymentGateway implements PaymentGateway {
 			command.amount(), instrument.id(), command.amount()
 		);
 		if (updated != 1) {
-			return rejected("INSUFFICIENT_FUNDS", "La tarjeta ficticia no tiene fondos suficientes.", instrument);
+			return rejected("INSUFFICIENT_FUNDS", "La tarjeta no tiene fondos suficientes.", instrument);
 		}
 
 		String authorizationCode = "AUTH-%010d".formatted(command.paymentNumber());

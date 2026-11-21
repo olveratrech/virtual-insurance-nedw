@@ -21,8 +21,8 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Identidad visual integrada | El portal del cliente y la zona administrativa usan el logotipo adaptable y el favicon propios; los recorridos comerciales y administrativos continúan aprobados. |
-| Backend Spring Boot | Póliza profesional integrada | Las 85 pruebas pasan; la póliza regenerable incorpora marca, cláusulas por producto, estados semánticos y tipografías embebidas. |
+| Frontend React | Comunicación unificada | Cliente y administración comparten marca, favicon y un aviso global sobre el carácter académico y ficticio del sistema, sin rótulos redundantes en cada recorrido. |
+| Backend Spring Boot | Documentos profesionalizados | Las 85 pruebas pasan; póliza y comprobante usan lenguaje operativo, marca y tipografías embebidas, con el aviso explícito centralizado en cada PDF. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
 | Pruebas | Parciales aprobadas | Oracle, 85 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
@@ -69,6 +69,7 @@
 - Proyecto creado con React y Vite.
 - React Router configurado con las diez rutas iniciales y una ruta de página no encontrada.
 - `MainLayout` comparte el encabezado y el área de contenido entre páginas.
+- `DisclosureFooter` presenta en los layouts de cliente y administración el aviso único sobre la implementación académica y sus operaciones ficticias.
 - `Header` implementa identidad con logotipo completo en escritorio e isotipo en vista estrecha, navegación principal y acceso.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
@@ -80,15 +81,15 @@
 - `DashboardPage` consulta el resumen persistente del cliente, conserva accesos rápidos y maneja carga, error, reintento y actividad vacía.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
 - `panelApi.js` adapta la actividad real de cotizaciones y pólizas a los componentes del panel.
-- `QuotePageLayout` comparte la estructura visual y el aviso demostrativo de ambas cotizaciones.
+- `QuotePageLayout` comparte la estructura visual de ambas cotizaciones sin repetir avisos globales.
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
 - `SelectField` y `CheckboxField` complementan los controles reutilizables del formulario.
 - `quoteApi.js` encapsula la creación y consulta autenticada de cotizaciones mediante la API REST.
 - `QuoteResultPage` consulta por identificador y presenta resultados persistidos, aprobados o rechazados, mediante renderizado condicional.
 - Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
-- `PaymentPage` integra la contratación con la pasarela académica de Spring y Oracle.
-- `PaymentForm` valida vigencia, modalidad, tarjeta ficticia, vencimiento, CVV y términos.
+- `PaymentPage` integra la contratación con el procesador de pagos controlado por Spring y Oracle.
+- `PaymentForm` valida vigencia, modalidad, tarjeta, vencimiento, CVV y términos, mientras la guía identifica los datos habilitados para evaluación.
 - `paymentApi.js` envía CSRF e idempotencia y evita que los componentes conozcan detalles del transporte.
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
@@ -96,6 +97,7 @@
 - `DocumentList` descarga pólizas y comprobantes PDF reales mediante una ruta protegida.
 - Los PDF se regeneran desde datos persistidos. La póliza `VI-POL-2026.2` usa carátula estructurada, logotipo, cláusulas diferenciadas para auto y gastos médicos, estados con color semántico y un único aviso ficticio y educativo.
 - Cinzel, Fira Sans y JetBrains Mono se cargan desde recursos del backend y se incrustan en el PDF para conservar la composición en local, contenedores y despliegues remotos.
+- El comprobante PDF usa título, autorización, alcance y pie profesionales; póliza y comprobante conservan un solo aviso explícito por documento.
 - `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
 - `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
 - `cancellationApi.js` crea solicitudes reales protegidas con CSRF y presenta el folio persistido.

@@ -39,7 +39,7 @@ public class CardCryptoService {
 			byte[] encrypted = cipher.doFinal(cardNumber.getBytes(StandardCharsets.US_ASCII));
 			return ByteBuffer.allocate(iv.length + encrypted.length).put(iv).put(encrypted).array();
 		} catch (GeneralSecurityException exception) {
-			throw new IllegalStateException("No fue posible cifrar el instrumento ficticio.", exception);
+			throw new IllegalStateException("No fue posible cifrar el instrumento de pago.", exception);
 		}
 	}
 

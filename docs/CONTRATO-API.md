@@ -773,7 +773,7 @@ Content-Disposition: attachment; filename="poliza-VI-2026-001000.pdf"
 Cache-Control: no-store
 ```
 
-El cuerpo contiene un PDF generado desde los datos persistidos y con el logotipo institucional embebido en la primera página. La póliza incluye identificación, asegurado, vigencia, resumen económico, cobertura y seis secciones contractuales versionables, con contenido específico para auto o gastos médicos. Sus fuentes Cinzel, Fira Sans y JetBrains Mono se incrustan para mantener la representación entre entornos. Cuando existe una cancelación, también incluye folio, estado localizado, fecha solicitada y, después de resolverla, fecha y observación. El comprobante incluye importe y autorización simulada. Ninguno contiene PAN, CVV, contraseña o identificador de sesión.
+El cuerpo contiene un PDF generado desde los datos persistidos y con el logotipo institucional embebido en la primera página. La póliza incluye identificación, asegurado, vigencia, resumen económico, cobertura y seis secciones contractuales versionables, con contenido específico para auto o gastos médicos. Sus fuentes Cinzel, Fira Sans y JetBrains Mono se incrustan para mantener la representación entre entornos. Cuando existe una cancelación, también incluye folio, estado localizado, fecha solicitada y, después de resolverla, fecha y observación. El comprobante incluye importe, autorización y alcance de la operación. Ambos presentan una sola vez el aviso sobre el carácter académico y ficticio del sistema. Ninguno contiene PAN, CVV, contraseña o identificador de sesión.
 
 La representación anterior muestra únicamente los campos que cambian; la respuesta real conserva todos los campos del detalle.
 

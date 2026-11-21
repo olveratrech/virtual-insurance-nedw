@@ -190,7 +190,7 @@ La abstracción no oculta la transacción: el servicio coordina idempotencia, in
 
 `PolicyDocumentGenerator` define la composición visual común de los PDFs, carga el logotipo y las familias Cinzel, Fira Sans y JetBrains Mono desde los recursos del backend, y las incrusta en cada archivo. La póliza aplica una jerarquía tipográfica y cromática según títulos, texto, datos técnicos y estados. `AcademicContractContent` concentra las seis secciones contractuales editables, su variante de cobertura por producto y la versión. `PolicyPdfData` transporta exclusivamente los valores variables obtenidos de Oracle, incluido el resultado vigente de una cancelación. Cada descarga regenera el documento para reflejar una aprobación o rechazo posterior a la emisión.
 
-Esta separación permite incorporar después exclusiones, anexos, condiciones generales o textos revisados académicamente sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
+El aviso legal se obtiene de la misma fuente para póliza y comprobante, mientras React lo presenta mediante `DisclosureFooter` en ambos layouts. Esta separación permite incorporar después exclusiones, anexos o condiciones generales sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
 
 ## State simplificado para estados comerciales
 

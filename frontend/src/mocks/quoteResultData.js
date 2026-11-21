@@ -6,7 +6,7 @@ export const quoteResultData = {
     annualCost: '$12,480.00 MXN',
     monthlyCost: '$1,040.00 MXN',
     benefits: ['Daños materiales', 'Robo total', 'Responsabilidad civil', 'Asistencia vial'],
-    rejectionReason: 'Los antecedentes declarados no cumplen las reglas académicas de aceptación para este producto.',
+    rejectionReason: 'Los antecedentes declarados no cumplen las reglas de aceptación para este producto.',
     retryDestination: '/cotizar/auto',
   },
   MEDICAL: {

@@ -8,9 +8,6 @@ function QuotePageLayout({ eyebrow, title, description, children }) {
         <h1>{title}</h1>
         <p>{description}</p>
       </header>
-      <aside className="prototype-notice" role="note">
-        Evaluación académica conectada con Spring Boot y Oracle. No representa una oferta comercial real.
-      </aside>
       <div className="quote-page__form-card">{children}</div>
     </div>
   )

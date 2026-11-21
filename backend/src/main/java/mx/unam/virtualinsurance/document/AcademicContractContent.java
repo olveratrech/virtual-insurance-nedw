@@ -12,8 +12,9 @@ public class AcademicContractContent {
 	}
 
 	public String disclaimer() {
-		return "DOCUMENTO FICTICIO PARA FINES EDUCATIVOS. No constituye un contrato de seguro, "
-			+ "cobertura, operación financiera ni comprobante fiscal real.";
+		return "IMPLEMENTACIÓN ACADÉMICA. Las cotizaciones, pólizas, pagos, tarjetas y "
+			+ "operaciones mostradas son ficticias y no producen efectos legales, financieros ni "
+			+ "aseguradores reales.";
 	}
 
 	public List<ContractSection> policySections(String policyType) {

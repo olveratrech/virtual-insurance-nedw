@@ -11,7 +11,6 @@ function PaymentSummary({ quote }) {
         <div><dt>Cotización</dt><dd>{formatQuoteNumber(quote.quoteNumber)}</dd></div>
         <div className="payment-summary__total"><dt>Total anual</dt><dd>{formatMxn(quote.annualCost)}</dd></div>
       </dl>
-      <p>Operación demostrativa. No se realizará ningún cargo real.</p>
     </aside>
   )
 }

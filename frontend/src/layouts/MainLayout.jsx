@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import DisclosureFooter from '../components/layout/DisclosureFooter/DisclosureFooter.jsx'
 import Header from '../components/layout/Header/Header.jsx'
 
 function MainLayout() {
@@ -8,6 +9,7 @@ function MainLayout() {
       <main>
         <Outlet />
       </main>
+      <DisclosureFooter />
     </div>
   )
 }

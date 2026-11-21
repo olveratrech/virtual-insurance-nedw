@@ -3,7 +3,8 @@ html { background: var(--color-background); color: var(--color-text-strong); fon
 body { margin: 0; min-width: 20rem; min-height: 100vh; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; }
-.app-shell { min-height: 100vh; }
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+.app-shell > main { flex: 1; }
 .page-container { margin: 0 auto; max-width: var(--content-width); padding-inline: var(--space-lg); }
 .eyebrow { color: var(--color-primary); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; margin: 0; text-transform: uppercase; }
 .button { align-items: center; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; font-weight: 700; justify-content: center; min-height: 2.75rem; padding: 0.65rem 1rem; text-decoration: none; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease; }
