@@ -265,7 +265,7 @@ Las columnas identidad pueden tener saltos por concurrencia, caché o transaccio
 
 ```text
 Correo: emmanuel.demo@virtual-insurance.test
-Contraseña: Virtual2026!
+Contraseña: 
 ```
 
 El script almacena únicamente el hash BCrypt. La cuenta académica conserva una imagen PNG mínima válida, aunque `CLIENTE.FOTO` permite `NULL` para nuevos clientes que no proporcionen fotografía. No se carga una tarjeta desde SQL: debe crearse desde Spring para garantizar que pase por el servicio de cifrado.
