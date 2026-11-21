@@ -77,6 +77,7 @@ public class PaymentService {
 		if (previous != null) {
 			return responseFromExisting(previous, request.coverageStart());
 		}
+		validateCardBrand(request);
 
 		Quote quote = quoteRepository.findByQuoteIdAndClientClientId(quoteId, clientId)
 			.orElseThrow(this::quoteNotFound);
@@ -123,6 +124,7 @@ public class PaymentService {
 		));
 
 		GatewayPaymentResult gatewayResult = paymentGateway.authorize(new GatewayPaymentCommand(
+			request.cardBrand(),
 			request.cardNumber(),
 			expirationMonth,
 			expirationYear,
@@ -307,6 +309,28 @@ public class PaymentService {
 				HttpStatus.UNPROCESSABLE_CONTENT, "INVALID_IDEMPOTENCY_KEY",
 				"La clave de idempotencia no es valida",
 				"Envia Idempotency-Key con entre 16 y 64 caracteres seguros.",
+				"validation-error"
+			);
+		}
+	}
+
+	private void validateCardBrand(PaymentRequest request) {
+		if (!request.cardBrand().matches(request.cardNumber())) {
+			throw problem(
+				HttpStatus.UNPROCESSABLE_CONTENT,
+				"CARD_BRAND_MISMATCH",
+				"La red de la tarjeta no coincide",
+				"Selecciona la red correspondiente al número de tarjeta proporcionado.",
+				"validation-error"
+			);
+		}
+		if (!request.cardBrand().matchesSecurityCode(request.cvv())) {
+			throw problem(
+				HttpStatus.UNPROCESSABLE_CONTENT,
+				"INVALID_SECURITY_CODE_FORMAT",
+				"El código de seguridad no tiene el formato esperado",
+				"La red seleccionada requiere " + request.cardBrand().securityCodeLength()
+					+ " dígitos.",
 				"validation-error"
 			);
 		}

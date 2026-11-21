@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 85 pruebas automatizadas | 85 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 88 pruebas automatizadas | 88 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -24,7 +24,7 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 | `tests/03_cotizaciones.sql` | Integración transaccional | Secuencia de números, cotizaciones de auto y médicas, especialización exclusiva, estados e historial automático | Aprobada |
 | `tests/04_pagos_polizas.sql` | Integración transaccional | Intentos de pago, aprobación única, emisión de póliza, modalidad, costo, documentos e historial | Aprobada |
 | `tests/05_cancelaciones.sql` | Integración transaccional | Fechas, solicitudes duplicadas, resolución, sincronización de estado, historial y protección contra borrado | Aprobada |
-| `tests/06_simulador_pagos.sql` | Estructura e integración | Pasarela académica, columnas de idempotencia, secuencias y seis instrumentos con saldos y respuestas controladas | Aprobada |
+| `tests/06_simulador_pagos.sql` | Estructura e integración | Procesador de pagos, columnas de idempotencia, secuencias y ocho instrumentos Visa, Mastercard y American Express con saldos y respuestas controladas | Aprobada |
 | `tests/07_administracion_cancelaciones.sql` | Estructura e integración transaccional | Usuarios internos, roles, responsable, observación, autorización, aprobación, rechazo y resolución única | Aprobada |
 | `tests/99_recorrido_completo.sql` | E2E transaccional | Recorrido completo del caso de estudio y reglas negativas, con rollback integral | Aprobada |
 
@@ -99,6 +99,9 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `QuoteIntegrationTests.rejectsQuoteCreationWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para crear cotizaciones | Aprobada |
 | `QuoteIntegrationTests.hidesQuoteFromAnotherClient` | Autorización/integración | Ocultamiento mediante `quoteId + clientId` | Aprobada |
 | `PaymentIntegrationTests.approvesPaymentDebitsBalanceAndIssuesPolicy` | E2E transaccional | Débito, intento aprobado, póliza, historial y dos documentos | Aprobada |
+| `PaymentIntegrationTests.approvesMastercardPayment` | E2E transaccional | Mastercard válida, débito y autorización con CVV de tres dígitos | Aprobada |
+| `PaymentIntegrationTests.approvesAmericanExpressPaymentWithFourDigitSecurityCode` | E2E transaccional | American Express de 15 dígitos, débito y autorización con CVV de cuatro dígitos | Aprobada |
+| `PaymentIntegrationTests.rejectsCardNumberThatDoesNotMatchSelectedBrand` | Validación/integración | Rechazo `CARD_BRAND_MISMATCH` antes de crear el intento cuando red y PAN no coinciden | Aprobada |
 | `PaymentIntegrationTests.rejectsInsufficientFundsWithoutDebitingOrIssuingPolicy` | Regla transaccional | Rechazo sin débito ni póliza | Aprobada |
 | `PaymentIntegrationTests.rejectsBlockedCard` | Regla de pasarela | Rechazo de instrumento bloqueado | Aprobada |
 | `PaymentIntegrationTests.rejectsProcessorDecline` | Regla de pasarela | Rechazo forzado del procesador | Aprobada |
@@ -135,7 +138,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **85 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **88 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 

@@ -181,6 +181,19 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** identidad y comunicación compartidas por React y documentos PDF, con póliza y comprobante profesionalizados.
 
+### Fase 5.3 — Endurecimiento de contratación y pago
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Incorporar selección y validación cruzada de Visa, Mastercard y American Express.
+- [x] Habilitar instrumentos controlados y repetibles para las tres redes.
+- [ ] Impedir visualmente un nuevo pago cuando la cotización ya produjo una póliza.
+- [ ] Verificar en API que una cotización pagada no pueda generar otro intento aprobado ni otra póliza.
+- [ ] Mantener el bloqueo aunque la póliza vinculada esté cancelada.
+- [ ] Cubrir navegación normal, recarga y acceso directo a la ruta de pago.
+
+**Entregable parcial:** redes de tarjeta completas; pendiente cerrar definitivamente la reutilización de cotizaciones pagadas.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre

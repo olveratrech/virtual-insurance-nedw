@@ -46,7 +46,7 @@ begin
     verificar(v_actual = 2, 'faltan secuencias de pago o poliza');
 
     select count(*) into v_actual from instrumento_pago_prueba;
-    verificar(v_actual = 6, 'se esperaban 6 instrumentos ficticios');
+    verificar(v_actual = 8, 'se esperaban 8 instrumentos de evaluacion');
 
     select count(*) into v_actual
       from instrumento_pago_prueba
@@ -78,7 +78,21 @@ begin
        and respuesta_forzada = 'PROCESSOR_DECLINED';
     verificar(v_actual = 1, 'el rechazo forzado no coincide');
 
-    dbms_output.put_line('prueba exitosa: pasarela academica lista con 6 escenarios.');
+    select count(*) into v_actual
+      from instrumento_pago_prueba
+     where numero_hash = lower(rawtohex(standard_hash('5105105105105100', 'SHA256')))
+       and ultimos_cuatro = '5100'
+       and estatus = 'ACTIVE';
+    verificar(v_actual = 1, 'el instrumento Mastercard no coincide');
+
+    select count(*) into v_actual
+      from instrumento_pago_prueba
+     where numero_hash = lower(rawtohex(standard_hash('371449635398431', 'SHA256')))
+       and ultimos_cuatro = '8431'
+       and estatus = 'ACTIVE';
+    verificar(v_actual = 1, 'el instrumento American Express no coincide');
+
+    dbms_output.put_line('prueba exitosa: procesador listo con 8 instrumentos.');
 end;
 /
 

@@ -224,7 +224,7 @@ class CancellationIntegrationTests {
 			.content("""
 				{
 				  "coverageStart":"%s","paymentMode":"MONTHLY",
-				  "cardholderName":"Cliente Academico","cardNumber":"4242424242421111",
+				  "cardholderName":"Cliente Academico","cardBrand":"VISA","cardNumber":"4242424242421111",
 				  "expiration":"12/30","cvv":"123","acceptsTerms":true
 				}
 				""".formatted(LocalDate.now().plusDays(1))))

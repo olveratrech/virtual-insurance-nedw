@@ -26,6 +26,12 @@ using (
     union all
     select 'tok_academic_exact', lower(rawtohex(standard_hash('4242424242426666', 'SHA256'))),
            '6666', 1040, 'ACTIVE', 2030, 12, null from dual
+    union all
+    select 'tok_mastercard_funded', lower(rawtohex(standard_hash('5105105105105100', 'SHA256'))),
+           '5100', 50000, 'ACTIVE', 2030, 12, null from dual
+    union all
+    select 'tok_amex_funded', lower(rawtohex(standard_hash('371449635398431', 'SHA256'))),
+           '8431', 50000, 'ACTIVE', 2030, 12, null from dual
 ) fuente
 on (destino.token = fuente.token)
 when matched then update set

@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
 | Frontend React | Comunicación unificada | Cliente y administración comparten marca, favicon y un aviso global sobre el carácter académico y ficticio del sistema, sin rótulos redundantes en cada recorrido. |
-| Backend Spring Boot | Documentos profesionalizados | Las 85 pruebas pasan; póliza y comprobante usan lenguaje operativo, marca y tipografías embebidas, con el aviso explícito centralizado en cada PDF. |
+| Backend Spring Boot | Redes de tarjeta verificadas | Las 88 pruebas pasan; Visa, Mastercard y American Express se validan por red, longitud y CVV antes de persistir o autorizar el pago. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 85 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 88 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -90,6 +90,7 @@
 - Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
 - `PaymentPage` integra la contratación con el procesador de pagos controlado por Spring y Oracle.
 - `PaymentForm` valida vigencia, modalidad, tarjeta, vencimiento, CVV y términos, mientras la guía identifica los datos habilitados para evaluación.
+- El pago permite seleccionar Visa, Mastercard o American Express; React y Spring comprueban que la red, el prefijo, la longitud del PAN y los 3 o 4 dígitos del CVV sean coherentes.
 - `paymentApi.js` envía CSRF e idempotencia y evita que los componentes conozcan detalles del transporte.
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.

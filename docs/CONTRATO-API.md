@@ -599,6 +599,7 @@ Petición:
   "coverageStart": "2026-11-26",
   "paymentMode": "MONTHLY",
   "cardholderName": "Emmanuel Trejo Olvera",
+  "cardBrand": "VISA",
   "cardNumber": "4242424242421111",
   "expiration": "12/30",
   "cvv": "123",
@@ -611,13 +612,14 @@ Validaciones:
 - La cotización debe pertenecer al cliente, estar aprobada y vigente.
 - `coverageStart` no puede estar en el pasado ni superar la vigencia de la cotización.
 - `paymentMode` admite `MONTHLY` o `ANNUAL`.
-- La tarjeta debe tener 16 dígitos y pertenecer a la lista académica de demostración.
-- La fecha de expiración debe coincidir con el instrumento ficticio y no estar vencida.
-- El CVV tiene tres dígitos, se usa para la simulación y no se almacena.
+- `cardBrand` admite `VISA`, `MASTERCARD` o `AMEX`.
+- Visa y Mastercard requieren 16 dígitos; American Express requiere 15. El prefijo y la longitud deben coincidir con la red seleccionada o se responde `422 CARD_BRAND_MISMATCH`.
+- La fecha de expiración debe coincidir con el instrumento controlado y no estar vencida.
+- El CVV requiere tres dígitos para Visa y Mastercard o cuatro para American Express; se valida, pero nunca se almacena.
 - `acceptsTerms` debe ser `true` y no se persiste.
 - `cardholderName` se usa para validación de entrada, pero no se persiste porque no existe en el modelo de `TARJETA`.
 
-Instrumentos de demostración, todos con CVV `123` y vencimiento `12/30`, salvo el escenario vencido:
+Instrumentos habilitados para evaluación, con vencimiento `12/30` salvo el escenario vencido:
 
 | Número exclusivamente ficticio | Escenario |
 |---|---|
@@ -627,6 +629,8 @@ Instrumentos de demostración, todos con CVV `123` y vencimiento `12/30`, salvo 
 | `4000000000004444` | Tarjeta vencida en `01/25`; se prueba por API porque React impide enviarla |
 | `4000000000005555` | Rechazo forzado del procesador |
 | `4242424242426666` | Saldo exacto de $1,040 para probar un débito hasta cero |
+| `5105105105105100` | Mastercard con fondos suficientes; CVV `123` |
+| `371449635398431` | American Express con fondos suficientes; CVV `1234` |
 
 Cualquier otro número produce un intento rechazado con `TEST_CARD_NOT_FOUND`; no se emite póliza.
 
@@ -637,7 +641,7 @@ Respuesta aprobada `201`:
   "attemptId": 401,
   "status": "APROBADO",
   "responseCode": "APPROVED",
-  "message": "El pago fue aprobado por la pasarela academica.",
+  "message": "El pago fue aprobado por el procesador de pagos.",
   "authorizationCode": "AUTH-0000001000",
   "lastFour": "1111",
   "amount": 1040.00,
@@ -649,7 +653,7 @@ Respuesta aprobada `201`:
 }
 ```
 
-`paymentNumber` funciona como referencia de la autorización simulada; no se agrega un segundo atributo de autorización.
+`paymentNumber` funciona como referencia interna de la autorización; no se agrega un segundo atributo con el mismo propósito.
 
 Respuesta rechazada `201`:
 
@@ -658,7 +662,7 @@ Respuesta rechazada `201`:
   "attemptId": 402,
   "status": "RECHAZADO",
   "responseCode": "INSUFFICIENT_FUNDS",
-  "message": "La tarjeta ficticia no tiene fondos suficientes.",
+  "message": "La tarjeta no tiene fondos suficientes.",
   "authorizationCode": null,
   "lastFour": "2222",
   "amount": 1040.00,
@@ -903,6 +907,7 @@ El backend debe impedir que `toString`, trazas o serialización automática de e
 | `alcoholAddiction` | `alcoholAddiction` | `COTIZACION_MEDICA.ADICCION_ALCOHOL` |
 | `coverageStart` | `coverageStart` | `POLIZA.VIGENCIA_DESDE` |
 | `paymentMode` | `paymentModeId` | `MODALIDAD_PAGO_ID` |
+| `cardBrand` | `cardBrand` | Dato derivado y validado por prefijo; no se persiste por separado |
 | `cardNumber` | `card.number` | `TARJETA.NUMERO_TARJETA`, cifrado |
 | `expiration` | `expirationYear`, `expirationMonth` | `TARJETA.ANIO_EXPIRACION`, `MES_EXPIRACION` |
 | `cvv` | `card.cvv` | No se persiste |

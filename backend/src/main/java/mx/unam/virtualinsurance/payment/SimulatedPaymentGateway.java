@@ -55,7 +55,8 @@ public class SimulatedPaymentGateway implements PaymentGateway {
 			|| instrument.expirationYear() != command.expirationYear()) {
 			return rejected("CARD_DATA_MISMATCH", "El vencimiento no coincide con la tarjeta proporcionada.", instrument);
 		}
-		if (!"123".equals(command.securityCode())) {
+		String expectedSecurityCode = command.cardBrand() == CardBrand.AMEX ? "1234" : "123";
+		if (!expectedSecurityCode.equals(command.securityCode())) {
 			return rejected("INVALID_SECURITY_CODE", "El CVV no es válido.", instrument);
 		}
 		if ("BLOCKED".equals(instrument.status())) {

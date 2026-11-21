@@ -71,6 +71,44 @@ class PaymentIntegrationTests {
 	}
 
 	@Test
+	void approvesMastercardPayment() throws Exception {
+		var initialBalance = balance("5100");
+
+		pay(createApprovedAutoQuote(), "5105105105105100", "123", UUID.randomUUID().toString())
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.status").value("APROBADO"))
+			.andExpect(jsonPath("$.lastFour").value("5100"));
+
+		assertThat(balance("5100"))
+			.isEqualByComparingTo(initialBalance.subtract(new java.math.BigDecimal("1040.00")));
+	}
+
+	@Test
+	void approvesAmericanExpressPaymentWithFourDigitSecurityCode() throws Exception {
+		var initialBalance = balance("8431");
+
+		pay(createApprovedAutoQuote(), "371449635398431", "1234", UUID.randomUUID().toString())
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.status").value("APROBADO"))
+			.andExpect(jsonPath("$.lastFour").value("8431"));
+
+		assertThat(balance("8431"))
+			.isEqualByComparingTo(initialBalance.subtract(new java.math.BigDecimal("1040.00")));
+	}
+
+	@Test
+	void rejectsCardNumberThatDoesNotMatchSelectedBrand() throws Exception {
+		mockMvc.perform(post("/cotizaciones/{quoteId}/intentos-pago", createApprovedAutoQuote())
+			.with(authenticatedAcademicClient())
+			.with(csrf())
+			.header("Idempotency-Key", UUID.randomUUID().toString())
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(paymentJson("MASTERCARD", "4242424242421111", "123", "12/30")))
+			.andExpect(status().isUnprocessableContent())
+			.andExpect(jsonPath("$.code").value("CARD_BRAND_MISMATCH"));
+	}
+
+	@Test
 	void rejectsInsufficientFundsWithoutDebitingOrIssuingPolicy() throws Exception {
 		Long quoteId = createApprovedAutoQuote();
 		var initialBalance = balance("2222");
@@ -224,17 +262,39 @@ class PaymentIntegrationTests {
 	}
 
 	private String paymentJson(String cardNumber, String cvv, String expiration) {
+		return paymentJson(cardBrand(cardNumber), cardNumber, cvv, expiration);
+	}
+
+	private String paymentJson(
+		String cardBrand,
+		String cardNumber,
+		String cvv,
+		String expiration
+	) {
 		return """
 			{
 			  "coverageStart":"%s",
 			  "paymentMode":"MONTHLY",
 			  "cardholderName":"Cliente Academico",
+			  "cardBrand":"%s",
 			  "cardNumber":"%s",
 			  "expiration":"%s",
 			  "cvv":"%s",
 			  "acceptsTerms": true
 			}
-			""".formatted(LocalDate.now().plusDays(1), cardNumber, expiration, cvv);
+			""".formatted(
+				LocalDate.now().plusDays(1),
+				cardBrand,
+				cardNumber,
+				expiration,
+				cvv
+			);
+	}
+
+	private String cardBrand(String cardNumber) {
+		if (cardNumber.startsWith("3")) return "AMEX";
+		if (cardNumber.startsWith("5") || cardNumber.startsWith("2")) return "MASTERCARD";
+		return "VISA";
 	}
 
 	private RequestPostProcessor authenticatedAcademicClient() {

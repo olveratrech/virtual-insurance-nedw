@@ -26,6 +26,7 @@ function PaymentPage() {
         coverageStart: values.coverageStart,
         paymentMode: values.paymentMode,
         cardholderName: values.cardholderName.trim(),
+        cardBrand: values.cardBrand,
         cardNumber: values.cardNumber.replace(/\s/g, ''),
         expiration: values.expiration,
         cvv: values.cvv,
@@ -76,8 +77,7 @@ function PaymentPage() {
         <p>Revisa la cobertura, la modalidad y los datos de pago antes de confirmar.</p>
       </header>
       <aside className="payment-demo-guide" role="note">
-        Datos habilitados para evaluación: usa CVV <strong>123</strong> y vencimiento <strong>12/30</strong>. Tarjetas: <strong>4242 4242 4242 1111</strong> con fondos,
-        {' '}<strong>4000 0000 0000 2222</strong> sin fondos, <strong>4000 0000 0000 3333</strong> bloqueada o
+        Datos habilitados para evaluación: usa vencimiento <strong>12/30</strong> y CVV <strong>123</strong> para Visa/Mastercard o <strong>1234</strong> para American Express. Con fondos: Visa <strong>4242 4242 4242 1111</strong>, Mastercard <strong>5105 1051 0510 5100</strong> y American Express <strong>3714 496353 98431</strong>. Casos Visa: <strong>4000 0000 0000 2222</strong> sin fondos, <strong>4000 0000 0000 3333</strong> bloqueada o
         {' '}<strong>4000 0000 0000 5555</strong> rechazada por el procesador.
       </aside>
       <div className="payment-page__content">
