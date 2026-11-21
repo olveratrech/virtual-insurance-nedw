@@ -159,9 +159,9 @@ class AdminCancellationIntegrationTests {
 		assertThat(latestHistoryStatus(policyId)).isEqualTo("CANCELADA");
 		assertPolicyPdfContains(
 			policyId,
-			"Estatus: Cancelada",
-			"Estado de solicitud: Cancelacion aprobada",
-			"Observacion de resolucion: " + observation
+			"Estado\nCancelada",
+			"Estado de solicitud\nCancelación aprobada",
+			"Observación de resolución\n" + observation
 		);
 	}
 
@@ -189,9 +189,9 @@ class AdminCancellationIntegrationTests {
 		assertThat(latestHistoryStatus(policyId)).isEqualTo("ACTIVA");
 		assertPolicyPdfContains(
 			policyId,
-			"Estatus: Activa",
-			"Estado de solicitud: Cancelacion rechazada",
-			"Observacion de resolucion: " + observation
+			"Estado\nActiva",
+			"Estado de solicitud\nCancelación rechazada",
+			"Observación de resolución\n" + observation
 		);
 	}
 

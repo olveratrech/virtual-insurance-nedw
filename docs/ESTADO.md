@@ -22,7 +22,7 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
 | Frontend React | Identidad visual integrada | El portal del cliente y la zona administrativa usan el logotipo adaptable y el favicon propios; los recorridos comerciales y administrativos continúan aprobados. |
-| Backend Spring Boot | Ciclo administrativo completo | Las 85 pruebas pasan; aprobación y rechazo se reflejan en póliza, panel, PDF e historial, y ambos documentos incorporan la marca institucional. |
+| Backend Spring Boot | Póliza profesional integrada | Las 85 pruebas pasan; la póliza regenerable incorpora marca, cláusulas por producto, estados semánticos y tipografías embebidas. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
 | Pruebas | Parciales aprobadas | Oracle, 85 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
@@ -94,7 +94,8 @@
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
 - `DocumentList` descarga pólizas y comprobantes PDF reales mediante una ruta protegida.
-- Los PDF se regeneran con una plantilla académica versionable, incorporan el logotipo PNG institucional e incluyen datos específicos de auto, como placas, y modalidades presentadas en español.
+- Los PDF se regeneran desde datos persistidos. La póliza `VI-POL-2026.2` usa carátula estructurada, logotipo, cláusulas diferenciadas para auto y gastos médicos, estados con color semántico y un único aviso ficticio y educativo.
+- Cinzel, Fira Sans y JetBrains Mono se cargan desde recursos del backend y se incrustan en el PDF para conservar la composición en local, contenedores y despliegues remotos.
 - `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
 - `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
 - `cancellationApi.js` crea solicitudes reales protegidas con CSRF y presenta el folio persistido.

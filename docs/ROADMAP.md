@@ -175,10 +175,11 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Configurar el favicon propio de la aplicación.
 - [x] Integrar el logotipo institucional en la póliza y el comprobante PDF.
 - [x] Verificar la marca en escritorio, vista estrecha y documentos descargados.
-- [ ] Rediseñar la plantilla completa de la póliza y ampliar su contenido contractual.
+- [x] Rediseñar la plantilla completa de la póliza y ampliar su contenido contractual.
+- [x] Incorporar tipografías embebidas y estados con color semántico en la póliza.
 - [ ] Unificar el aviso explícito sobre el carácter ficticio y educativo de la aplicación.
 
-**Entregable parcial:** identidad visual compartida por React y los documentos PDF.
+**Entregable parcial:** identidad visual compartida por React y documentos PDF, con la póliza profesional terminada.
 
 ### Fase 6 — Pruebas, estabilización y entrega
 

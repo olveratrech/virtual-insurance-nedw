@@ -188,7 +188,7 @@ La abstracción no oculta la transacción: el servicio coordina idempotencia, in
 
 ## Plantilla de documentos
 
-`PolicyDocumentGenerator` define la composición visual común de los PDFs, carga el logotipo institucional desde los recursos del backend y lo reutiliza en la póliza y el comprobante. `AcademicContractContent` concentra las secciones contractuales editables y su versión. `PolicyPdfData` transporta exclusivamente los valores variables obtenidos de Oracle, incluido el resultado vigente de una cancelación. Cada descarga regenera el documento para reflejar una aprobación o rechazo posterior a la emisión.
+`PolicyDocumentGenerator` define la composición visual común de los PDFs, carga el logotipo y las familias Cinzel, Fira Sans y JetBrains Mono desde los recursos del backend, y las incrusta en cada archivo. La póliza aplica una jerarquía tipográfica y cromática según títulos, texto, datos técnicos y estados. `AcademicContractContent` concentra las seis secciones contractuales editables, su variante de cobertura por producto y la versión. `PolicyPdfData` transporta exclusivamente los valores variables obtenidos de Oracle, incluido el resultado vigente de una cancelación. Cada descarga regenera el documento para reflejar una aprobación o rechazo posterior a la emisión.
 
 Esta separación permite incorporar después exclusiones, anexos, condiciones generales o textos revisados académicamente sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
 

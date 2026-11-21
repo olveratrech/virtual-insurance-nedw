@@ -132,11 +132,21 @@ class PolicyIntegrationTests {
 			String text = new PDFTextStripper().getText(document);
 			org.assertj.core.api.Assertions.assertThat(hasImageOnFirstPage(document)).isTrue();
 			org.assertj.core.api.Assertions.assertThat(text)
-				.contains("Poliza academica " + policyNumber)
-				.contains("DOCUMENTO EXCLUSIVAMENTE ACADEMICO")
+				.contains("PÓLIZA DE SEGURO")
+				.contains(policyNumber)
+				.containsOnlyOnce("DOCUMENTO FICTICIO PARA FINES EDUCATIVOS")
+				.contains("Identificación de la póliza")
+				.contains("Objeto del seguro")
+				.contains("Privacidad y tratamiento de datos")
+				.contains("Términos, condiciones y exclusiones")
 				.contains("Mazda 3 - 2026 - Placas: POL123A")
-				.contains("Modalidad: Mensual")
-				.contains("Version de plantilla: NEDW-2026.1");
+				.contains("Forma de pago")
+				.contains("Mensual")
+				.contains("Versión del documento: VI-POL-2026.2")
+				.doesNotContain("Póliza académica")
+				.doesNotContain("simulada")
+				.doesNotContain("demostrativa")
+				.doesNotContain("Cobertura demostrativa");
 		}
 	}
 
@@ -203,9 +213,9 @@ class PolicyIntegrationTests {
 		try (var document = Loader.loadPDF(downloadResult.getResponse().getContentAsByteArray())) {
 			String text = new PDFTextStripper().getText(document);
 			org.assertj.core.api.Assertions.assertThat(text)
-				.contains("Estatus: Cancelacion solicitada")
-				.contains("Folio de cancelacion: " + cancellationNumber)
-				.doesNotContain("Estatus: CANCELACION_SOLICITADA");
+				.contains("Cancelación solicitada")
+				.contains("Folio de cancelación\n" + cancellationNumber)
+				.doesNotContain("CANCELACION_SOLICITADA");
 		}
 	}
 
