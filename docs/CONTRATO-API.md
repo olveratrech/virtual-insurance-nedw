@@ -102,6 +102,8 @@ Códigos de negocio previstos:
 - `PROCESSOR_DECLINED`
 - `POLICY_NOT_ACTIVE`
 - `CANCELLATION_ALREADY_PENDING`
+- `CANCELLATION_REQUEST_NOT_FOUND`
+- `CANCELLATION_ALREADY_RESOLVED`
 - `UNSUPPORTED_FILE`
 
 Para no revelar la existencia de recursos de otros usuarios, una póliza o cotización ajena responde `404`, no `403`.
@@ -359,7 +361,65 @@ Requiere una sesión interna con `ADMIN` o `CANCELLATION_REVIEWER` y devuelve la
 
 Requiere CSRF, invalida la sesión, elimina `JSESSIONID` y responde `204`.
 
-La API de consulta y resolución de cancelaciones se incorporará en el siguiente incremento.
+## 5.2. Administración de cancelaciones
+
+Todas estas rutas requieren una sesión interna con `ADMIN` o `CANCELLATION_REVIEWER`. Una sesión de cliente recibe `403`.
+
+### `GET /admin/solicitudes-cancelacion`
+
+Lista solicitudes por estado. Sin parámetro utiliza `SOLICITADA`; `status` también admite `APROBADA` y `RECHAZADA`.
+
+Respuesta `200`:
+
+```json
+{
+  "items": [
+    {
+      "id": 501,
+      "requestNumber": "CAN-0123456789ABCDEF",
+      "status": "SOLICITADA",
+      "reason": "FINANCIAL",
+      "requestedDate": "2026-11-21",
+      "comments": "Solicitud para revision administrativa",
+      "createdAt": "2026-11-21T09:30:00-06:00",
+      "policy": {
+        "id": 301,
+        "policyNumber": "VI-802145",
+        "status": "CANCELACION_SOLICITADA",
+        "type": "AUTO",
+        "productName": "Seguro de auto"
+      },
+      "client": {
+        "id": 101,
+        "fullName": "Emmanuel Trejo Olvera",
+        "email": "emmanuel@example.com"
+      },
+      "resolution": null
+    }
+  ]
+}
+```
+
+Un filtro desconocido responde `422 VALIDATION_ERROR`.
+
+### `GET /admin/solicitudes-cancelacion/{id}`
+
+Devuelve un elemento con la misma estructura del listado. Si ya fue resuelto, `resolution` contiene `resolvedAt`, `observation`, `resolvedById` y `resolvedByName`. Un identificador inexistente responde `404 CANCELLATION_REQUEST_NOT_FOUND`.
+
+### `PUT /admin/solicitudes-cancelacion/{id}/resolucion`
+
+Requiere CSRF y recibe:
+
+```json
+{
+  "decision": "APROBADA",
+  "observation": "Procede la cancelacion inmediata"
+}
+```
+
+`decision` admite `APROBADA` o `RECHAZADA`; `observation` es obligatoria y admite hasta 500 caracteres. El responsable se obtiene de la sesión y no se acepta desde el cuerpo.
+
+La operación bloquea la solicitud, registra la resolución y devuelve `200` con el detalle actualizado. Oracle cambia la póliza a `CANCELADA` cuando se aprueba o a `ACTIVA` cuando se rechaza, y genera el historial correspondiente. Una segunda resolución responde `409 CANCELLATION_ALREADY_RESOLVED`.
 
 ## 6. Panel del cliente
 

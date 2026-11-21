@@ -193,7 +193,7 @@ Esta separación permite incorporar después exclusiones, anexos, condiciones ge
 
 Cotizaciones, pagos, pólizas y cancelaciones tienen transiciones permitidas. Oracle protege las reglas finales mediante restricciones y triggers; Spring valida cada operación antes de persistirla y devuelve errores de negocio comprensibles.
 
-En cancelaciones, `CancellationService` bloquea la póliza durante la transacción, exige el estado `ACTIVA` y rechaza una solicitud pendiente antes de insertar. El trigger `TRG_SOLICITUD_CANCELACION_REG` conserva la regla en Oracle, cambia la póliza a `CANCELACION_SOLICITADA` y genera su historial.
+En cancelaciones, `CancellationService` bloquea la póliza durante la solicitud, exige el estado `ACTIVA` y rechaza otra pendiente. `AdminCancellationService` bloquea la solicitud antes de resolverla y solo permite la transición desde `SOLICITADA` hacia `APROBADA` o `RECHAZADA`. El trigger `TRG_SOLICITUD_CANCELACION_REG` conserva las reglas finales en Oracle, registra la fecha y el responsable, cambia la póliza a `CANCELACION_SOLICITADA`, `CANCELADA` o `ACTIVA` y genera su historial.
 
 Se eligió una validación centralizada en lugar de una jerarquía de clases de estado porque las transiciones actuales son pocas y explícitas. Esta implementación mantiene la regla en un solo caso de uso sin agregar abstracciones innecesarias.
 

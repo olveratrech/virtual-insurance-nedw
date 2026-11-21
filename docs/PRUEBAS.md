@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 71 pruebas automatizadas | 71 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 83 pruebas automatizadas | 83 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -75,6 +75,18 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `AdminAuthenticationIntegrationTests.logsOutAndInvalidatesAdministrativeSession` | Sesión/integración | Logout administrativo, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
 | `AdminAuthenticationIntegrationTests.clientSessionCannotAccessAdministrativeEndpoints` | Autorización/integración | Una sesión con `ROLE_CLIENT` recibe `403` en rutas administrativas | Aprobada |
 | `AdminAuthenticationIntegrationTests.administrativeSessionCannotAccessClientEndpoints` | Autorización/integración | Una sesión interna recibe `403` en rutas exclusivas del cliente | Aprobada |
+| `AdminCancellationIntegrationTests.listsPendingRequestsByDefaultAndSupportsStatusFilter` | API/integración | Listado pendiente predeterminado y filtro por solicitudes rechazadas | Aprobada |
+| `AdminCancellationIntegrationTests.returnsAdministrativeCancellationDetail` | API/integración | Detalle de solicitud, póliza, producto y cliente | Aprobada |
+| `AdminCancellationIntegrationTests.approvesCancellationAndPersistsResolverPolicyAndHistory` | E2E transaccional | Aprobación, responsable, observación, fecha, póliza cancelada e historial | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsCancellationAndReactivatesPolicy` | E2E transaccional | Rechazo de solicitud y retorno de la póliza a `ACTIVA` | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsSecondResolution` | Concurrencia/estado | Una solicitud resuelta no admite otra decisión | Aprobada |
+| `AdminCancellationIntegrationTests.returnsNotFoundForUnknownCancellationDetail` | Error/integración | `404` al consultar una solicitud inexistente | Aprobada |
+| `AdminCancellationIntegrationTests.returnsNotFoundWhenResolvingUnknownCancellation` | Error/integración | `404` al intentar resolver una solicitud inexistente | Aprobada |
+| `AdminCancellationIntegrationTests.validatesDecisionAndObservation` | Validación/integración | Decisión permitida y observación obligatoria | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsInvalidStatusFilter` | Validación/integración | Rechazo de filtros administrativos desconocidos | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsResolutionWithoutCsrf` | Seguridad/integración | Protección CSRF de la resolución | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsAdministrativeQueryWithoutAuthentication` | Seguridad/integración | Sesión interna obligatoria para consultar | Aprobada |
+| `AdminCancellationIntegrationTests.rejectsClientSessionOnAdministrativeEndpoints` | Autorización/integración | Una sesión de cliente no puede consultar administración | Aprobada |
 | `QuoteIntegrationTests.createsApprovedAutoQuoteWithSubtypeAndHistory` | API/integración | Strategy de auto, costo, subtipo, historial y consulta posterior | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithTwelveNegativePoints` | Regla de negocio/integración | Rechazo de auto por 12 puntos y costo nulo | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithCriminalRecord` | Regla de negocio/integración | Rechazo de auto por antecedentes | Aprobada |
@@ -121,7 +133,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **71 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **83 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
