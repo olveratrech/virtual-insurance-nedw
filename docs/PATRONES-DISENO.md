@@ -16,7 +16,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Adapter | Backend | Implementado | Adaptar clientes y usuarios internos a Spring Security sin acoplar las entidades |
 | Dependency Injection | Backend | Implementado mediante Spring | Desacoplar dependencias y facilitar pruebas |
 | Component Composition | Frontend | Implementado | Construir pantallas mediante componentes reutilizables |
-| Provider / Context | Frontend | Implementado | Compartir la sesión autenticada sin prop drilling |
+| Provider / Context | Frontend | Implementado | Compartir por separado las sesiones de cliente y administración sin prop drilling |
 | Facade de servicios | Frontend | Implementado | Ocultar `fetch`, cookies, CSRF, multipart y rutas HTTP |
 | Route Guard | Frontend | Implementado | Impedir acceso visual a rutas que requieren sesión |
 | Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
@@ -139,15 +139,18 @@ AdminAuthenticationService
 
 **Problema:** encabezado, formulario de acceso, panel y rutas protegidas necesitan conocer la misma sesión.
 
-**Aplicación:** `AuthProvider` conserva el cliente y el estado de sesión; `useAuth` proporciona acceso controlado a login, registro, logout y recuperación de sesión.
+**Aplicación:** `AuthProvider` conserva el cliente y su sesión; `AdminAuthProvider` conserva al usuario interno y sus roles. `useAuth` y `useAdminAuth` impiden que los componentes mezclen ambos contextos.
 
 **Archivos:**
 
 - `frontend/src/contexts/AuthContext.jsx`
 - `frontend/src/contexts/authContext.js`
 - `frontend/src/hooks/useAuth.js`
+- `frontend/src/contexts/AdminAuthContext.jsx`
+- `frontend/src/contexts/adminAuthContext.js`
+- `frontend/src/hooks/useAdminAuth.js`
 
-**Beneficio:** se evita pasar datos de autenticación manualmente a través de componentes intermedios.
+**Beneficio:** se evita pasar datos de autenticación manualmente y cada árbol de rutas monta solamente el proveedor que le corresponde.
 
 ### Facade de servicios HTTP
 
@@ -165,7 +168,7 @@ AdminAuthenticationService
 
 **Problema:** una persona sin sesión no debe visualizar el panel del cliente.
 
-**Aplicación:** `ProtectedRoute` consulta el contexto, muestra el estado de carga, maneja errores de conexión y redirige a `/acceso` cuando no existe sesión.
+**Aplicación:** `ProtectedRoute` protege el portal comercial y `AdminProtectedRoute` protege `/admin`; ambos consultan su contexto, manejan carga y errores, y redirigen a su acceso correspondiente.
 
 **Límite:** esta protección mejora la navegación, pero no sustituye la autorización del backend. Spring debe validar siempre al propietario del recurso.
 

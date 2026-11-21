@@ -223,6 +223,14 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Panel sin operaciones | Caso vacío manual | Aprobado; muestra el mensaje de actividad vacía sin datos ficticios |
 | Panel real en diseño adaptable | Revisión visual | Aprobado en escritorio y vista estrecha |
 | Fecha efectiva fija de cancelación | Integración manual React–Spring–Oracle | Aprobada; React muestra el día actual sin permitir cambios y Oracle conserva esa misma fecha |
+| Acceso administrativo | Integración manual React–Spring–Oracle | Aprobado; autentica al usuario interno y abre exclusivamente la zona administrativa |
+| Listado y filtros administrativos | Integración manual | Aprobados para solicitudes pendientes, aprobadas y rechazadas |
+| Detalle y recarga de solicitud administrativa | Persistencia y navegación | Aprobados; conservan solicitud, póliza, cliente y resolución |
+| Aprobación administrativa | E2E parcial React–Spring–Oracle | Aprobada; registra observación y responsable, y cambia la póliza a `CANCELADA` |
+| Rechazo administrativo | E2E parcial React–Spring–Oracle | Aprobado; registra la resolución y devuelve la póliza a `ACTIVA` |
+| Logout y aislamiento de sesiones administrativas | Seguridad manual | Aprobados; cliente y usuario interno no comparten identidad simultánea |
+| Panel administrativo adaptable | Revisión visual | Aprobado en listado, detalle y formulario de resolución |
+| Detalle de póliza cancelada | Regresión funcional y visual | Aprobado; usa estado rojo, informa cobertura terminada, elimina próximo pago y oculta otra cancelación |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

@@ -162,7 +162,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Crear usuarios internos, roles y auditoría mínima de resolución en Oracle.
 - [x] Implementar autenticación y autorización administrativa en Spring Security.
 - [x] Implementar la API de consulta, aprobación y rechazo de cancelaciones.
-- [ ] Construir el panel administrativo en React.
+- [x] Construir el panel administrativo en React.
 - [ ] Integrar y verificar el resultado administrativo en póliza, PDF, panel e historial del cliente.
 
 **Entregable:** ciclo completo de solicitud y resolución administrativa de cancelaciones.

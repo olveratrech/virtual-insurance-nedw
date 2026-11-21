@@ -1,0 +1,23 @@
+.admin-cancellation-detail { display: grid; gap: var(--space-xl); padding-bottom: 5rem; padding-top: 3.5rem; }
+.admin-cancellation-detail header > p:last-child { color: var(--color-text); }
+.admin-cancellation-detail__title { align-items: center; display: flex; flex-wrap: wrap; gap: var(--space-md); justify-content: space-between; }
+.admin-cancellation-detail__title h1 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.04em; margin: var(--space-md) 0; }
+.admin-cancellation-detail__grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.admin-detail-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: var(--space-xl); }
+.admin-detail-card h2 { margin: 0 0 var(--space-lg); }
+.admin-detail-card dl { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+.admin-detail-card dt { color: var(--color-text); font-size: 0.8rem; font-weight: 700; }
+.admin-detail-card dd { font-weight: 650; line-height: 1.5; margin: 0.25rem 0 0; overflow-wrap: anywhere; }
+.admin-detail-card__full { grid-column: 1 / -1; }
+.admin-detail-card--resolution { border-color: var(--color-success-border); }
+.admin-cancellation-detail__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+
+@media (max-width: 720px) {
+  .admin-cancellation-detail { padding-top: var(--space-xl); }
+  .admin-cancellation-detail__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 460px) {
+  .admin-detail-card dl { grid-template-columns: 1fr; }
+  .admin-detail-card__full { grid-column: auto; }
+}

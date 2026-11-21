@@ -5,7 +5,7 @@ export async function getCurrentSession() {
   try {
     return await apiRequest('/auth/me')
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) return null
+    if (error instanceof ApiError && [401, 403].includes(error.status)) return null
     throw error
   }
 }

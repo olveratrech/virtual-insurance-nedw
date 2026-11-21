@@ -1,0 +1,14 @@
+.admin-cancellations-page { display: grid; gap: var(--space-xl); padding-bottom: 5rem; padding-top: 3.5rem; }
+.admin-cancellations-page header { max-width: 52rem; }
+.admin-cancellations-page h1 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.04em; margin: var(--space-md) 0; }
+.admin-cancellations-page header > p:last-child { color: var(--color-text); font-size: 1.05rem; line-height: 1.6; }
+.admin-cancellations-page__filters { background: var(--color-neutral-soft); border-radius: var(--radius-sm); display: flex; flex-wrap: wrap; gap: 0.25rem; justify-self: start; padding: 0.25rem; }
+.admin-cancellations-page__filters button { background: transparent; border: 0; border-radius: calc(var(--radius-sm) - 0.15rem); color: var(--color-text); cursor: pointer; font-weight: 700; padding: 0.65rem 1rem; }
+.admin-cancellations-page__filters button:hover, .admin-cancellations-page__filters button.is-active { background: var(--color-surface); box-shadow: 0 1px 3px rgb(15 23 42 / 0.12); color: var(--color-primary-dark); }
+.admin-cancellations-page__error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); display: grid; gap: var(--space-md); justify-items: start; padding: var(--space-md); }
+.admin-cancellations-page__error p { margin: 0; }
+
+@media (max-width: 560px) {
+  .admin-cancellations-page { padding-top: var(--space-xl); }
+  .admin-cancellations-page__filters { display: grid; justify-self: stretch; }
+}

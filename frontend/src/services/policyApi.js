@@ -21,9 +21,11 @@ export async function getPolicy(policyId) {
     insuredLabel: response.insured.label,
     insuredValue: response.insured.value,
     paymentMode: response.payment.mode === 'ANNUAL' ? 'Anual' : 'Mensual',
-    nextPayment: response.payment.nextPaymentDate
-      ? formatDate(response.payment.nextPaymentDate)
-      : 'Cubierto durante la vigencia',
+    nextPayment: response.coverageActive
+      ? response.payment.nextPaymentDate
+        ? formatDate(response.payment.nextPaymentDate)
+        : 'Cubierto durante la vigencia'
+      : 'No aplica',
     lastPayment: `${formatMxn(response.payment.lastPaymentAmount)} · ${response.payment.lastPaymentStatus}`,
     authorizationCode: response.payment.authorizationCode,
     documents: response.documents,

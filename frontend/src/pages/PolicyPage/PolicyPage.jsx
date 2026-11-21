@@ -17,7 +17,37 @@ function PolicyPage() {
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
   const issuedAfterPayment = ['APPROVED', 'APROBADO'].includes(location.state?.payment?.status)
+  const active = policy?.status === 'ACTIVA'
   const cancellationRequested = policy?.status === 'CANCELACION_SOLICITADA'
+  const cancelled = policy?.status === 'CANCELADA'
+  const canRequestCancellation = active
+  const statusPresentation = cancellationRequested
+    ? {
+        title: 'Cancelación en revisión',
+        description: `La cobertura permanece vigente desde el ${policy.validFrom}.`,
+        tone: 'warning',
+        label: 'CANCELACIÓN SOLICITADA',
+      }
+    : cancelled
+      ? {
+          title: 'Tu póliza está cancelada',
+          description: 'La cobertura ya no se encuentra activa.',
+          tone: 'danger',
+          label: 'CANCELADA',
+        }
+      : active
+        ? {
+            title: 'Tu póliza está activa',
+            description: `Cobertura vigente desde el ${policy.validFrom}.`,
+            tone: 'success',
+            label: 'ACTIVA',
+          }
+        : {
+            title: 'Estado de tu póliza',
+            description: 'La cobertura no se encuentra activa.',
+            tone: 'neutral',
+            label: policy?.status,
+          }
 
   useEffect(() => {
     let active = true
@@ -87,14 +117,15 @@ function PolicyPage() {
       <header className="policy-page__heading">
         <p className="eyebrow">Póliza {policy.policyNumber}</p>
         <div className="policy-page__title-row">
-          <h1>{cancellationRequested ? 'Cancelación en revisión' : 'Tu póliza está activa'}</h1>
-          <StatusBadge tone={cancellationRequested ? 'warning' : 'success'}>{cancellationRequested ? 'CANCELACIÓN SOLICITADA' : policy.status}</StatusBadge>
+          <h1>{statusPresentation.title}</h1>
+          <StatusBadge tone={statusPresentation.tone}>{statusPresentation.label}</StatusBadge>
         </div>
-        <p>Cobertura vigente desde el {policy.validFrom}.</p>
+        <p>{statusPresentation.description}</p>
       </header>
 
       {issuedAfterPayment && <p className="confirmation-message" role="status">Pago aprobado. La póliza se emitió correctamente.</p>}
       {cancellationRequested && <p className="prototype-notice" role="status">La solicitud está en revisión. La cobertura permanece activa.</p>}
+      {cancelled && <p className="policy-page__cancelled-notice" role="status">La solicitud fue aprobada. Esta póliza se conserva únicamente para consulta y descarga de documentos.</p>}
 
       <div className="policy-page__cards">
         <PolicyDetails policy={policy} />
@@ -106,7 +137,7 @@ function PolicyPage() {
 
       <div className="policy-page__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
-        {!cancellationRequested && (
+        {canRequestCancellation && (
           <Link className="button button--primary" to={`/polizas/${polizaId}/cancelacion`} state={{ policy }}>Solicitar cancelación</Link>
         )}
       </div>

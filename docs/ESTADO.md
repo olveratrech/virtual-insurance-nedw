@@ -21,7 +21,7 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Recorrido principal aprobado | Panel, registro, autenticación, cotizaciones, pagos, pólizas, documentos y cancelaciones consumen la API real y fueron verificados manualmente. |
+| Frontend React | Panel administrativo aprobado | Acceso interno, filtros, detalle y resolución de cancelaciones complementan el recorrido comercial y fueron verificados manualmente. |
 | Backend Spring Boot | Resolución administrativa aprobada | Las 83 pruebas pasan; consulta, aprobación y rechazo de cancelaciones complementan el recorrido comercial verificado. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
@@ -100,6 +100,9 @@
 - `cancellationApi.js` crea solicitudes reales protegidas con CSRF y presenta el folio persistido.
 - Al regresar, `PolicyPage` muestra `CANCELACIÓN SOLICITADA` y conserva la indicación de cobertura activa.
 - `PolicyPage` oculta la acción de cancelación cuando ya existe una solicitud pendiente.
+- La zona `/admin` utiliza contexto, layout, guardia de rutas y servicios independientes del portal del cliente.
+- El panel administrativo permite filtrar, consultar, aprobar y rechazar solicitudes con confirmación explícita y observación obligatoria.
+- `PolicyPage` presenta `ACTIVA`, `CANCELACION_SOLICITADA` y `CANCELADA` de forma diferenciada; solo una póliza activa ofrece iniciar una cancelación.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
 - `npm run lint` y `npm run build` terminan correctamente.
 - La página de inicio, el acceso, el registro y sus validaciones aprobaron la revisión visual y las pruebas manuales del autor.
@@ -232,7 +235,7 @@
 
 ## Próxima acción
 
-Construir el panel administrativo en React para consultar y resolver solicitudes de cancelación.
+Integrar y verificar el resultado administrativo en póliza, PDF, panel e historial del cliente.
 
 ## Bitácora breve
 
@@ -323,4 +326,5 @@ Construir el panel administrativo en React para consultar y resolver solicitudes
 | 21/11/2026 | Se desplegó y verificó el modelo administrativo de cancelaciones. | Roles, usuarios internos, relación de permisos, responsable de resolución, trigger reforzado, seed repetible y pruebas `05`, `07` y `99` terminaron correctamente. | Implementar autenticación administrativa en Spring Security. |
 | 21/11/2026 | Se implementó y verificó la autenticación administrativa. | Proveedores separados, roles internos, sesión, CSRF, logout y aislamiento entre rutas de clientes y administradores quedaron aprobados en la suite completa de 71 pruebas. | Implementar la API administrativa de consulta y resolución de cancelaciones. |
 | 21/11/2026 | Se implementó y verificó la API administrativa de cancelaciones. | Listado, filtros, detalle, aprobación, rechazo, bloqueo transaccional, responsable, cambio de póliza e historial quedaron aprobados en la suite completa de 83 pruebas. | Construir el panel administrativo en React. |
+| 21/11/2026 | Se implementó y verificó el panel administrativo en React. | Acceso interno, sesión aislada, filtros, detalle, aprobación, rechazo, recarga, logout y diseño adaptable funcionan; la póliza cancelada se muestra en rojo, sin cobertura ni nueva acción de cancelación. | Completar la integración final del resultado administrativo en las vistas del cliente y documentos. |
 
