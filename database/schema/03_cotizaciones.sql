@@ -44,6 +44,24 @@ declare
             dbms_output.put_line('conservado: ' || lower(p_indice));
         end if;
     end crear_indice_si_falta;
+
+    procedure crear_secuencia_si_falta(
+        p_secuencia varchar2,
+        p_sentencia varchar2
+    ) is
+        v_existe number;
+    begin
+        select count(*) into v_existe
+          from user_sequences
+         where sequence_name = upper(p_secuencia);
+
+        if v_existe = 0 then
+            execute immediate p_sentencia;
+            dbms_output.put_line('creada: ' || lower(p_secuencia));
+        else
+            dbms_output.put_line('conservada: ' || lower(p_secuencia));
+        end if;
+    end crear_secuencia_si_falta;
 begin
     v_usuario := sys_context('USERENV', 'CURRENT_USER');
     v_contenedor := sys_context('USERENV', 'CON_NAME');
@@ -84,6 +102,12 @@ begin
                     check (costo_calculado is null or costo_calculado >= 0)
             )
         ~'
+    );
+
+    crear_secuencia_si_falta(
+        'seq_numero_cotizacion',
+        'create sequence seq_numero_cotizacion '
+        || 'start with 1000 increment by 1 maxvalue 9999 nocycle cache 20'
     );
 
     crear_tabla_si_falta(

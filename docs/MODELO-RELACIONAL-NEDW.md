@@ -95,7 +95,7 @@ Catálogo inicial propuesto:
 |---|---|
 | `COTIZACION_ID` | PK, no nulo |
 | `CLIENTE_ID` | FK a `CLIENTE`, no nulo |
-| `NUMERO_COTIZACION` | No nulo, único |
+| `NUMERO_COTIZACION` | No nulo, único; generado desde `SEQ_NUMERO_COTIZACION` para la aplicación |
 | `FECHA_COTIZACION` | No nulo |
 | `VIGENCIA_COTIZACION` | No nulo |
 | `TIPO_SEGURO` | No nulo; discriminante de auto o médico |

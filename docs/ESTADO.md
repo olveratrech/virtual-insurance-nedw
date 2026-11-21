@@ -240,7 +240,7 @@
 
 ## Próxima acción
 
-Preparar el siguiente recorrido vertical para sustituir mocks: cotizaciones de auto y médicas.
+Implementar en Spring el recorrido de cotizaciones con entidades, DTO, Repository, Service Layer y Strategy por producto.
 
 ## Bitácora breve
 
@@ -307,4 +307,6 @@ Preparar el siguiente recorrido vertical para sustituir mocks: cotizaciones de a
 | 20/11/2026 | Se preparó el registro real en React. | Cliente HTTP compartido, catálogo de géneros, multipart, campos completos, fotografía opcional, validaciones y sesión automática pasan `lint` y `build`. | Ejecutar el recorrido manual antes de registrar el incremento. |
 | 20/11/2026 | Se verificó el registro real desde React. | Catálogo, validaciones, alta sin fotografía, datos nullable, sesión automática, recarga, nuevo login, duplicados y diseño adaptable pasaron correctamente. | Registrar el incremento y continuar con el siguiente recorrido comercial real. |
 | 20/11/2026 | Se documentaron los patrones de diseño y arquitectura. | Patrones implementados, planificados, ubicaciones, límites y criterios quedaron diferenciados sin atribuir mecanismos internos del framework como implementaciones propias. | Mantener el inventario al implementar Strategy o transiciones de estado. |
+| 20/11/2026 | Se preparó la numeración concurrente de cotizaciones. | El DDL crea de forma idempotente una secuencia de cuatro dígitos separada de los seeds y la prueba valida configuración y `NEXTVAL`. | Ejecutar dos veces el esquema de cotizaciones y después su prueba. |
+| 20/11/2026 | Se verificó la numeración de cotizaciones en Oracle. | La secuencia se creó, la repetición la conservó y `NEXTVAL` quedó operativo sin alterar seeds, subtipos, historiales ni triggers. | Registrar el incremento e implementar el backend de cotizaciones. |
 

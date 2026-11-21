@@ -9,6 +9,7 @@ declare
     v_usuario     varchar2(128);
     v_contenedor  varchar2(128);
     v_actual      number;
+    v_numero_reservado number;
 
     procedure verificar(
         p_condicion boolean,
@@ -49,6 +50,25 @@ begin
       from user_tab_identity_cols
      where table_name in ('COTIZACION', 'HISTORICO_ESTATUS_COTIZACION');
     verificar(v_actual = 2, 'se esperaban 2 columnas identity y se encontraron ' || v_actual);
+
+    select count(*) into v_actual
+      from user_sequences
+     where sequence_name = 'SEQ_NUMERO_COTIZACION'
+       and increment_by = 1
+       and max_value = 9999
+       and cycle_flag = 'N'
+       and cache_size = 20
+       and last_number >= 1000;
+    verificar(
+        v_actual = 1,
+        'seq_numero_cotizacion debe ser incremental, no ciclica y reservar numeros desde 1000'
+    );
+
+    select seq_numero_cotizacion.nextval into v_numero_reservado from dual;
+    verificar(
+        v_numero_reservado between 1000 and 9999,
+        'seq_numero_cotizacion devolvio un numero fuera del rango de 4 digitos'
+    );
 
     select count(*) into v_actual
       from user_constraints
@@ -178,7 +198,10 @@ begin
      where c.numero_cotizacion in (2, 3, 4, 5);
     verificar(v_actual = 4, 'se esperaban 4 registros historicos iniciales y se encontraron ' || v_actual);
 
-    dbms_output.put_line('pruebas de cotizaciones completadas correctamente.');
+    dbms_output.put_line(
+        'pruebas de cotizaciones completadas correctamente; numero reservado: '
+        || to_char(v_numero_reservado, 'fm0000')
+    );
 end;
 /
 

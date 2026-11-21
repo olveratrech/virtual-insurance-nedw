@@ -90,6 +90,10 @@ Los scripts comprueban por sí mismos que el usuario y la PDB sean correctos. Si
 
 Esta estrategia permite continuar después de un fallo intermedio sin convertir los scripts en procesos destructivos. No pretende reparar automáticamente una tabla que haya sido alterada manualmente; una diferencia estructural debe detectarse, revisarse y corregirse mediante un cambio explícito.
 
+## Numeración de cotizaciones
+
+`SEQ_NUMERO_COTIZACION` reserva números de negocio entre `1000` y `9999` para las cotizaciones creadas por la aplicación. Las cotizaciones académicas `0002` a `0005` permanecen separadas. La secuencia evita colisiones entre solicitudes concurrentes; sus saltos por caché, reinicios o transacciones revertidas son válidos y no afectan las PK.
+
 ## Prueba E2E transaccional
 
 `tests/99_recorrido_completo.sql` es la prueba de aceptación integral de Oracle. Utiliza el esquema y los catálogos ya desplegados, crea un cliente temporal y recorre:

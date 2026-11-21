@@ -21,7 +21,7 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 |---|---|---|---|
 | `tests/01_catalogos.sql` | Estructura e integración | Tablas de catálogo, columnas, identidades, PK, restricciones únicas, checks y datos iniciales | Aprobada |
 | `tests/02_clientes_tarjetas.sql` | Estructura e integración | Cliente, género y sexo, BCrypt, fotografía BLOB opcional, conservación de 70 bytes en la cuenta académica, tarjetas, tipos e índices de FK | Aprobada |
-| `tests/03_cotizaciones.sql` | Integración transaccional | Cotizaciones de auto y médicas, especialización exclusiva, estados e historial automático | Aprobada |
+| `tests/03_cotizaciones.sql` | Integración transaccional | Secuencia de números, cotizaciones de auto y médicas, especialización exclusiva, estados e historial automático | Aprobada |
 | `tests/04_pagos_polizas.sql` | Integración transaccional | Intentos de pago, aprobación única, emisión de póliza, modalidad, costo, documentos e historial | Aprobada |
 | `tests/05_cancelaciones.sql` | Integración transaccional | Fechas, solicitudes duplicadas, resolución, sincronización de estado, historial y protección contra borrado | Aprobada |
 | `tests/99_recorrido_completo.sql` | E2E transaccional | Recorrido completo del caso de estudio y reglas negativas, con rollback integral | Aprobada |
