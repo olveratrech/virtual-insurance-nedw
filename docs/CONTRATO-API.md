@@ -1,13 +1,18 @@
 # Contrato de API REST de Virtual Insurance
 
-**Versión:** 1.0  
-**Fecha:** 19 de noviembre de 2026  
-**Base URL:** `/api/v1`  
+**Versión:** 1.0
+
+**Fecha:** 20 de noviembre de 2026
+
+**Rutas del backend:** desde `/`
+
+**Proxy local de React:** prefijo `/api`, eliminado por Vite antes de reenviar a Spring
+
 **Consumidor inicial:** frontend React de Virtual Insurance
 
 ## 1. Objetivo
 
-Este documento define el límite entre React y Spring Boot antes de implementar el backend y el DDL. Los nombres de la API no dependen de los nombres físicos de Oracle: los DTO usan `camelCase` en inglés y el esquema conserva los nombres acordados en español.
+Este documento define el límite vigente entre React y Spring Boot. Los nombres de la API no dependen de los nombres físicos de Oracle: los DTO usan `camelCase` en inglés y el esquema conserva los nombres acordados en español.
 
 ## 2. Convenciones generales
 
@@ -59,7 +64,7 @@ Todos los errores controlados usan la misma estructura:
   "title": "La solicitud contiene datos inválidos",
   "status": 422,
   "detail": "Corrige los campos indicados.",
-  "instance": "/api/v1/cotizaciones/auto",
+  "instance": "/cotizaciones/auto",
   "code": "VALIDATION_ERROR",
   "timestamp": "2026-11-19T14:30:00-06:00",
   "fieldErrors": [
@@ -241,7 +246,7 @@ Respuesta `201`:
   },
   "fiscalIdentifier": "IDENTIFICADOR-FICTICIO",
   "email": "emmanuel@example.com",
-  "photoUrl": "/api/v1/clientes/me/foto"
+  "photoUrl": "/clientes/me/foto"
 }
 ```
 
@@ -271,7 +276,7 @@ Respuesta `200`:
     "paternalSurname": "Trejo",
     "maternalSurname": "Olvera",
     "email": "emmanuel@example.com",
-    "photoUrl": "/api/v1/clientes/me/foto"
+    "photoUrl": "/clientes/me/foto"
   }
 }
 ```
@@ -291,7 +296,7 @@ Respuesta `200`:
     "paternalSurname": "Trejo",
     "maternalSurname": "Olvera",
     "email": "emmanuel@example.com",
-    "photoUrl": "/api/v1/clientes/me/foto"
+    "photoUrl": "/clientes/me/foto"
   }
 }
 ```
@@ -618,7 +623,7 @@ Respuesta `200`:
       "type": "POLICY_PDF",
       "name": "Póliza de seguro",
       "format": "PDF",
-      "downloadUrl": "/api/v1/polizas/301/documentos/501/contenido"
+      "downloadUrl": "/polizas/301/documentos/501/contenido"
     }
   ]
 }
@@ -656,17 +661,6 @@ El cuerpo contiene un PDF generado desde los datos persistidos. La póliza inclu
 La representación anterior muestra únicamente los campos que cambian; la respuesta real conserva todos los campos del detalle.
 
 Una póliza ajena o inexistente responde `404`.
-
-### `GET /polizas/{policyId}/documentos/{documentId}/contenido`
-
-Devuelve el documento binario si pertenece a la póliza y al cliente autenticado.
-
-Encabezados principales:
-
-```text
-Content-Type: application/pdf
-Content-Disposition: attachment; filename="poliza-VI-802145.pdf"
-```
 
 ## 10. Solicitudes de cancelación
 

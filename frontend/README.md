@@ -1,16 +1,32 @@
-# React + Vite
+# Frontend de Virtual Insurance
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación React creada con Vite para el portal académico de Virtual Insurance.
 
-Currently, two official plugins are available:
+## Módulos integrados
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Registro, inicio y cierre de sesión con Spring Security.
+- Cotizaciones de auto y seguro médico.
+- Resultados aprobados y rechazados persistidos.
+- Contratación mediante una pasarela académica con tarjetas ficticias.
+- Emisión y consulta de pólizas.
+- Descarga protegida de póliza y comprobante PDF.
 
-## React Compiler
+La solicitud de cancelación conserva por ahora su implementación de interfaz y es el siguiente módulo que debe conectarse con Spring Boot y Oracle.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Ejecución
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Vite publica normalmente la aplicación en `http://localhost:5173` y reenvía las solicitudes bajo `/api` al backend local.
+
+## Verificación
+
+```bash
+npm run lint
+npm run build
+```
+
+El estado funcional, las pruebas manuales y los pendientes se mantienen en `../docs/ESTADO.md`, `../docs/PRUEBAS.md` y `../docs/ROADMAP.md`.

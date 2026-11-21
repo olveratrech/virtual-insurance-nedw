@@ -8,8 +8,11 @@ Proyecto final de **Negocios Electrónicos y Desarrollo Web** de la Facultad de 
 - Prototipo navegable elaborado en Figma.
 - Esquema funcional desplegado y probado en Oracle Database 26ai.
 - Recorrido E2E transaccional de base de datos aprobado.
-- Frontend React con registro, login y sesión reales; los módulos comerciales todavía utilizan datos simulados.
-- Backend Spring Boot conectado a Oracle, con catálogo, registro y autenticación verificados.
+- Frontend React integrado con Spring Boot para registro, autenticación, cotizaciones, pagos, emisión, consulta de pólizas y descarga de documentos.
+- Backend Spring Boot conectado a Oracle, con 46 pruebas automatizadas aprobadas.
+- Pasarela académica con tarjetas exclusivamente ficticias, saldos de prueba e idempotencia.
+- Pólizas y comprobantes PDF reales, protegidos por sesión y propiedad del recurso.
+- Siguiente incremento: integrar las solicitudes de cancelación de React con Spring Boot y Oracle.
 
 Consulta el [roadmap](docs/ROADMAP.md), el [estado detallado](docs/ESTADO.md), el [registro consolidado de pruebas](docs/PRUEBAS.md) y los [patrones de diseño y arquitectura](docs/PATRONES-DISENO.md).
 

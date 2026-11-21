@@ -131,7 +131,7 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Conservación de datos al revisar una cotización rechazada | Regresión manual | Aprobado |
 | Contratación y pagos simulados aprobados y rechazados | Manual funcional | Aprobado |
 | Conservación del producto al regresar desde pago | Regresión manual | Aprobado |
-| Pólizas de auto y médicas, pagos y documentos simulados | Manual funcional y visual | Aprobado |
+| Pólizas de auto y médicas, pagos y documentos PDF reales | Manual funcional y visual | Aprobado |
 | Solicitud de cancelación y bloqueo de duplicados | Manual funcional | Aprobado |
 | Rechazo de fechas pasadas y tarjetas ficticias vencidas | Regresión manual | Aprobado |
 | Rutas y pólizas inexistentes | Regresión manual | Aprobado; muestran 404 explícito |
@@ -171,7 +171,7 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Consulta persistente de póliza médica | E2E parcial React–Spring–Oracle | Aprobada; muestra producto, cobertura y persona asegurada |
 | Póliza inexistente | Integración de error React–Spring | Aprobada; presenta el `404` dentro de React y permite reintentar |
 | Retorno a póliza después de autenticarse | Regresión de navegación protegida | Aprobado; conserva la URL solicitada |
-| Metadatos de documentos persistidos | Integración manual | Aprobados; ambos documentos provienen de Oracle y anuncian la descarga pendiente |
+| Metadatos de documentos persistidos | Integración manual | Aprobados; ambos documentos provienen de Oracle y exponen su descarga protegida |
 | Descarga de póliza y comprobante PDF | E2E parcial React–Spring–Oracle | Aprobada; ambos archivos abren correctamente y contienen datos persistidos |
 | Contenido PDF de póliza de auto | Regresión funcional y visual | Aprobado; incluye placas y muestra la modalidad como Mensual o Anual |
 
@@ -187,8 +187,8 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 ## Pendientes de prueba
 
 - Descarga protegida de la fotografía del cliente.
-- Integración de los módulos restantes de React con la API real, sustituyendo los mocks de consulta de pólizas, documentos y cancelaciones.
-- Autorización por propietario sobre cotizaciones, pagos, pólizas, documentos y cancelaciones.
+- Integración de cancelaciones de React con la API real, sustituyendo su estado simulado.
+- Autorización por propietario y prevención de solicitudes duplicadas en la API de cancelaciones.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.
 

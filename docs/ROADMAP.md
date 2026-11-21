@@ -72,8 +72,8 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Definir la estructura inicial de carpetas.
 - [x] Iniciar el repositorio Git local.
 - [x] Crear el roadmap y el registro de estado.
-- [ ] Crear y enlazar el repositorio remoto.
-- [ ] Registrar la versión inicial con un primer commit.
+- [x] Crear y enlazar el repositorio remoto.
+- [x] Registrar la versión inicial con un primer commit.
 
 **Entregable:** repositorio local organizado y plan verificable.
 
@@ -99,7 +99,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Implementar resultados aprobado y rechazado.
 - [x] Implementar pago, detalle de póliza y cancelación.
 - [x] Crear componentes reutilizables.
-- [ ] Crear servicios y adaptadores temporales con datos simulados.
+- [x] Crear servicios y adaptadores temporales con datos simulados.
 - [x] Validar campos y mostrar errores comprensibles.
 - [x] Conservar los datos al volver desde una cotización rechazada.
 - [x] Conservar la cotización al volver desde pago.
@@ -128,13 +128,13 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 - [x] Crear el proyecto Spring Boot dentro de `backend/`.
 - [x] Configurar la conexión con Oracle.
-- [ ] Crear entidades, DTO, repositorios, servicios y controladores.
+- [x] Crear entidades, DTO, repositorios, servicios y controladores para los módulos integrados.
 - [x] Implementar Strategy para cotizaciones de auto y médicas.
 - [ ] Implementar transiciones válidas de estados.
 - [ ] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
 - [x] Configurar registro, autenticación y autorización inicial con Spring Security.
-- [ ] Exponer endpoints del recorrido prioritario.
-- [ ] Documentar el contrato básico de la API.
+- [x] Exponer endpoints del recorrido prioritario hasta pólizas y documentos.
+- [x] Documentar el contrato básico de la API.
 
 **Entregable:** API REST autenticada y conectada con Oracle.
 
@@ -142,13 +142,14 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Fecha objetivo:** 23–24 de noviembre
 
-- [ ] Sustituir progresivamente los mocks del frontend por llamadas HTTP.
+- [ ] Sustituir los mocks restantes del panel y las cancelaciones por llamadas HTTP.
 - [x] Integrar inicio de sesión, persistencia de sesión y logout.
 - [x] Integrar el registro ampliado con fotografía opcional y catálogos reales.
 - [x] Integrar ambas cotizaciones y sus resultados.
 - [x] Integrar pago simulado y emisión de póliza.
+- [x] Integrar consulta de pólizas y descarga protegida de documentos PDF.
 - [ ] Integrar consulta y solicitud de cancelación.
-- [ ] Comprobar que un cliente no pueda consultar datos de otro.
+- [x] Comprobar que un cliente no pueda consultar cotizaciones, pólizas ni documentos de otro.
 
 **Entregable:** recorrido funcional React–Spring Boot–Oracle.
 
@@ -157,11 +158,11 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 **Fecha objetivo:** 24–26 de noviembre
 
 - [ ] Ejecutar pruebas unitarias de reglas críticas.
-- [ ] Ejecutar pruebas de integración del backend y Oracle.
-- [ ] Probar manualmente los recorridos principales y de error.
-- [ ] Corregir defectos bloqueantes y de alta prioridad.
+- [x] Ejecutar pruebas de integración del backend y Oracle hasta el incremento de documentos.
+- [x] Probar manualmente los recorridos principales y de error implementados.
+- [x] Corregir los defectos bloqueantes y de alta prioridad detectados hasta el incremento de documentos.
 - [ ] Preparar datos y pasos reproducibles para la demostración.
-- [ ] Actualizar README, estado del proyecto y evidencias.
+- [x] Mantener actualizados README, estado del proyecto y evidencias durante los incrementos.
 - [ ] Crear una versión o etiqueta de entrega.
 
 **Entregable:** proyecto demostrable, documentado y reproducible.

@@ -475,7 +475,8 @@ Para ajustarse al modelo conservado, el frontend deberá recibir mantenimiento e
 - Las claves criptográficas y contraseñas de Oracle se proporcionarán mediante variables de entorno o un mecanismo de secretos y se excluirán de Git.
 - Spring cifrará `NUMERO_TARJETA` con AES-256-GCM y Oracle almacenará el paquete binario en `RAW(128)`.
 
-## 9. Decisiones pendientes antes del DDL
+## 9. Decisión aplicada en el DDL
 
-- Diseñar la restricción que garantice un solo intento aprobado utilizable por cotización.
+- `trg_intento_pago_reglas` bloquea un segundo intento aprobado para la misma cotización, incluso ante actualizaciones de estado.
+- `UK_POLIZA_INTENTO` garantiza que un intento aprobado origine como máximo una póliza.
 

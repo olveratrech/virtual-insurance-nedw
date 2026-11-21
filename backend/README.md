@@ -67,7 +67,7 @@ El resultado esperado es HTTP `200` con un cuerpo equivalente a:
 {"status":"UP"}
 ```
 
-Actuator no expone detalles de la conexión. Mientras se implementa la autenticación, las demás rutas permanecen denegadas.
+Actuator no expone detalles de la conexión. Las rutas privadas requieren la sesión y autorización definidas por Spring Security.
 
 ## Catálogo público de géneros
 

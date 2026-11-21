@@ -108,7 +108,7 @@
 - Los formularios de auto y médico, sus validaciones, reglas provisionales y recorridos de aprobación y rechazo aprobaron la revisión visual y las pruebas manuales del autor.
 - Las páginas de resultado aprobado y rechazado de ambos seguros aprobaron la revisión visual y las pruebas manuales del autor.
 - La contratación, las validaciones y los pagos simulados aprobado y rechazado aprobaron la revisión visual y las pruebas manuales del autor.
-- Las pólizas de auto y médica, pagos, documentos simulados y diseño adaptable aprobaron la revisión visual y las pruebas manuales del autor.
+- Las pólizas de auto y médica, pagos, documentos PDF reales y diseño adaptable aprobaron la revisión visual y las pruebas manuales del autor.
 - La cancelación de ambos tipos de póliza, su estado intermedio y la prevención visual de solicitudes duplicadas aprobaron la revisión visual y las pruebas manuales del autor.
 
 #### Pendientes del frontend

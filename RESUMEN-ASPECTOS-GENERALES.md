@@ -1,5 +1,7 @@
 # Resumen de aspectos generales de Virtual Insurance
 
+> **Documento histórico:** este diagnóstico describe el estado inicial anterior a la integración. Para continuar el desarrollo se deben consultar `docs/ESTADO.md`, `docs/ROADMAP.md` y `docs/PRUEBAS.md`.
+
 ## Estado general
 
 - El anteproyecto está elaborado y establece los objetivos, el alcance funcional, la estrategia y el plan de trabajo.
