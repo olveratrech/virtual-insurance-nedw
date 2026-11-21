@@ -52,6 +52,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/catalogos/generos", "/auth/csrf").permitAll()
 				.requestMatchers(HttpMethod.POST, "/auth/registro", "/auth/login").permitAll()
 				.requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
+				.requestMatchers(HttpMethod.GET, "/panel").authenticated()
 				.requestMatchers("/cotizaciones/**").authenticated()
 				.requestMatchers("/polizas/**").authenticated()
 				.anyRequest().denyAll())

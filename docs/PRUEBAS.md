@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 55 pruebas automatizadas | 55 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 61 pruebas automatizadas | 61 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -103,8 +103,14 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `CancellationIntegrationTests.validatesPastDateInvalidReasonLongCommentsAndConfirmation` | Validación/integración | Fecha, motivo, longitud de comentarios y confirmación obligatoria | Aprobada |
 | `CancellationIntegrationTests.rejectsRequestWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para solicitar cancelación | Aprobada |
 | `CancellationIntegrationTests.rejectsRequestWithoutCsrf` | Seguridad/integración | Protección CSRF de la operación de escritura | Aprobada |
+| `PanelIntegrationTests.returnsOwnedQuoteWithContractFieldsAndDestination` | API/integración | Cotización propia, contrato de actividad y destino navegable | Aprobada |
+| `PanelIntegrationTests.ordersNewPolicyBeforeItsQuote` | Orden/integración | Póliza recién emitida antes de la cotización que la originó | Aprobada |
+| `PanelIntegrationTests.reflectsPendingCancellationInPolicyActivity` | Estado/integración | Estado actualizado de una póliza con cancelación pendiente | Aprobada |
+| `PanelIntegrationTests.returnsEmptyActivityForClientWithoutOperations` | Caso vacío/integración | Nombre del cliente y lista vacía sin operaciones | Aprobada |
+| `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
+| `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **55 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **61 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -128,7 +134,7 @@ No se registran contraseñas, tokens CSRF, identificadores de sesión ni otros s
 
 ## React
 
-El frontend continúa utilizando datos simulados en los módulos que todavía no consumen la API. Por ello, las siguientes son pruebas del comportamiento de interfaz y no sustituyen las futuras pruebas de integración React–Spring.
+El recorrido comercial principal del frontend consume la API real. Las pruebas manuales complementan las pruebas automatizadas de Spring y verifican navegación, presentación y comportamiento en el navegador.
 
 | Prueba o recorrido | Tipo | Resultado |
 |---|---|---|
@@ -188,6 +194,11 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Acceso directo a cancelación pendiente | Regresión de duplicados | Aprobado; informa que la solicitud ya está en revisión sin mostrar el formulario |
 | PDF de póliza activa | Regresión funcional y visual | Aprobado; muestra `Activa` y no presenta folio de cancelación |
 | PDF de póliza con solicitud pendiente | Regresión funcional y visual | Aprobado; muestra `Cancelacion solicitada` y el folio real de la solicitud |
+| Panel con actividad persistida | E2E parcial React–Spring–Oracle | Aprobado; muestra cotizaciones y pólizas propias ordenadas por actividad reciente |
+| Navegación desde actividad del panel | Integración manual | Aprobada; cada elemento abre su cotización o póliza real |
+| Póliza con cancelación en el panel | Regresión de estado | Aprobada; aparece reciente con `CANCELACIÓN SOLICITADA` y tono de advertencia |
+| Panel sin operaciones | Caso vacío manual | Aprobado; muestra el mensaje de actividad vacía sin datos ficticios |
+| Panel real en diseño adaptable | Revisión visual | Aprobado en escritorio y vista estrecha |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

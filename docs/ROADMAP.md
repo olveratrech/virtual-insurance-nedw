@@ -143,7 +143,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 **Fecha objetivo:** 23–24 de noviembre
 
 - [x] Sustituir los mocks restantes de cancelaciones por llamadas HTTP.
-- [ ] Sustituir la actividad simulada del panel por llamadas HTTP.
+- [x] Sustituir la actividad simulada del panel por llamadas HTTP.
 - [x] Integrar inicio de sesión, persistencia de sesión y logout.
 - [x] Integrar el registro ampliado con fotografía opcional y catálogos reales.
 - [x] Integrar ambas cotizaciones y sus resultados.

@@ -3,6 +3,9 @@
 .dashboard-page__heading > p:last-child { color: var(--color-text); font-size: 1.1rem; margin: 0; }
 .confirmation-message { background: var(--color-success-soft); border: 1px solid var(--color-success-border); border-radius: var(--radius-sm); color: var(--color-success-text); margin: -1.5rem 0 0; padding: var(--space-md); }
 .dashboard-page__actions { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dashboard-page__feedback { color: var(--color-text); }
+.dashboard-page__feedback--error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); display: grid; gap: var(--space-md); justify-items: start; padding: var(--space-md); }
+.dashboard-page__feedback--error p { margin: 0; }
 
 @media (max-width: 720px) {
   .dashboard-page { gap: 2.5rem; padding-top: var(--space-xl); }

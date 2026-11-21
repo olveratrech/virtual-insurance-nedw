@@ -21,11 +21,11 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
-| Frontend React | Pólizas aprobadas | Registro, autenticación, cotizaciones, pagos, emisión y consulta persistente de pólizas consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Cancelaciones aprobadas | Las 55 pruebas pasan; cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
+| Frontend React | Recorrido principal aprobado | Panel, registro, autenticación, cotizaciones, pagos, pólizas, documentos y cancelaciones consumen la API real y fueron verificados manualmente. |
+| Backend Spring Boot | Panel aprobado | Las 61 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 55 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 61 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -77,9 +77,9 @@
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
 - Registro, login, recuperación de sesión y logout ya consumen Spring Security y persisten clientes en Oracle.
-- `DashboardPage` implementa el panel del cliente con saludo, accesos rápidos y actividad reciente.
+- `DashboardPage` consulta el resumen persistente del cliente, conserva accesos rápidos y maneja carga, error, reintento y actividad vacía.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
-- `dashboardData.js` separa los datos ficticios de los componentes que los presentan.
+- `panelApi.js` adapta la actividad real de cotizaciones y pólizas a los componentes del panel.
 - `QuotePageLayout` comparte la estructura visual y el aviso demostrativo de ambas cotizaciones.
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
@@ -93,12 +93,11 @@
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
-- `policyData.js` contiene pólizas ficticias diferenciadas para auto y seguro médico.
 - `DocumentList` descarga pólizas y comprobantes PDF reales mediante una ruta protegida.
 - Los PDF se regeneran con una plantilla académica versionable e incluyen datos específicos de auto, como placas, y modalidades presentadas en español.
 - `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
 - `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
-- `cancellationRules.js` genera un folio y el estado temporal `CANCELLATION_REQUESTED`.
+- `cancellationApi.js` crea solicitudes reales protegidas con CSRF y presenta el folio persistido.
 - Al regresar, `PolicyPage` muestra `CANCELACIÓN SOLICITADA` y conserva la indicación de cobertura activa.
 - `PolicyPage` oculta la acción de cancelación cuando ya existe una solicitud pendiente.
 - Variables visuales, estilos globales y adaptación inicial para pantallas pequeñas configurados.
@@ -115,6 +114,7 @@
 
 - Corrección terminada: las cancelaciones consumen la API real y persisten en Oracle; se eliminaron sus mocks obsoletos.
 - Corrección terminada: el backend rechaza solicitudes duplicadas, pólizas ajenas y pólizas que no están activas.
+- Corrección terminada: el panel consume actividad persistida y ya no depende de `dashboardData.js`.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 - Los valores capturados se conservan cuando el usuario selecciona “Revisar datos” desde una cotización rechazada.
 
@@ -129,9 +129,9 @@
 
 ### Pendientes que dependen de integración
 
-- Proteger pagos y pólizas mediante recursos reales asociados al cliente autenticado.
-- Sustituir los archivos de `mocks/` por servicios y adaptadores HTTP cuando corresponda.
-- Impedir desde el backend accesos a pólizas de otros clientes y operaciones duplicadas.
+- Corrección terminada: pagos y pólizas utilizan recursos reales asociados al cliente autenticado.
+- Corrección terminada: los mocks del recorrido comercial fueron sustituidos por servicios HTTP.
+- Corrección terminada: el backend impide accesos a pólizas de otros clientes y operaciones duplicadas.
 - Corrección terminada: generar, autorizar y descargar documentos PDF reales.
 
 ### Calidad pendiente
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Sustituir la actividad simulada del panel por el resumen persistente del cliente autenticado.
+Preparar y ejecutar un guion reproducible de demostración extremo a extremo.
 
 ## Bitácora breve
 
@@ -317,4 +317,6 @@ Sustituir la actividad simulada del panel por el resumen persistente del cliente
 | 20/11/2026 | Se implementó y verificó la API de solicitudes de cancelación. | El endpoint valida propiedad, estado, fecha, motivo, confirmación, CSRF y duplicados; crea la solicitud de forma transaccional y las 54 pruebas de Spring terminaron sin fallos, errores ni omisiones. | Sustituir los mocks de cancelación en React y verificar el recorrido completo. |
 | 21/11/2026 | Se verificó la integración real de cancelaciones en React. | `lint`, `build`, el recorrido desde el navegador y la persistencia en Oracle fueron correctos; el folio y el estado sobreviven a la recarga y se evita otra solicitud pendiente. | Mejorar la presentación del estado y folio de cancelación en el PDF de póliza. |
 | 21/11/2026 | Se localizó la cancelación en el PDF de póliza. | Las 55 pruebas pasaron; una póliza activa muestra un estado legible sin folio y una póliza en revisión muestra `Cancelacion solicitada` junto con su folio real. | Integrar la actividad reciente del panel con datos persistidos. |
+| 21/11/2026 | Se implementó y verificó la API real del panel. | `GET /panel` limita la actividad al cliente autenticado, combina cotizaciones y pólizas, refleja cancelaciones y ordena los últimos 20 movimientos; las 61 pruebas pasaron. | Conectar `DashboardPage` y retirar su actividad simulada. |
+| 21/11/2026 | Se verificó la integración real del panel en React. | `lint`, `build`, actividad persistente, navegación, recarga, cancelación pendiente, estado vacío y diseño adaptable fueron correctos; `dashboardData.js` fue eliminado. | Preparar el recorrido de demostración y estabilización final. |
 
