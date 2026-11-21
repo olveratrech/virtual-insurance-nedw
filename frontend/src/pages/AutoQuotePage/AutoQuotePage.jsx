@@ -1,15 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import AutoQuoteForm from '../../components/quote/AutoQuoteForm/AutoQuoteForm.jsx'
 import QuotePageLayout from '../../components/quote/QuotePageLayout/QuotePageLayout.jsx'
-import { evaluateAutoQuote } from '../../mocks/quoteRules.js'
+import { createAutoQuote } from '../../services/quoteApi.js'
 
 function AutoQuotePage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  function handleEvaluate(values) {
-    const decision = evaluateAutoQuote(values)
-    navigate(`/cotizaciones/${decision === 'approved' ? 'aprobada' : 'rechazada'}`, { state: { quoteType: 'AUTO', values } })
+  async function handleEvaluate(values) {
+    const quote = await createAutoQuote(values)
+    navigate(`/cotizaciones/${quote.id}`, { state: { quote } })
   }
 
   return (

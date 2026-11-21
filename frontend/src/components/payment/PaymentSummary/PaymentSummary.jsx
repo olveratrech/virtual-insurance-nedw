@@ -1,4 +1,5 @@
 import './PaymentSummary.css'
+import { formatMxn, formatQuoteNumber } from '../../../utils/currency.js'
 
 function PaymentSummary({ quote }) {
   return (
@@ -7,8 +8,8 @@ function PaymentSummary({ quote }) {
       <dl>
         <div><dt>Producto</dt><dd>{quote.productName}</dd></div>
         <div><dt>Cobertura</dt><dd>{quote.coverageName}</dd></div>
-        <div><dt>Cotización</dt><dd>{quote.quoteNumber}</dd></div>
-        <div className="payment-summary__total"><dt>Total anual</dt><dd>{quote.annualCost}</dd></div>
+        <div><dt>Cotización</dt><dd>{formatQuoteNumber(quote.quoteNumber)}</dd></div>
+        <div className="payment-summary__total"><dt>Total anual</dt><dd>{formatMxn(quote.annualCost)}</dd></div>
       </dl>
       <p>Operación demostrativa. No se realizará ningún cargo real.</p>
     </aside>

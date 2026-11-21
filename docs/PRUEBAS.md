@@ -11,7 +11,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
 | Spring Boot | 26 pruebas automatizadas | 26 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
-| React | Análisis estático, compilación, autenticación real y recorridos funcionales | Aprobado; autenticación integrada y módulos comerciales todavía simulados |
+| React | Análisis estático, compilación, autenticación, registro y cotizaciones reales | Aprobado; pago, pólizas, documentos y cancelaciones todavía simulados |
 
 ## Oracle Database
 
@@ -130,6 +130,14 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Sesión automática después del registro | Integración manual | Aprobada; persiste tras recarga y permite login posterior |
 | Correo o identificador duplicado | Regresión React–Spring | Aprobado; muestra el error, no duplica y limpia contraseñas |
 | Formulario ampliado en diseño adaptable | Revisión visual | Aprobado en escritorio y vista móvil |
+| Retorno a `/cotizar/auto` después de autenticarse | Regresión de navegación protegida | Aprobado; conserva el destino solicitado antes del login |
+| Cotización de auto aprobada y rechazada | E2E parcial React–Spring–Oracle | Aprobado; persiste la decisión y permite recargar el resultado |
+| Cotización médica aprobada y rechazada | E2E parcial React–Spring–Oracle | Aprobado; persiste la decisión y permite recargar el resultado |
+| Revisión de datos desde resultados rechazados | Regresión de navegación | Aprobado; restaura los datos de ambos productos |
+| Prevención de doble envío durante la evaluación | Regresión manual | Aprobado |
+| Continuación a pago y regreso al resultado | Integración manual | Aprobado; conserva la cotización seleccionada |
+| Cotizaciones integradas en diseño adaptable | Revisión visual | Aprobada |
+| Consulta de una cotización inexistente | Integración de error React–Spring | Aprobada; muestra la página React, el detalle del `404` y acciones de recuperación |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -137,11 +145,12 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 - Oracle devolvió `ORA-25006` porque un BLOB aparecía en `update of`; se corrigió el trigger de intentos de pago y las pruebas posteriores aprobaron.
 - La primera prueba del catálogo asumía un orden semántico distinto al orden real de las identidades. Se corrigió para verificar los registros y el orden por ID sin imponer significado comercial a la PK.
 - La validación inicial del login rechazaba con `422` un correo con espacios exteriores antes de normalizarlo. La limpieza se trasladó al constructor del DTO y las 16 pruebas aprobaron.
+- El proxy inicial de Vite no reenviaba `/cotizaciones` y producía un `404` al crear una cotización. Al agregarlo, también interceptaba la recarga de la ruta SPA `/cotizaciones/:id`; se separaron las llamadas técnicas bajo `/api` con reescritura hacia Spring Boot.
 
 ## Pendientes de prueba
 
 - Descarga protegida de la fotografía del cliente.
-- Integración de React con la API real, sustituyendo los mocks.
+- Integración de los módulos restantes de React con la API real, sustituyendo los mocks de pago, pólizas, documentos y cancelaciones.
 - Autorización por propietario sobre cotizaciones, pagos, pólizas, documentos y cancelaciones.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.

@@ -22,11 +22,10 @@ function AppRouter() {
             <Route index element={<HomePage />} />
             <Route path="acceso" element={<AccessPage />} />
             <Route path="panel" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-            <Route path="cotizar/auto" element={<AutoQuotePage />} />
-            <Route path="cotizar/medico" element={<MedicalQuotePage />} />
-            <Route path="cotizaciones/aprobada" element={<QuoteResultPage outcome="approved" />} />
-            <Route path="cotizaciones/rechazada" element={<QuoteResultPage outcome="rejected" />} />
-            <Route path="contratacion/pago" element={<PaymentPage />} />
+            <Route path="cotizar/auto" element={<ProtectedRoute><AutoQuotePage /></ProtectedRoute>} />
+            <Route path="cotizar/medico" element={<ProtectedRoute><MedicalQuotePage /></ProtectedRoute>} />
+            <Route path="cotizaciones/:quoteId" element={<ProtectedRoute><QuoteResultPage /></ProtectedRoute>} />
+            <Route path="contratacion/pago" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
             <Route path="polizas/:polizaId" element={<PolicyPage />} />
             <Route path="polizas/:polizaId/cancelacion" element={<CancellationPage />} />
             <Route path="*" element={<NotFoundPage />} />

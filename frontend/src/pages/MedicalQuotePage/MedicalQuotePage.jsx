@@ -1,15 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import MedicalQuoteForm from '../../components/quote/MedicalQuoteForm/MedicalQuoteForm.jsx'
 import QuotePageLayout from '../../components/quote/QuotePageLayout/QuotePageLayout.jsx'
-import { evaluateMedicalQuote } from '../../mocks/quoteRules.js'
+import { createMedicalQuote } from '../../services/quoteApi.js'
 
 function MedicalQuotePage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  function handleEvaluate(values) {
-    const decision = evaluateMedicalQuote(values)
-    navigate(`/cotizaciones/${decision === 'approved' ? 'aprobada' : 'rechazada'}`, { state: { quoteType: 'MEDICAL', values } })
+  async function handleEvaluate(values) {
+    const quote = await createMedicalQuote(values)
+    navigate(`/cotizaciones/${quote.id}`, { state: { quote } })
   }
 
   return (

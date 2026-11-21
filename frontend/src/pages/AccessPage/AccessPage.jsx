@@ -8,11 +8,11 @@ function AccessPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const { client, login, register, sessionStatus } = useAuth()
+  const authenticatedDestination = location.state?.from?.pathname ?? '/panel'
 
   async function handleLogin(credentials) {
     await login(credentials)
-    const destination = location.state?.from?.pathname ?? '/panel'
-    navigate(destination, {
+    navigate(authenticatedDestination, {
       replace: true,
       state: { message: 'Inicio de sesión correcto.' },
     })
@@ -26,7 +26,9 @@ function AccessPage() {
     })
   }
 
-  if (sessionStatus === 'authenticated' && client) return <Navigate to="/panel" replace />
+  if (sessionStatus === 'authenticated' && client) {
+    return <Navigate to={authenticatedDestination} replace />
+  }
 
   return (
     <div className="access-page page-container">

@@ -10,7 +10,7 @@
 - El anteproyecto y el prototipo navegable existen.
 - El modelo relacional reducido para NEDW y el contrato inicial de la API están definidos.
 - El esquema funcional está desplegado y probado en Oracle Database 26ai dentro de Docker.
-- El recorrido principal de React funciona con datos simulados; Spring Boot ya está conectado con Oracle y la integración con React todavía no ha comenzado.
+- Registro, autenticación y cotizaciones ya recorren React, Spring Boot y Oracle; pago, pólizas y cancelaciones todavía utilizan datos simulados en el frontend.
 
 ## Estado por área
 
@@ -21,11 +21,11 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
-| Frontend React | Registro y login reales aprobados | Catálogo, multipart, fotografía opcional, sesión, errores, rutas protegidas y logout fueron verificados con Oracle. |
+| Frontend React | Cotizaciones aprobadas | Formularios, decisiones, resultados persistentes, recarga, revisión de datos, rutas protegidas y enlace a pago consumen la API real y fueron verificados manualmente. |
 | Backend Spring Boot | Cotizaciones aprobadas | Las 26 pruebas y el recorrido HTTP pasan; Strategy, persistencia, historial, propiedad y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
-| Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
-| Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
+| Integración completa | En curso | Registro, autenticación y cotizaciones están integrados; faltan pago, pólizas, documentos y cancelaciones reales. |
+| Pruebas | Parciales aprobadas | Oracle, 26 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro y cotizaciones están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -84,9 +84,8 @@
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
 - `SelectField` y `CheckboxField` complementan los controles reutilizables del formulario.
-- `quoteRules.js` aísla reglas académicas provisionales de aprobación y rechazo para cada seguro.
-- `QuoteResultPage` presenta resultados aprobados y rechazados mediante renderizado condicional.
-- `quoteResultData.js` mantiene precios, coberturas, beneficios y mensajes ficticios fuera de la interfaz.
+- `quoteApi.js` encapsula la creación y consulta autenticada de cotizaciones mediante la API REST.
+- `QuoteResultPage` consulta por identificador y presenta resultados persistidos, aprobados o rechazados, mediante renderizado condicional.
 - Una cotización aprobada puede continuar a contratación; una rechazada permite revisar los datos sin crear póliza ni cargo.
 - `PaymentPage` implementa contratación y pago simulado con resumen separado del formulario.
 - `PaymentForm` valida vigencia, modalidad, tarjeta ficticia, vencimiento, CVV y términos.
@@ -113,11 +112,7 @@
 
 #### Pendientes del frontend
 
-- Completar refinamientos de UX, estados de carga y errores antes de sustituir los mocks.
-- Incorporar estados de carga, validación y error.
-- Sustituir posteriormente los datos simulados por servicios HTTP.
-- Conectar acceso y registro con Spring Security y eliminar la simulación local.
-- Sustituir `quoteRules.js` por estrategias del backend y reglas definitivas documentadas.
+- Sustituir progresivamente los mocks restantes de pago, pólizas, documentos y cancelaciones por servicios HTTP.
 - Generar pólizas y comprobantes PDF reales desde el backend.
 - Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
@@ -134,10 +129,7 @@
 
 ### Pendientes que dependen de integración
 
-- Proteger panel, cotizaciones, pagos y pólizas mediante autenticación real.
-- Reflejar la sesión en el encabezado y permitir cerrar sesión.
-- Persistir el estado después de recargar el navegador.
-- Agregar estados de carga, errores HTTP y sesión expirada.
+- Proteger pagos y pólizas mediante recursos reales asociados al cliente autenticado.
 - Sustituir los archivos de `mocks/` por servicios y adaptadores HTTP cuando corresponda.
 - Impedir desde el backend accesos a pólizas de otros clientes y operaciones duplicadas.
 - Generar y descargar documentos reales.
@@ -240,7 +232,7 @@
 
 ## Próxima acción
 
-Integrar en React la creación y consulta real de cotizaciones, sustituyendo `quoteRules.js` y los resultados simulados.
+Integrar el pago simulado con Spring Boot y Oracle para emitir una póliza únicamente después de un intento aprobado.
 
 ## Bitácora breve
 
@@ -312,4 +304,6 @@ Integrar en React la creación y consulta real de cotizaciones, sustituyendo `qu
 | 20/11/2026 | Se preparó el backend de cotizaciones. | Entidades, repositorios, DTO, estrategias, Service Layer, propiedad, endpoints y nueve pruebas compilan con `BUILD SUCCESS`. | Ejecutar las 26 pruebas contra Oracle antes de aprobar Strategy. |
 | 20/11/2026 | Se ejecutaron las pruebas del backend de cotizaciones. | Las 26 pruebas pasaron; ambos Strategy, subtipos, historial, secuencia, validación, sesión y propiedad funcionan contra Oracle. | Realizar una comprobación HTTP manual antes del commit. |
 | 20/11/2026 | Se verificó manualmente la API de cotizaciones. | Auto aprobado y médica rechazada respondieron `201`, la consulta propia `200` y la consulta sin sesión `401`, con datos persistidos coherentes. | Registrar el incremento e integrar las cotizaciones en React. |
+| 20/11/2026 | Se preparó la integración de cotizaciones en React. | Formularios reales, CSRF compartido, resultado por ID, recarga, revisión de datos, rutas protegidas y enlace a pago pasan `lint` y `build`. | Ejecutar los recorridos manuales de auto y médico antes del commit. |
+| 20/11/2026 | Se verificó la integración de cotizaciones en React. | Ambos productos, decisiones, recarga, revisión de datos, regreso a pago, validaciones, diseño adaptable y resultado inexistente funcionan; se separaron las rutas SPA y API para evitar que el proxy intercepte `/cotizaciones/:id`. | Registrar el incremento e integrar pago y emisión de póliza. |
 

@@ -9,6 +9,10 @@ export default defineConfig({
       '/auth': 'http://localhost:8080',
       '/catalogos': 'http://localhost:8080',
       '/clientes': 'http://localhost:8080',
+      '/api': {
+        target: 'http://localhost:8080',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
   },
 })

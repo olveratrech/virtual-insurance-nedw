@@ -9,7 +9,7 @@ function QuotePageLayout({ eyebrow, title, description, children }) {
         <p>{description}</p>
       </header>
       <aside className="prototype-notice" role="note">
-        Evaluación demostrativa. Las reglas definitivas se ejecutarán posteriormente en Spring Boot.
+        Evaluación académica conectada con Spring Boot y Oracle. No representa una oferta comercial real.
       </aside>
       <div className="quote-page__form-card">{children}</div>
     </div>

@@ -27,7 +27,15 @@ export async function apiRequest(path, options = {}) {
     : null
 
   if (!response.ok) {
-    const message = body?.detail ?? 'No fue posible completar la solicitud.'
+    const fallbackMessages = {
+      401: 'La sesión no es válida o ha expirado.',
+      403: 'La solicitud fue rechazada por la protección de seguridad.',
+      404: 'El recurso solicitado no existe.',
+      500: 'El servidor encontró un error al procesar la solicitud.',
+    }
+    const message = body?.detail
+      ?? fallbackMessages[response.status]
+      ?? `No fue posible completar la solicitud (HTTP ${response.status}).`
     throw new ApiError(message, response.status, body)
   }
 

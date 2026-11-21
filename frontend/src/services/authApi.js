@@ -1,24 +1,5 @@
 import { ApiError, apiRequest } from './apiClient.js'
-
-let csrf = null
-
-async function getCsrf() {
-  if (csrf) return csrf
-  csrf = await apiRequest('/auth/csrf')
-  return csrf
-}
-
-async function authenticatedRequest(path, options = {}) {
-  const csrfData = await getCsrf()
-
-  return apiRequest(path, {
-    ...options,
-    headers: {
-      ...options.headers,
-      [csrfData.headerName]: csrfData.token,
-    },
-  })
-}
+import { clearCsrf, csrfRequest } from './csrfClient.js'
 
 export async function getCurrentSession() {
   try {
@@ -30,7 +11,7 @@ export async function getCurrentSession() {
 }
 
 export function login(credentials) {
-  return authenticatedRequest('/auth/login', {
+  return csrfRequest('/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials),
@@ -44,7 +25,7 @@ export function register(data, photo) {
 
   if (photo) formData.append('photo', photo)
 
-  return authenticatedRequest('/auth/registro', {
+  return csrfRequest('/auth/registro', {
     method: 'POST',
     body: formData,
   })
@@ -52,8 +33,8 @@ export function register(data, photo) {
 
 export async function logout() {
   try {
-    await authenticatedRequest('/auth/logout', { method: 'POST' })
+    await csrfRequest('/auth/logout', { method: 'POST' })
   } finally {
-    csrf = null
+    clearCsrf()
   }
 }
