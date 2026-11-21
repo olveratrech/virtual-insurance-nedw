@@ -115,7 +115,16 @@ public class PolicyDocumentService {
 				       ep.clave estatus, c.tipo_seguro, mp.clave modalidad,
 				       i.importe, i.codigo_autorizacion,
 				       ca.marca, ca.modelo, ca.anio, ca.placas,
-				       cl.nombre, cl.apellido_paterno, cl.apellido_materno
+				       cl.nombre, cl.apellido_paterno, cl.apellido_materno,
+				       (
+				           select sc.folio
+				             from solicitud_cancelacion sc
+				             join estatus_cancelacion ec
+				               on ec.estatus_cancelacion_id = sc.estatus_cancelacion_id
+				            where sc.poliza_id = p.poliza_id
+				              and ec.clave = 'SOLICITADA'
+				            fetch first 1 row only
+				       ) folio_cancelacion
 				  from poliza p
 				  join estatus_poliza ep on ep.estatus_poliza_id = p.estatus_poliza_id
 				  join intento_pago i on i.intento_pago_id = p.intento_pago_id
@@ -154,7 +163,8 @@ public class PolicyDocumentService {
 						rs.getString("modalidad"),
 						rs.getBigDecimal("importe"),
 						rs.getString("codigo_autorizacion"),
-						rs.getString("folio_factura")
+						rs.getString("folio_factura"),
+						rs.getString("folio_cancelacion")
 					);
 				},
 				arguments.toArray()

@@ -20,7 +20,8 @@ public record PolicyPdfData(
 	String paymentMode,
 	BigDecimal paymentAmount,
 	String authorizationCode,
-	String invoiceNumber
+	String invoiceNumber,
+	String cancellationNumber
 ) {
 }
 

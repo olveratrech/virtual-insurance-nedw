@@ -9,7 +9,7 @@ import './CancellationForm.css'
 
 const initialValues = { reason: '', requestedDate: '', comments: '', confirmed: false }
 
-function CancellationForm({ policyId, onSubmitRequest }) {
+function CancellationForm({ policyId, onSubmitRequest, submitting = false, submitError = '' }) {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const today = getTodayInputValue()
@@ -45,9 +45,12 @@ function CancellationForm({ policyId, onSubmitRequest }) {
         {errors.confirmed && <p className="form-field__error">{errors.confirmed}</p>}
       </div>
       <aside className="cancellation-warning" role="note">El estado cambiará a <strong>CANCELACIÓN SOLICITADA</strong>. La cobertura seguirá activa hasta que la solicitud sea resuelta.</aside>
+      {submitError && <p className="cancellation-form__error" role="alert">{submitError}</p>}
       <div className="cancellation-form__actions">
         <Link className="button button--secondary" to={`/polizas/${policyId}`}>Volver a la póliza</Link>
-        <button className="button button--danger" type="submit">Enviar solicitud</button>
+        <button className="button button--danger" type="submit" disabled={submitting}>
+          {submitting ? 'Enviando solicitud…' : 'Enviar solicitud'}
+        </button>
       </div>
     </form>
   )

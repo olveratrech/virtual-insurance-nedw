@@ -18,7 +18,6 @@ function PolicyPage() {
   const [reloadKey, setReloadKey] = useState(0)
   const issuedAfterPayment = ['APPROVED', 'APROBADO'].includes(location.state?.payment?.status)
   const cancellationRequested = policy?.status === 'CANCELACION_SOLICITADA'
-    || location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
 
   useEffect(() => {
     let active = true

@@ -53,7 +53,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/auth/registro", "/auth/login").permitAll()
 				.requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
 				.requestMatchers("/cotizaciones/**").authenticated()
-				.requestMatchers(HttpMethod.GET, "/polizas/**").authenticated()
+				.requestMatchers("/polizas/**").authenticated()
 				.anyRequest().denyAll())
 			.logout(logout -> logout
 				.logoutUrl("/auth/logout")

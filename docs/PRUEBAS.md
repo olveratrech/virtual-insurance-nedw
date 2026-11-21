@@ -2,14 +2,14 @@
 
 Este documento concentra las pruebas ejecutadas y confirmadas durante el desarrollo. Los README de cada componente conservan las instrucciones de ejecución; este archivo registra **qué se probó, qué tipo de prueba fue y cuál fue su último resultado conocido**.
 
-Última actualización: **20 de noviembre de 2026**.
+Última actualización: **21 de noviembre de 2026**.
 
 ## Resumen
 
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 46 pruebas automatizadas | 46 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 55 pruebas automatizadas | 55 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -94,8 +94,17 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PolicyIntegrationTests.hidesDocumentFromAnotherClient` | Autorización/integración | Un cliente no puede descargar documentos ajenos | Aprobada |
 | `PolicyIntegrationTests.returnsNotFoundForDocumentOutsidePolicy` | Autorización/integración | Se valida conjuntamente póliza y documento | Aprobada |
 | `PolicyIntegrationTests.rejectsDocumentDownloadWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para descargar | Aprobada |
+| `PolicyIntegrationTests.downloadsPolicyWithLocalizedPendingCancellationAndRequestNumber` | PDF/integración | Estado de cancelación legible, folio real y ausencia de la clave técnica en el PDF | Aprobada |
+| `CancellationIntegrationTests.createsCancellationAndUpdatesPolicyAndHistory` | API/integración | Creación persistente, respuesta, cambio de póliza e historial automático | Aprobada |
+| `CancellationIntegrationTests.rejectsDuplicatePendingCancellation` | Regla transaccional | Rechazo `409 CANCELLATION_ALREADY_PENDING` de una segunda solicitud pendiente | Aprobada |
+| `CancellationIntegrationTests.hidesPolicyOwnedByAnotherClient` | Autorización/integración | Ocultamiento de una póliza ajena mediante `404 POLICY_NOT_FOUND` | Aprobada |
+| `CancellationIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para un identificador inexistente | Aprobada |
+| `CancellationIntegrationTests.rejectsPolicyThatIsNotActive` | Estado/integración | Rechazo `409 POLICY_NOT_ACTIVE` cuando la póliza no está activa | Aprobada |
+| `CancellationIntegrationTests.validatesPastDateInvalidReasonLongCommentsAndConfirmation` | Validación/integración | Fecha, motivo, longitud de comentarios y confirmación obligatoria | Aprobada |
+| `CancellationIntegrationTests.rejectsRequestWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para solicitar cancelación | Aprobada |
+| `CancellationIntegrationTests.rejectsRequestWithoutCsrf` | Seguridad/integración | Protección CSRF de la operación de escritura | Aprobada |
 
-Última ejecución confirmada: **46 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **55 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -174,6 +183,11 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Metadatos de documentos persistidos | Integración manual | Aprobados; ambos documentos provienen de Oracle y exponen su descarga protegida |
 | Descarga de póliza y comprobante PDF | E2E parcial React–Spring–Oracle | Aprobada; ambos archivos abren correctamente y contienen datos persistidos |
 | Contenido PDF de póliza de auto | Regresión funcional y visual | Aprobado; incluye placas y muestra la modalidad como Mensual o Anual |
+| Solicitud real de cancelación | E2E parcial React–Spring–Oracle | Aprobada; crea el folio y persiste motivo, fecha, comentarios y estado |
+| Recarga de póliza con cancelación pendiente | Persistencia y navegación | Aprobada; conserva `CANCELACION_SOLICITADA`, cobertura activa y oculta la acción duplicada |
+| Acceso directo a cancelación pendiente | Regresión de duplicados | Aprobado; informa que la solicitud ya está en revisión sin mostrar el formulario |
+| PDF de póliza activa | Regresión funcional y visual | Aprobado; muestra `Activa` y no presenta folio de cancelación |
+| PDF de póliza con solicitud pendiente | Regresión funcional y visual | Aprobado; muestra `Cancelacion solicitada` y el folio real de la solicitud |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -187,8 +201,6 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 ## Pendientes de prueba
 
 - Descarga protegida de la fotografía del cliente.
-- Integración de cancelaciones de React con la API real, sustituyendo su estado simulado.
-- Autorización por propietario y prevención de solicitudes duplicadas en la API de cancelaciones.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.
 

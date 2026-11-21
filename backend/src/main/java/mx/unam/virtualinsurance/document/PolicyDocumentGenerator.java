@@ -47,7 +47,10 @@ public class PolicyDocumentGenerator {
 				writer.notice(contractContent.disclaimer());
 				writer.sectionTitle("Datos de la poliza");
 				writer.keyValue("Folio", data.policyNumber());
-				writer.keyValue("Estatus", data.status());
+				writer.keyValue("Estatus", policyStatusLabel(data.status()));
+				if (data.cancellationNumber() != null) {
+					writer.keyValue("Folio de cancelacion", data.cancellationNumber());
+				}
 				writer.keyValue("Producto", data.productName());
 				writer.keyValue("Cobertura", data.coverageName());
 				writer.keyValue("Contratante", data.clientName());
@@ -124,6 +127,16 @@ public class PolicyDocumentGenerator {
 			case "MONTHLY" -> "Mensual";
 			case "ANNUAL" -> "Anual";
 			default -> paymentMode;
+		};
+	}
+
+	private String policyStatusLabel(String status) {
+		return switch (status) {
+			case "ACTIVA" -> "Activa";
+			case "CANCELACION_SOLICITADA" -> "Cancelacion solicitada";
+			case "CANCELADA" -> "Cancelada";
+			case "VENCIDA" -> "Vencida";
+			default -> status;
 		};
 	}
 

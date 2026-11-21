@@ -22,7 +22,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
 | Ports and Adapters | Backend | Implementado | Aislar el caso de uso de pago de la pasarela académica |
 | Template | Backend | Implementado | Separar textos contractuales editables de la generación PDF |
-| State simplificado | Backend y Oracle | Planificado | Controlar transiciones válidas de estados comerciales |
+| State simplificado | Backend y Oracle | Implementado | Controlar transiciones válidas de estados comerciales |
 
 ## Flujo arquitectónico actual
 
@@ -183,13 +183,13 @@ La abstracción no oculta la transacción: el servicio coordina idempotencia, in
 
 Esta separación permite incorporar después exclusiones, anexos, condiciones generales o textos revisados académicamente sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
 
-## Patrones planificados
+## State simplificado para estados comerciales
 
-### State simplificado para estados comerciales
+Cotizaciones, pagos, pólizas y cancelaciones tienen transiciones permitidas. Oracle protege las reglas finales mediante restricciones y triggers; Spring valida cada operación antes de persistirla y devuelve errores de negocio comprensibles.
 
-Cotizaciones, pagos, pólizas y cancelaciones tienen transiciones permitidas. Oracle ya protege varias reglas mediante restricciones y triggers; Spring deberá validar las operaciones antes de persistirlas.
+En cancelaciones, `CancellationService` bloquea la póliza durante la transacción, exige el estado `ACTIVA` y rechaza una solicitud pendiente antes de insertar. El trigger `TRG_SOLICITUD_CANCELACION_REG` conserva la regla en Oracle, cambia la póliza a `CANCELACION_SOLICITADA` y genera su historial.
 
-Se utilizará una tabla explícita de transiciones, enums con comportamiento o clases de estado únicamente si reducen condicionales repetidos. No se implementará una jerarquía compleja si una validación centralizada resulta suficiente.
+Se eligió una validación centralizada en lugar de una jerarquía de clases de estado porque las transiciones actuales son pocas y explícitas. Esta implementación mantiene la regla en un solo caso de uso sin agregar abstracciones innecesarias.
 
 ## Mecanismos relacionados que no se cuentan como patrones propios
 

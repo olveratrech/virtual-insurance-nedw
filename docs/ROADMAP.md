@@ -130,8 +130,8 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Configurar la conexión con Oracle.
 - [x] Crear entidades, DTO, repositorios, servicios y controladores para los módulos integrados.
 - [x] Implementar Strategy para cotizaciones de auto y médicas.
-- [ ] Implementar transiciones válidas de estados.
-- [ ] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
+- [x] Implementar transiciones válidas de estados.
+- [x] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
 - [x] Configurar registro, autenticación y autorización inicial con Spring Security.
 - [x] Exponer endpoints del recorrido prioritario hasta pólizas y documentos.
 - [x] Documentar el contrato básico de la API.
@@ -142,13 +142,14 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Fecha objetivo:** 23–24 de noviembre
 
-- [ ] Sustituir los mocks restantes del panel y las cancelaciones por llamadas HTTP.
+- [x] Sustituir los mocks restantes de cancelaciones por llamadas HTTP.
+- [ ] Sustituir la actividad simulada del panel por llamadas HTTP.
 - [x] Integrar inicio de sesión, persistencia de sesión y logout.
 - [x] Integrar el registro ampliado con fotografía opcional y catálogos reales.
 - [x] Integrar ambas cotizaciones y sus resultados.
 - [x] Integrar pago simulado y emisión de póliza.
 - [x] Integrar consulta de pólizas y descarga protegida de documentos PDF.
-- [ ] Integrar consulta y solicitud de cancelación.
+- [x] Integrar consulta y solicitud de cancelación.
 - [x] Comprobar que un cliente no pueda consultar cotizaciones, pólizas ni documentos de otro.
 
 **Entregable:** recorrido funcional React–Spring Boot–Oracle.
@@ -158,9 +159,9 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 **Fecha objetivo:** 24–26 de noviembre
 
 - [ ] Ejecutar pruebas unitarias de reglas críticas.
-- [x] Ejecutar pruebas de integración del backend y Oracle hasta el incremento de documentos.
+- [x] Ejecutar pruebas de integración del backend y Oracle hasta el incremento de cancelaciones.
 - [x] Probar manualmente los recorridos principales y de error implementados.
-- [x] Corregir los defectos bloqueantes y de alta prioridad detectados hasta el incremento de documentos.
+- [x] Corregir los defectos bloqueantes y de alta prioridad detectados hasta el incremento de cancelaciones.
 - [ ] Preparar datos y pasos reproducibles para la demostración.
 - [x] Mantener actualizados README, estado del proyecto y evidencias durante los incrementos.
 - [ ] Crear una versión o etiqueta de entrega.

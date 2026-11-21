@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 20 de noviembre de 2026
+**Última actualización:** 21 de noviembre de 2026
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
 | Frontend React | Pólizas aprobadas | Registro, autenticación, cotizaciones, pagos, emisión y consulta persistente de pólizas consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Documentos aprobados | Las 46 pruebas pasan; cotizaciones, pagos, emisión, consulta por propietario, PDFs y seguridad están verificados. |
+| Backend Spring Boot | Cancelaciones aprobadas | Las 55 pruebas pasan; cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
-| Integración completa | En curso | Registro, autenticación, cotizaciones, pago, emisión, consulta de pólizas y descarga protegida de documentos están integrados; faltan cancelaciones reales. |
-| Pruebas | Parciales aprobadas | Oracle, 46 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas y PDFs están aprobados. |
+| Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
+| Pruebas | Parciales aprobadas | Oracle, 55 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -113,8 +113,8 @@
 
 #### Pendientes del frontend
 
-- Sustituir los mocks restantes de cancelaciones por servicios HTTP.
-- Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
+- Corrección terminada: las cancelaciones consumen la API real y persisten en Oracle; se eliminaron sus mocks obsoletos.
+- Corrección terminada: el backend rechaza solicitudes duplicadas, pólizas ajenas y pólizas que no están activas.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 - Los valores capturados se conservan cuando el usuario selecciona “Revisar datos” desde una cotización rechazada.
 
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Integrar las solicitudes de cancelación de React con Spring Boot y Oracle, incluida la prevención de duplicados en el backend.
+Sustituir la actividad simulada del panel por el resumen persistente del cliente autenticado.
 
 ## Bitácora breve
 
@@ -314,4 +314,7 @@ Integrar las solicitudes de cancelación de React con Spring Boot y Oracle, incl
 | 20/11/2026 | Se verificó la consulta persistente desde React. | Pólizas recién emitidas, recarga, acceso directo, producto médico, identificador inexistente, recuperación de sesión y metadatos de documentos pasaron correctamente. | Registrar el incremento e integrar la descarga protegida de documentos. |
 | 20/11/2026 | Se preparó la descarga protegida de documentos. | PDFBox, plantilla contractual versionable, regeneración de BLOB, autorización compuesta, encabezados seguros, descarga React y cinco pruebas nuevas pasan compilación, `lint` y `build`. | Ejecutar las 46 pruebas y revisar manualmente ambos PDFs. |
 | 20/11/2026 | Se verificó la descarga protegida de documentos. | Las 46 pruebas pasaron y React descargó póliza y comprobante reales; se corrigieron placas faltantes y modalidades técnicas para mostrarlas en español. | Registrar el incremento e integrar cancelaciones reales. |
+| 20/11/2026 | Se implementó y verificó la API de solicitudes de cancelación. | El endpoint valida propiedad, estado, fecha, motivo, confirmación, CSRF y duplicados; crea la solicitud de forma transaccional y las 54 pruebas de Spring terminaron sin fallos, errores ni omisiones. | Sustituir los mocks de cancelación en React y verificar el recorrido completo. |
+| 21/11/2026 | Se verificó la integración real de cancelaciones en React. | `lint`, `build`, el recorrido desde el navegador y la persistencia en Oracle fueron correctos; el folio y el estado sobreviven a la recarga y se evita otra solicitud pendiente. | Mejorar la presentación del estado y folio de cancelación en el PDF de póliza. |
+| 21/11/2026 | Se localizó la cancelación en el PDF de póliza. | Las 55 pruebas pasaron; una póliza activa muestra un estado legible sin folio y una póliza en revisión muestra `Cancelacion solicitada` junto con su folio real. | Integrar la actividad reciente del panel con datos persistidos. |
 

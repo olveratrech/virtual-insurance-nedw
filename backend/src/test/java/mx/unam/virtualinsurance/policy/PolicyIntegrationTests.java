@@ -158,6 +158,45 @@ class PolicyIntegrationTests {
 	}
 
 	@Test
+	void downloadsPolicyWithLocalizedPendingCancellationAndRequestNumber() throws Exception {
+		Long policyId = createPolicy("AUTO");
+		Long documentId = documentId(policyId, "POLICY_PDF");
+
+		MvcResult cancellationResult = mockMvc.perform(post(
+			"/polizas/{policyId}/solicitudes-cancelacion", policyId
+		).with(authenticatedAcademicClient())
+			.with(csrf())
+			.contentType(MediaType.APPLICATION_JSON)
+			.content("""
+				{
+				  "reason":"FINANCIAL",
+				  "requestedDate":"%s",
+				  "comments":"Solicitud para verificar el PDF",
+				  "confirmed":true
+				}
+				""".formatted(LocalDate.now().plusDays(2))))
+			.andExpect(status().isCreated())
+			.andReturn();
+		String cancellationNumber = JsonPath.read(
+			cancellationResult.getResponse().getContentAsString(), "$.requestNumber"
+		);
+
+		MvcResult downloadResult = mockMvc.perform(get(
+			"/polizas/{policyId}/documentos/{documentId}/contenido", policyId, documentId
+		).with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andReturn();
+
+		try (var document = Loader.loadPDF(downloadResult.getResponse().getContentAsByteArray())) {
+			String text = new PDFTextStripper().getText(document);
+			org.assertj.core.api.Assertions.assertThat(text)
+				.contains("Estatus: Cancelacion solicitada")
+				.contains("Folio de cancelacion: " + cancellationNumber)
+				.doesNotContain("Estatus: CANCELACION_SOLICITADA");
+		}
+	}
+
+	@Test
 	void hidesDocumentFromAnotherClient() throws Exception {
 		Long policyId = createPolicy("AUTO");
 		Long documentId = documentId(policyId, "POLICY_PDF");
