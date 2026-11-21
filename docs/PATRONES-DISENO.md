@@ -164,6 +164,8 @@ AdminAuthenticationService
 
 **Beneficio:** los componentes llaman operaciones como `login`, `register` o `getGenders` sin conocer detalles del protocolo.
 
+El mismo criterio se aplica al área de cuenta: `AccountHistoryService` obtiene una proyección ordenada del repositorio y la separa por tipo de movimiento. `PanelService` reutiliza la misma transformación, pero limita el resultado a tres elementos. React consume ambos contratos mediante `panelApi.js` y reutiliza `AccountHistoryPage` para cotizaciones, pólizas y pagos, evitando tres implementaciones visuales equivalentes.
+
 ### Route Guard
 
 **Problema:** una persona sin sesión no debe visualizar el panel del cliente.

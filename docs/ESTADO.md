@@ -21,11 +21,11 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Comunicación unificada | Cliente y administración comparten marca, favicon y un aviso global sobre el carácter académico y ficticio del sistema, sin rótulos redundantes en cada recorrido. |
-| Backend Spring Boot | Cotización consumible verificada | Las 90 pruebas pasan; una cotización que ya produjo póliza no admite otro pago, independientemente del estado posterior de esa póliza. |
+| Frontend React | Cuenta navegable verificada | Inicio, cotización, historiales de cotizaciones, pólizas y pagos, ayuda y perfil comparten navegación adaptable y datos persistidos. |
+| Backend Spring Boot | Historial de cuenta verificado | Las 93 pruebas pasan; el resumen limita la actividad a tres movimientos y el historial completo se separa por tipo y propietario. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 90 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 93 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -70,7 +70,7 @@
 - React Router configurado con las diez rutas iniciales y una ruta de página no encontrada.
 - `MainLayout` comparte el encabezado y el área de contenido entre páginas.
 - `DisclosureFooter` presenta en los layouts de cliente y administración el aviso único sobre la implementación académica y sus operaciones ficticias.
-- `Header` implementa identidad con logotipo completo en escritorio e isotipo en vista estrecha, navegación principal y acceso.
+- `Header` implementa identidad con logotipo completo en escritorio e isotipo en vista estrecha; con sesión activa ofrece Inicio, Cotizar, Cotizaciones, Pólizas, Pagos, Ayuda y Perfil.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
 - `NotFoundPage` atiende rutas y pólizas inexistentes; todas las rutas principales tienen pantalla propia.
@@ -78,9 +78,11 @@
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
 - Registro, login, recuperación de sesión y logout ya consumen Spring Security y persisten clientes en Oracle.
-- `DashboardPage` consulta el resumen persistente del cliente, conserva accesos rápidos y maneja carga, error, reintento y actividad vacía.
+- `DashboardPage` consulta el resumen persistente del cliente, conserva accesos rápidos y limita la actividad reciente a los últimos tres movimientos.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
-- `panelApi.js` adapta la actividad real de cotizaciones y pólizas a los componentes del panel.
+- `AccountHistoryPage` presenta el historial completo y separado de cotizaciones, pólizas y pagos con carga, error, reintento y estado vacío.
+- `QuoteHubPage`, `HelpPage` y `ProfilePage` completan la elección de producto, orientación y consulta de identidad sin inventar operaciones no soportadas.
+- `panelApi.js` adapta el resumen y el historial real de cotizaciones, pólizas y pagos a los componentes compartidos.
 - `QuotePageLayout` comparte la estructura visual de ambas cotizaciones sin repetir avisos globales.
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
@@ -334,4 +336,5 @@ Ejecutar la estabilización final y preparar el recorrido de demostración de ex
 | 21/11/2026 | Se implementó y verificó la API administrativa de cancelaciones. | Listado, filtros, detalle, aprobación, rechazo, bloqueo transaccional, responsable, cambio de póliza e historial quedaron aprobados en la suite completa de 83 pruebas. | Construir el panel administrativo en React. |
 | 21/11/2026 | Se implementó y verificó el panel administrativo en React. | Acceso interno, sesión aislada, filtros, detalle, aprobación, rechazo, recarga, logout y diseño adaptable funcionan; la póliza cancelada se muestra en rojo, sin cobertura ni nueva acción de cancelación. | Completar la integración final del resultado administrativo en las vistas del cliente y documentos. |
 | 21/11/2026 | Se completó y verificó el ciclo administrativo de cancelaciones. | Las 85 pruebas, `lint`, `build` y los recorridos manuales aprobaron; la solicitud usa labels legibles y aprobación o rechazo aparecen en póliza, historial visible, panel y PDF regenerado. | Ejecutar estabilización final y preparar la demostración E2E. |
+| 21/11/2026 | Se completó y verificó la navegación de la cuenta del cliente. | Las 93 pruebas y los recorridos manuales aprobaron; Inicio muestra tres movimientos y Cotizaciones, Pólizas y Pagos conservan el historial completo, junto con Cotizar, Ayuda y Perfil. | Continuar con la lógica detallada de los nuevos paneles o la estabilización final. |
 

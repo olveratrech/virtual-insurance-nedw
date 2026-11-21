@@ -1,0 +1,7 @@
+.account-history-page { display: grid; gap: var(--space-xl); padding-bottom: 5rem; padding-top: 4rem; }
+.account-history-page__heading { max-width: 48rem; }
+.account-history-page__heading h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -0.04em; margin: var(--space-md) 0; }
+.account-history-page__heading > p:last-child { color: var(--color-text); font-size: 1.1rem; margin: 0; }
+.account-history-page__error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); display: grid; gap: var(--space-md); justify-items: start; padding: var(--space-md); }
+.account-history-page__error p { margin: 0; }
+.account-history-page__empty { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); color: var(--color-text); margin: 0; padding: var(--space-xl); }

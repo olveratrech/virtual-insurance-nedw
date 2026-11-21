@@ -194,6 +194,18 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** redes de tarjeta completas y cotizaciones contratadas consumidas de forma definitiva en React y Spring.
 
+### Fase 5.4 — Navegación e historiales del cliente
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Incorporar Inicio, Cotizar, Cotizaciones, Pólizas, Pagos, Ayuda y Perfil en la navegación autenticada.
+- [x] Limitar el resumen de Inicio a los tres movimientos más recientes.
+- [x] Exponer el historial completo del cliente separado por cotizaciones, pólizas y pagos.
+- [x] Conservar propiedad, estados, destinos y recorridos de error en cada historial.
+- [x] Adaptar la navegación y las nuevas páginas a pantallas estrechas.
+
+**Entregable:** cuenta del cliente navegable con resumen acotado e historiales completos obtenidos de Oracle.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import ActivityList from '../../components/dashboard/ActivityList/ActivityList.jsx'
 import DashboardActionCard from '../../components/dashboard/DashboardActionCard/DashboardActionCard.jsx'
 import useAuth from '../../hooks/useAuth.js'
@@ -73,7 +73,10 @@ function DashboardPage() {
       </section>
 
       <section aria-labelledby="recent-activity-title">
-        <div className="section-heading"><h2 id="recent-activity-title">Actividad reciente</h2></div>
+        <div className="section-heading dashboard-page__activity-heading">
+          <h2 id="recent-activity-title">Actividad reciente</h2>
+          <div><Link to="/cotizaciones">Cotizaciones</Link><Link to="/polizas">Pólizas</Link><Link to="/pagos">Pagos</Link></div>
+        </div>
         {status === 'loading' && <p className="dashboard-page__feedback" role="status">Consultando actividad…</p>}
         {status === 'error' && (
           <div className="dashboard-page__feedback dashboard-page__feedback--error" role="alert">

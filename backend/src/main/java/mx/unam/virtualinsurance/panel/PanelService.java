@@ -31,6 +31,7 @@ public class PanelService {
 			.orElseThrow(() -> new IllegalStateException("La sesion no corresponde a un cliente."));
 		List<PanelActivityResponse> activity = panelRepository.findRecentActivity(clientId)
 			.stream()
+			.limit(3)
 			.map(this::toResponse)
 			.toList();
 		return new PanelResponse(client.getName(), activity);
@@ -38,18 +39,25 @@ public class PanelService {
 
 	private PanelActivityResponse toResponse(PanelRepository.ActivityRow row) {
 		boolean quote = "QUOTE".equals(row.resourceType());
+		boolean payment = "PAYMENT".equals(row.resourceType());
 		boolean auto = "A".equals(row.insuranceType());
-		String prefix = quote ? "quote" : "policy";
+		String prefix = quote ? "quote" : payment ? "payment" : "policy";
 		return new PanelActivityResponse(
 			prefix + "-" + row.resourceId(),
 			row.resourceType(),
 			row.resourceId(),
-			(quote ? "Cotización" : "Póliza") + (auto ? " de auto" : " médica"),
-			quote ? "#" + row.reference() : row.reference(),
+			(payment ? "Pago" : quote ? "Cotización" : "Póliza") + (auto ? " de auto" : " médica"),
+			quote || payment ? "#" + row.reference() : row.reference(),
 			row.status(),
-			quote ? quoteDetail(row.annualCost(), row.status(), auto) : policyDetail(row),
-			(quote ? "/cotizaciones/" : "/polizas/") + row.resourceId()
+			payment ? paymentDetail(row) : quote ? quoteDetail(row.annualCost(), row.status(), auto) : policyDetail(row),
+			payment
+				? ("APROBADO".equals(row.status()) ? "/polizas/" : "/cotizaciones/") + row.destinationId()
+				: (quote ? "/cotizaciones/" : "/polizas/") + row.resourceId()
 		);
+	}
+
+	PanelActivityResponse mapActivity(PanelRepository.ActivityRow row) {
+		return toResponse(row);
 	}
 
 	private String quoteDetail(BigDecimal annualCost, String status, boolean auto) {
@@ -67,5 +75,13 @@ public class PanelService {
 			case "VENCIDA" -> "Cobertura vencida";
 			default -> "Vigencia hasta el " + row.validUntil().format(DATE);
 		};
+	}
+
+	private String paymentDetail(PanelRepository.ActivityRow row) {
+		String amount = String.format(Locale.US, "$%,.2f MXN", row.annualCost());
+		String mode = "ANNUAL".equals(row.paymentMode()) ? "Anual" : "Mensual";
+		return "RECHAZADO".equals(row.status())
+			? amount + " · " + (row.rejectionReason() == null ? "Pago no autorizado" : row.rejectionReason())
+			: amount + " · Modalidad " + mode;
 	}
 }

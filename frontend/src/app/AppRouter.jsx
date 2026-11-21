@@ -18,6 +18,10 @@ import AdminAccessPage from '../pages/AdminAccessPage/AdminAccessPage.jsx'
 import AdminCancellationsPage from '../pages/AdminCancellationsPage/AdminCancellationsPage.jsx'
 import AdminCancellationDetailPage from '../pages/AdminCancellationDetailPage/AdminCancellationDetailPage.jsx'
 import AdminProtectedRoute from '../components/admin/AdminProtectedRoute/AdminProtectedRoute.jsx'
+import AccountHistoryPage from '../pages/AccountHistoryPage/AccountHistoryPage.jsx'
+import QuoteHubPage from '../pages/QuoteHubPage/QuoteHubPage.jsx'
+import HelpPage from '../pages/HelpPage/HelpPage.jsx'
+import ProfilePage from '../pages/ProfilePage/ProfilePage.jsx'
 
 function ClientApplication() {
   return <AuthProvider><MainLayout /></AuthProvider>
@@ -35,12 +39,18 @@ function AppRouter() {
           <Route index element={<HomePage />} />
           <Route path="acceso" element={<AccessPage />} />
           <Route path="panel" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="cotizar" element={<ProtectedRoute><QuoteHubPage /></ProtectedRoute>} />
           <Route path="cotizar/auto" element={<ProtectedRoute><AutoQuotePage /></ProtectedRoute>} />
           <Route path="cotizar/medico" element={<ProtectedRoute><MedicalQuotePage /></ProtectedRoute>} />
+          <Route path="cotizaciones" element={<ProtectedRoute><AccountHistoryPage eyebrow="Mi cuenta" title="Cotizaciones" description="Consulta todas las propuestas que has solicitado." historyKey="quotes" emptyMessage="Todavía no has solicitado ninguna cotización." /></ProtectedRoute>} />
           <Route path="cotizaciones/:quoteId" element={<ProtectedRoute><QuoteResultPage /></ProtectedRoute>} />
           <Route path="cotizaciones/:quoteId/pago" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
+          <Route path="polizas" element={<ProtectedRoute><AccountHistoryPage eyebrow="Mi cuenta" title="Pólizas" description="Revisa tus coberturas emitidas y su estado actual." historyKey="policies" emptyMessage="Todavía no tienes pólizas emitidas." /></ProtectedRoute>} />
           <Route path="polizas/:polizaId" element={<ProtectedRoute><PolicyPage /></ProtectedRoute>} />
           <Route path="polizas/:polizaId/cancelacion" element={<ProtectedRoute><CancellationPage /></ProtectedRoute>} />
+          <Route path="pagos" element={<ProtectedRoute><AccountHistoryPage eyebrow="Mi cuenta" title="Pagos" description="Consulta todos los intentos de pago registrados en tu cuenta." historyKey="payments" emptyMessage="Todavía no tienes intentos de pago registrados." /></ProtectedRoute>} />
+          <Route path="ayuda" element={<ProtectedRoute><HelpPage /></ProtectedRoute>} />
+          <Route path="perfil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route path="admin" element={<AdminApplication />}>

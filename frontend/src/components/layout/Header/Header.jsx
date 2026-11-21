@@ -28,14 +28,27 @@ function Header() {
   return (
     <header className="site-header">
       <div className="site-header__content">
-        <Link className="site-header__brand" to="/" aria-label="Virtual Insurance, inicio">
+        <Link className="site-header__brand" to={client ? '/panel' : '/'} aria-label="Virtual Insurance, inicio">
           <img className="site-header__brand-logo" src={brandLogo} alt="Virtual Insurance" />
           <img className="site-header__brand-mark" src={brandMark} alt="" aria-hidden="true" />
         </Link>
         <nav className="site-header__navigation" aria-label="Navegación principal">
-          <NavLink to="/" end>Inicio</NavLink>
-          <NavLink to="/cotizar/auto">Cotizar</NavLink>
-          <NavLink to="/panel">Mi cuenta</NavLink>
+          {sessionStatus === 'authenticated' ? (
+            <>
+              <NavLink to="/panel">Inicio</NavLink>
+              <NavLink to="/cotizar">Cotizar</NavLink>
+              <NavLink to="/cotizaciones">Cotizaciones</NavLink>
+              <NavLink to="/polizas">Pólizas</NavLink>
+              <NavLink to="/pagos">Pagos</NavLink>
+              <NavLink to="/ayuda">Ayuda</NavLink>
+              <NavLink to="/perfil">Perfil</NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/" end>Inicio</NavLink>
+              <NavLink to="/cotizar/auto">Cotizar</NavLink>
+            </>
+          )}
         </nav>
         <div className="site-header__session">
           {sessionStatus === 'authenticated' && client ? (

@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 90 pruebas automatizadas | 90 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 93 pruebas automatizadas | 93 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -135,12 +135,15 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `CancellationIntegrationTests.rejectsRequestWithoutCsrf` | Seguridad/integración | Protección CSRF de la operación de escritura | Aprobada |
 | `PanelIntegrationTests.returnsOwnedQuoteWithContractFieldsAndDestination` | API/integración | Cotización propia, contrato de actividad y destino navegable | Aprobada |
 | `PanelIntegrationTests.ordersNewPolicyBeforeItsQuote` | Orden/integración | Póliza recién emitida antes de la cotización que la originó | Aprobada |
+| `PanelIntegrationTests.limitsDashboardToThreeMostRecentMovements` | Presentación/integración | El resumen devuelve únicamente los tres movimientos más recientes | Aprobada |
+| `PanelIntegrationTests.returnsCompleteHistorySeparatedByMovementType` | API/integración | Historial completo separado en cotizaciones, pólizas y pagos con destinos navegables | Aprobada |
+| `PanelIntegrationTests.rejectsAccountHistoryWithoutAuthentication` | Seguridad/integración | Sesión de cliente obligatoria para consultar el historial completo | Aprobada |
 | `PanelIntegrationTests.reflectsPendingCancellationInPolicyActivity` | Estado/integración | Estado actualizado de una póliza con cancelación pendiente | Aprobada |
 | `PanelIntegrationTests.returnsEmptyActivityForClientWithoutOperations` | Caso vacío/integración | Nombre del cliente y lista vacía sin operaciones | Aprobada |
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **90 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **93 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 

@@ -425,7 +425,7 @@ La operación bloquea la solicitud, registra la resolución y devuelve `200` con
 
 ### `GET /panel`
 
-Requiere autenticación. Resume la actividad sin obligar al frontend a combinar varias consultas.
+Requiere autenticación. Resume los tres movimientos más recientes sin obligar al frontend a combinar varias consultas. Los movimientos pueden ser cotizaciones, pólizas o pagos.
 
 Respuesta `200`:
 
@@ -458,6 +458,20 @@ Respuesta `200`:
 ```
 
 `destination` es una ayuda para el frontend, pero la autorización siempre se vuelve a comprobar en el recurso de destino.
+
+### `GET /cuenta/historial`
+
+Requiere autenticación de cliente. Devuelve todo el historial propio, ordenado de forma descendente y separado por tipo:
+
+```json
+{
+  "quotes": [],
+  "policies": [],
+  "payments": []
+}
+```
+
+Cada elemento conserva el contrato de actividad de `GET /panel`. Una cotización enlaza con su resultado, una póliza con su detalle, un pago aprobado con la póliza emitida y un pago rechazado con la cotización relacionada. La consulta filtra por el cliente autenticado y nunca acepta un identificador de cliente desde la URL o el cuerpo.
 
 ## 7. Cotizaciones
 

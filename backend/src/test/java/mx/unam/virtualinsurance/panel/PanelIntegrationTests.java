@@ -76,6 +76,35 @@ class PanelIntegrationTests {
 	}
 
 	@Test
+	void limitsDashboardToThreeMostRecentMovements() throws Exception {
+		createPolicy();
+
+		mockMvc.perform(get("/panel").with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.recentActivity.length()").value(3));
+	}
+
+	@Test
+	void returnsCompleteHistorySeparatedByMovementType() throws Exception {
+		Long policyId = createPolicy();
+
+		mockMvc.perform(get("/cuenta/historial").with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.quotes[?(@.resourceType == 'QUOTE')]").isNotEmpty())
+			.andExpect(jsonPath("$.policies[?(@.resourceType == 'POLICY')]").isNotEmpty())
+			.andExpect(jsonPath("$.payments[?(@.resourceType == 'PAYMENT')]").isNotEmpty())
+			.andExpect(jsonPath(
+				"$.payments[?(@.status == 'APROBADO')].destination"
+			).value(hasItem("/polizas/" + policyId)));
+	}
+
+	@Test
+	void rejectsAccountHistoryWithoutAuthentication() throws Exception {
+		mockMvc.perform(get("/cuenta/historial"))
+			.andExpect(status().isUnauthorized());
+	}
+
+	@Test
 	void reflectsPendingCancellationInPolicyActivity() throws Exception {
 		Long policyId = createPolicy();
 		mockMvc.perform(post("/polizas/{policyId}/solicitudes-cancelacion", policyId)
