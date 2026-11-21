@@ -110,6 +110,13 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Logout desde el encabezado | Integración manual React–Spring | Aprobado; vuelve al inicio y actualiza el encabezado |
 | Acceso a `/panel` después del logout | Regresión de autorización | Aprobado; redirige nuevamente a `/acceso` |
 | Integración de autenticación en diseño adaptable | Revisión visual | Aprobada |
+| Carga del catálogo de géneros en el registro | Integración manual React–Spring–Oracle | Aprobada; muestra los cinco registros y permite omitir género |
+| Validaciones del registro ampliado | Manual funcional | Aprobadas; obligatoriedad, edad, fecha mínima, contraseñas, términos y archivo |
+| Registro sin fotografía ni género | E2E parcial navegador–Oracle | Aprobado; crea cliente con valores `NULL`, sesión y navegación al panel |
+| Persistencia de la cuenta registrada | Verificación Oracle | Aprobada; datos normalizados y cliente único |
+| Sesión automática después del registro | Integración manual | Aprobada; persiste tras recarga y permite login posterior |
+| Correo o identificador duplicado | Regresión React–Spring | Aprobado; muestra el error, no duplica y limpia contraseñas |
+| Formulario ampliado en diseño adaptable | Revisión visual | Aprobado en escritorio y vista móvil |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

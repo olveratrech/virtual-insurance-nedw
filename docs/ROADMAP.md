@@ -139,7 +139,7 @@ Patrones que se aplicarán cuando aporten valor:
 
 - [ ] Sustituir progresivamente los mocks del frontend por llamadas HTTP.
 - [x] Integrar inicio de sesión, persistencia de sesión y logout.
-- [ ] Integrar el registro ampliado con fotografía opcional y catálogos reales.
+- [x] Integrar el registro ampliado con fotografía opcional y catálogos reales.
 - [ ] Integrar ambas cotizaciones y sus resultados.
 - [ ] Integrar pago simulado y emisión de póliza.
 - [ ] Integrar consulta y solicitud de cancelación.

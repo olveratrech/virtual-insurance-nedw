@@ -3,7 +3,16 @@
 .auth-form p { color: var(--color-text); margin: 0; }
 .auth-form__submit { justify-self: start; min-width: 8rem; }
 .auth-form__error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); padding: var(--space-sm) var(--space-md); }
-.auth-form--unavailable { align-content: start; }
+.auth-form__grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.auth-form__full { grid-column: 1 / -1; }
+.auth-form__catalog-status { color: var(--color-text); font-size: 0.85rem; margin-top: calc(-1 * var(--space-md)); min-height: 1.25rem; }
+.auth-form__inline-action { background: none; border: 0; color: var(--color-primary); cursor: pointer; font: inherit; font-weight: 700; padding: 0; text-decoration: underline; }
+.auth-form__hint { color: var(--color-text); font-size: 0.8rem; margin-top: var(--space-sm) !important; }
 .checkbox-field { align-items: flex-start; display: flex; gap: 0.75rem; }
 .checkbox-field input { height: 1.1rem; margin-top: 0.15rem; width: 1.1rem; }
 .checkbox-field label { color: var(--color-text); line-height: 1.45; }
+
+@media (max-width: 560px) {
+  .auth-form__grid { grid-template-columns: 1fr; }
+  .auth-form__full { grid-column: auto; }
+}

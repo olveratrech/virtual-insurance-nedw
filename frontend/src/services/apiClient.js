@@ -1,0 +1,35 @@
+export class ApiError extends Error {
+  constructor(message, status, problem = null) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+    this.problem = problem
+  }
+}
+
+export async function apiRequest(path, options = {}) {
+  let response
+
+  try {
+    response = await fetch(path, {
+      credentials: 'include',
+      ...options,
+    })
+  } catch {
+    throw new ApiError('No fue posible conectar con el servidor.', 0)
+  }
+
+  if (response.status === 204) return null
+
+  const contentType = response.headers.get('content-type') ?? ''
+  const body = contentType.includes('json')
+    ? await response.json()
+    : null
+
+  if (!response.ok) {
+    const message = body?.detail ?? 'No fue posible completar la solicitud.'
+    throw new ApiError(message, response.status, body)
+  }
+
+  return body
+}

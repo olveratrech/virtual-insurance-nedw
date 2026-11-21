@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getCurrentSession, login as loginRequest, logout as logoutRequest } from '../services/authApi.js'
+import {
+  getCurrentSession,
+  login as loginRequest,
+  logout as logoutRequest,
+  register as registerRequest,
+} from '../services/authApi.js'
 import AuthContext from './authContext.js'
 
 export function AuthProvider({ children }) {
@@ -52,11 +57,19 @@ export function AuthProvider({ children }) {
     setSessionStatus('anonymous')
   }
 
+  async function register(data, photo) {
+    const client = await registerRequest(data, photo)
+    setClient(client)
+    setSessionStatus('authenticated')
+    return client
+  }
+
   const value = useMemo(() => ({
     client,
     sessionStatus,
     login,
     logout,
+    register,
     refreshSession,
   }), [client, sessionStatus])
 

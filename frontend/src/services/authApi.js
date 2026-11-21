@@ -1,45 +1,17 @@
-class ApiError extends Error {
-  constructor(message, status, problem = null) {
-    super(message)
-    this.name = 'ApiError'
-    this.status = status
-    this.problem = problem
-  }
-}
+import { ApiError, apiRequest } from './apiClient.js'
 
 let csrf = null
 
-async function request(path, options = {}) {
-  const response = await fetch(path, {
-    credentials: 'include',
-    ...options,
-  })
-
-  if (response.status === 204) return null
-
-  const contentType = response.headers.get('content-type') ?? ''
-  const body = contentType.includes('json')
-    ? await response.json()
-    : null
-
-  if (!response.ok) {
-    const message = body?.detail ?? 'No fue posible completar la solicitud.'
-    throw new ApiError(message, response.status, body)
-  }
-
-  return body
-}
-
 async function getCsrf() {
   if (csrf) return csrf
-  csrf = await request('/auth/csrf')
+  csrf = await apiRequest('/auth/csrf')
   return csrf
 }
 
 async function authenticatedRequest(path, options = {}) {
   const csrfData = await getCsrf()
 
-  return request(path, {
+  return apiRequest(path, {
     ...options,
     headers: {
       ...options.headers,
@@ -50,7 +22,7 @@ async function authenticatedRequest(path, options = {}) {
 
 export async function getCurrentSession() {
   try {
-    return await request('/auth/me')
+    return await apiRequest('/auth/me')
   } catch (error) {
     if (error instanceof ApiError && error.status === 401) return null
     throw error
@@ -62,6 +34,19 @@ export function login(credentials) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials),
+  })
+}
+
+export function register(data, photo) {
+  const formData = new FormData()
+  const json = new Blob([JSON.stringify(data)], { type: 'application/json' })
+  formData.append('data', json, 'data.json')
+
+  if (photo) formData.append('photo', photo)
+
+  return authenticatedRequest('/auth/registro', {
+    method: 'POST',
+    body: formData,
   })
 }
 

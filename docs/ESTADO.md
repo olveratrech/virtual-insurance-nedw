@@ -21,7 +21,7 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
-| Frontend React | Login real aprobado | Contexto de sesión, cliente HTTP, CSRF, panel protegido, encabezado y logout consumen Spring y fueron verificados. |
+| Frontend React | Registro y login reales aprobados | Catálogo, multipart, fotografía opcional, sesión, errores, rutas protegidas y logout fueron verificados con Oracle. |
 | Backend Spring Boot | Registro y autenticación aprobados | Las 17 pruebas automatizadas pasan; fotografía opcional, login, sesión y logout están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
@@ -239,7 +239,7 @@
 
 ## Próxima acción
 
-Adaptar el formulario ampliado de registro en React al contrato multipart con fotografía opcional y catálogos reales.
+Preparar el siguiente recorrido vertical para sustituir mocks: cotizaciones de auto y médicas.
 
 ## Bitácora breve
 
@@ -303,4 +303,6 @@ Adaptar el formulario ampliado de registro en React al contrato multipart con fo
 | 20/11/2026 | Se verificó la autenticación real desde React. | Redirección, rechazo de credenciales, login, saludo, persistencia tras recarga, acceso autenticado, logout, protección posterior y diseño adaptable pasaron correctamente. | Registrar el incremento y conectar el formulario ampliado de registro. |
 | 20/11/2026 | Se preparó el cambio de fotografía obligatoria a opcional. | DDL idempotente, entidad nullable, multipart opcional, respuesta condicional, contrato y una prueba nueva compilan correctamente. | Ejecutar el DDL y su prueba en Oracle antes de correr las 17 pruebas de Spring. |
 | 20/11/2026 | Se verificó la fotografía opcional en Oracle y Spring. | La migración y su repetición pasaron, la fotografía académica persistió y las 17 pruebas de Spring terminaron correctamente. | Registrar el incremento y construir el formulario ampliado de React. |
+| 20/11/2026 | Se preparó el registro real en React. | Cliente HTTP compartido, catálogo de géneros, multipart, campos completos, fotografía opcional, validaciones y sesión automática pasan `lint` y `build`. | Ejecutar el recorrido manual antes de registrar el incremento. |
+| 20/11/2026 | Se verificó el registro real desde React. | Catálogo, validaciones, alta sin fotografía, datos nullable, sesión automática, recarga, nuevo login, duplicados y diseño adaptable pasaron correctamente. | Registrar el incremento y continuar con el siguiente recorrido comercial real. |
 
