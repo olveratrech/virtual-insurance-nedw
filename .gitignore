@@ -53,6 +53,8 @@ backend/target/
 !.env.example
 application-local.properties
 application-local.yml
+database/admin/pruebas_no_versionar.sql
+database/tests/salida_recorrido_e2e.txt
 
 # Cobertura y reportes de pruebas
 coverage/

@@ -1,7 +1,8 @@
 # Modelo relacional de Virtual Insurance para NEDW
 
 **Fecha de definición:** 19 de noviembre de 2026  
-**Alcance:** aplicación web de cotización, contratación, pago simulado, consulta de pólizas y solicitud de cancelación.
+**Última actualización:** 21 de noviembre de 2026
+**Alcance:** aplicación web de cotización, contratación, pago simulado, consulta de pólizas y ciclo administrativo de cancelación.
 
 ## 1. Criterios del modelo
 
@@ -356,14 +357,17 @@ Catálogo inicial:
 | `FECHA_CREACION` | No nulo |
 | `FECHA_RESOLUCION` | Nulo permitido |
 | `OBSERVACION_RESOLUCION` | Nulo permitido |
+| `RESUELTA_POR_USUARIO_ID` | FK a `USUARIO_INTERNO`, nulo mientras está pendiente |
 
 Cardinalidades y reglas:
 
 - Una póliza puede acumular cero o muchas solicitudes a lo largo de su vida.
 - Cada solicitud corresponde exactamente a una póliza.
 - Una póliza no puede tener dos solicitudes con estado `SOLICITADA` al mismo tiempo.
+- La fecha solicitada debe ser el día actual; no existen cancelaciones programadas.
 - Crear una solicitud cambia la póliza a `CANCELACION_SOLICITADA`, pero su cobertura continúa activa.
-- Aprobarla cambia la póliza a `CANCELADA`; rechazarla devuelve la póliza a `ACTIVA`.
+- Resolver exige observación y un usuario interno activo con rol autorizado.
+- Aprobarla cancela inmediatamente la póliza; rechazarla devuelve la póliza a `ACTIVA`.
 
 ### 4.7 `DOCUMENTO_POLIZA`
 
@@ -383,6 +387,39 @@ Cardinalidad:
 - Cada documento pertenece exactamente a una póliza.
 
 `FACTURA_JSON`, `FACTURA_XML` y `COMPROBANTE_PDF` permanecen en sus tablas originales. `DOCUMENTO_POLIZA` se utiliza para documentos adicionales mostrados por la aplicación, principalmente la carátula o contrato de la póliza.
+
+### 4.8 `ROL_INTERNO`
+
+| Atributo | Condición |
+|---|---|
+| `ROL_INTERNO_ID` | PK, no nulo |
+| `CLAVE` | No nulo, único y normalizado en mayúsculas |
+| `DESCRIPCION` | No nulo |
+
+Roles iniciales: `ADMIN` y `CANCELLATION_REVIEWER`.
+
+### 4.9 `USUARIO_INTERNO`
+
+| Atributo | Condición |
+|---|---|
+| `USUARIO_INTERNO_ID` | PK, no nulo |
+| `NOMBRE` | No nulo |
+| `EMAIL` | No nulo, único y normalizado |
+| `CONTRASENA` | Hash BCrypt, nunca texto plano |
+| `ACTIVO` | `S` o `N` |
+| `FECHA_CREACION` | No nulo |
+| `ULTIMO_ACCESO` | Nulo permitido |
+
+Un usuario interno representa personal de la aseguradora y no se almacena como `CLIENTE`.
+
+### 4.10 `USUARIO_INTERNO_ROL`
+
+| Atributo | Condición |
+|---|---|
+| `USUARIO_INTERNO_ID` | PK compuesta y FK a `USUARIO_INTERNO` |
+| `ROL_INTERNO_ID` | PK compuesta y FK a `ROL_INTERNO` |
+
+Un usuario puede tener varios roles y un rol puede pertenecer a varios usuarios.
 
 ## 5. Diagrama resumido de relaciones
 
@@ -415,6 +452,9 @@ erDiagram
 
     POLIZA ||--o{ SOLICITUD_CANCELACION : recibe
     ESTATUS_CANCELACION ||--o{ SOLICITUD_CANCELACION : clasifica
+    USUARIO_INTERNO o|--o{ SOLICITUD_CANCELACION : resuelve
+    USUARIO_INTERNO ||--o{ USUARIO_INTERNO_ROL : posee
+    ROL_INTERNO ||--o{ USUARIO_INTERNO_ROL : asigna
     POLIZA ||--o{ DOCUMENTO_POLIZA : contiene
 ```
 

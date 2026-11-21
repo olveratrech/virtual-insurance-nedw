@@ -22,6 +22,7 @@ declare
     v_intento_pago_id       intento_pago.intento_pago_id%type;
     v_poliza_id             poliza.poliza_id%type;
     v_solicitud_id          solicitud_cancelacion.solicitud_cancelacion_id%type;
+    v_admin_id              usuario_interno.usuario_interno_id%type;
     v_clave                 varchar2(30);
 
     procedure verificar(
@@ -51,7 +52,7 @@ begin
     select count(*) into v_actual
       from user_tab_columns
      where table_name = 'SOLICITUD_CANCELACION';
-    verificar(v_actual = 10, 'solicitud_cancelacion debe tener 10 columnas');
+    verificar(v_actual = 11, 'solicitud_cancelacion debe tener 11 columnas');
 
     select count(*) into v_actual
       from user_tab_identity_cols
@@ -70,7 +71,7 @@ begin
      where table_name = 'SOLICITUD_CANCELACION'
        and constraint_type = 'R'
        and status = 'ENABLED';
-    verificar(v_actual = 2, 'se esperaban dos llaves foraneas habilitadas');
+    verificar(v_actual = 3, 'se esperaban tres llaves foraneas habilitadas');
 
     select count(*) into v_actual
       from user_constraints
@@ -85,9 +86,10 @@ begin
       from user_indexes
      where index_name in (
         'IX_SOLICITUD_CANCELACION_POL',
-        'IX_SOLICITUD_CANCELACION_EST'
+        'IX_SOLICITUD_CANCELACION_EST',
+        'IX_SOLICITUD_CANCELACION_USR'
      );
-    verificar(v_actual = 2, 'se esperaban dos indices adicionales');
+    verificar(v_actual = 3, 'se esperaban tres indices adicionales');
 
     select count(*) into v_actual
       from user_objects
@@ -127,6 +129,10 @@ begin
     select estatus_cancelacion_id into v_cancelacion_rech_id
       from estatus_cancelacion
      where clave = 'RECHAZADA';
+
+    select usuario_interno_id into v_admin_id
+      from usuario_interno
+     where email = 'admin.cancelaciones@virtual-insurance.test';
 
     select cotizacion_id into v_cotizacion_id
       from cotizacion
@@ -224,7 +230,7 @@ begin
         v_poliza_id,
         'CAN-TEST-001',
         'FINANCIAL',
-        trunc(current_date) + 1,
+        trunc(current_date),
         'solicitud academica de prueba',
         v_cancelacion_sol_id,
         systimestamp
@@ -247,7 +253,7 @@ begin
             poliza_id, folio, motivo, fecha_solicitada, comentarios,
             estatus_cancelacion_id, fecha_creacion
         ) values (
-            v_poliza_id, 'CAN-TEST-DUP', 'OTHER', trunc(current_date) + 2,
+            v_poliza_id, 'CAN-TEST-DUP', 'OTHER', trunc(current_date),
             null, v_cancelacion_sol_id, systimestamp
         );
         raise_application_error(-20092, 'se permitio una segunda solicitud pendiente.');
@@ -260,7 +266,8 @@ begin
 
     update solicitud_cancelacion
        set estatus_cancelacion_id = v_cancelacion_rech_id,
-           observacion_resolucion = 'rechazo academico'
+           observacion_resolucion = 'rechazo academico',
+           resuelta_por_usuario_id = v_admin_id
      where solicitud_cancelacion_id = v_solicitud_id;
 
     select ep.clave into v_clave
@@ -288,7 +295,7 @@ begin
         v_poliza_id,
         'CAN-TEST-002',
         'NOT_NEEDED',
-        trunc(current_date) + 3,
+        trunc(current_date),
         null,
         v_cancelacion_sol_id,
         systimestamp
@@ -296,7 +303,8 @@ begin
 
     update solicitud_cancelacion
        set estatus_cancelacion_id = v_cancelacion_apr_id,
-           observacion_resolucion = 'aprobacion academica'
+           observacion_resolucion = 'aprobacion academica',
+           resuelta_por_usuario_id = v_admin_id
      where solicitud_cancelacion_id = v_solicitud_id;
 
     select ep.clave into v_clave

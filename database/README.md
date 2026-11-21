@@ -70,11 +70,15 @@ schema/04_pagos_polizas.sql
 tests/04_pagos_polizas.sql
 
 schema/05_cancelaciones.sql
-tests/05_cancelaciones.sql
 
 schema/06_simulador_pagos.sql
 seed/04_instrumentos_pago.sql
 tests/06_simulador_pagos.sql
+
+schema/07_administracion_cancelaciones.sql
+seed/05_usuarios_internos.sql
+tests/05_cancelaciones.sql
+tests/07_administracion_cancelaciones.sql
 
 tests/99_recorrido_completo.sql
 ```
@@ -103,6 +107,20 @@ Esta estrategia permite continuar después de un fallo intermedio sin convertir 
 `INSTRUMENTO_PAGO_PRUEBA` representa un procesador externo ficticio. Conserva únicamente hash SHA-256 del PAN de prueba, últimos cuatro, saldo, estado y versión de concurrencia. Los saldos no pertenecen a `TARJETA` porque una aseguradora real no administra la cuenta bancaria del cliente.
 
 `SEQ_NUMERO_PAGO` y `SEQ_FOLIO_POLIZA` generan referencias concurrentes. `INTENTO_PAGO.IDEMPOTENCY_KEY` impide registrar dos veces una misma operación. Volver a ejecutar `seed/04_instrumentos_pago.sql` restablece los seis escenarios académicos y sus saldos iniciales.
+
+## Administración de cancelaciones
+
+`USUARIO_INTERNO` mantiene las identidades administrativas separadas de `CLIENTE`. `ROL_INTERNO` y `USUARIO_INTERNO_ROL` asignan las autoridades `ADMIN` y `CANCELLATION_REVIEWER` sin convertir a un cliente en personal de la aseguradora.
+
+`SOLICITUD_CANCELACION.RESUELTA_POR_USUARIO_ID` registra al responsable de una aprobación o rechazo. Una solicitud pendiente conserva este valor en `NULL`; para resolverla, el trigger exige una observación, un usuario activo y uno de los roles autorizados. La aprobación cancela la póliza inmediatamente y el rechazo la devuelve a `ACTIVA`.
+
+La cuenta exclusivamente académica cargada por `seed/05_usuarios_internos.sql` es:
+
+```text
+admin.cancelaciones@virtual-insurance.test / Virtual2026!
+```
+
+La contraseña se persiste únicamente como hash BCrypt. Estas credenciales no deben reutilizarse fuera del entorno local de demostración.
 
 ## Prueba E2E transaccional
 

@@ -9,7 +9,7 @@ set feedback on
 set linesize 180
 set pagesize 100
 
-spool tests/salida_recorrido_e2e.txt replace
+spool salida_recorrido_e2e.txt replace
 
 prompt ============================================================
 prompt Virtual Insurance - inicio de la prueba E2E transaccional
@@ -47,6 +47,7 @@ declare
     v_poliza_medica_id       poliza.poliza_id%type;
     v_cancelacion_auto_id    solicitud_cancelacion.solicitud_cancelacion_id%type;
     v_cancelacion_medica_id  solicitud_cancelacion.solicitud_cancelacion_id%type;
+    v_admin_id               usuario_interno.usuario_interno_id%type;
     v_clave                  varchar2(30);
 
     procedure verificar(
@@ -321,6 +322,9 @@ begin
       from estatus_cancelacion where clave = 'APROBADA';
     select estatus_cancelacion_id into v_cancelacion_rech_id
       from estatus_cancelacion where clave = 'RECHAZADA';
+    select usuario_interno_id into v_admin_id
+      from usuario_interno
+     where email = 'admin.cancelaciones@virtual-insurance.test';
 
     iniciar_escenario('preparacion del cliente y medio de pago');
 
@@ -463,7 +467,7 @@ begin
         comentarios, estatus_cancelacion_id, fecha_creacion
     ) values (
         v_poliza_auto_id, 'CAN-E2E-AUTO', 'FINANCIAL',
-        trunc(current_date) + 1, 'solicitud e2e de auto',
+        trunc(current_date), 'solicitud e2e de auto',
         v_cancelacion_sol_id, systimestamp
     ) returning solicitud_cancelacion_id into v_cancelacion_auto_id;
 
@@ -484,7 +488,7 @@ begin
             comentarios, estatus_cancelacion_id, fecha_creacion
         ) values (
             v_poliza_auto_id, 'CAN-E2E-AUTO-DUP', 'OTHER',
-            trunc(current_date) + 2, null, v_cancelacion_sol_id, systimestamp
+            trunc(current_date), null, v_cancelacion_sol_id, systimestamp
         );
         raise_application_error(-20106, 'se permitio duplicar una cancelacion pendiente.');
     exception
@@ -497,7 +501,8 @@ begin
 
     update solicitud_cancelacion
        set estatus_cancelacion_id = v_cancelacion_rech_id,
-           observacion_resolucion = 'la cobertura permanece activa'
+           observacion_resolucion = 'la cobertura permanece activa',
+           resuelta_por_usuario_id = v_admin_id
      where solicitud_cancelacion_id = v_cancelacion_auto_id;
 
     mostrar_paso('la cancelacion de auto fue resuelta como RECHAZADA');
@@ -519,7 +524,7 @@ begin
         comentarios, estatus_cancelacion_id, fecha_creacion
     ) values (
         v_poliza_medica_id, 'CAN-E2E-MEDICA', 'NOT_NEEDED',
-        trunc(current_date) + 1, 'solicitud e2e medica',
+        trunc(current_date), 'solicitud e2e medica',
         v_cancelacion_sol_id, systimestamp
     ) returning solicitud_cancelacion_id into v_cancelacion_medica_id;
 
@@ -530,7 +535,8 @@ begin
 
     update solicitud_cancelacion
        set estatus_cancelacion_id = v_cancelacion_apr_id,
-           observacion_resolucion = 'cancelacion aprobada en la prueba e2e'
+           observacion_resolucion = 'cancelacion aprobada en la prueba e2e',
+           resuelta_por_usuario_id = v_admin_id
      where solicitud_cancelacion_id = v_cancelacion_medica_id;
 
     mostrar_paso('la cancelacion medica fue resuelta como APROBADA');
@@ -547,7 +553,7 @@ begin
             comentarios, estatus_cancelacion_id, fecha_creacion
         ) values (
             v_poliza_medica_id, 'CAN-E2E-CANCELADA', 'OTHER',
-            trunc(current_date) + 2, null, v_cancelacion_sol_id, systimestamp
+            trunc(current_date), null, v_cancelacion_sol_id, systimestamp
         );
         raise_application_error(-20107, 'una poliza cancelada admitio otra solicitud.');
     exception

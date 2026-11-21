@@ -18,9 +18,9 @@
 |---|---|---|
 | Anteproyecto | Terminado | Documento base disponible en `anteproyecto/`. |
 | Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
-| Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
+| Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
-| Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
+| Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
 | Frontend React | Recorrido principal aprobado | Panel, registro, autenticación, cotizaciones, pagos, pólizas, documentos y cancelaciones consumen la API real y fueron verificados manualmente. |
 | Backend Spring Boot | Panel aprobado | Las 62 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Crear el modelo administrativo de usuarios internos, roles y responsabilidad de resolución de cancelaciones.
+Implementar autenticación y autorización administrativa en Spring Security.
 
 ## Bitácora breve
 
@@ -320,4 +320,5 @@ Crear el modelo administrativo de usuarios internos, roles y responsabilidad de 
 | 21/11/2026 | Se implementó y verificó la API real del panel. | `GET /panel` limita la actividad al cliente autenticado, combina cotizaciones y pólizas, refleja cancelaciones y ordena los últimos 20 movimientos; las 61 pruebas pasaron. | Conectar `DashboardPage` y retirar su actividad simulada. |
 | 21/11/2026 | Se verificó la integración real del panel en React. | `lint`, `build`, actividad persistente, navegación, recarga, cancelación pendiente, estado vacío y diseño adaptable fueron correctos; `dashboardData.js` fue eliminado. | Preparar el recorrido de demostración y estabilización final. |
 | 21/11/2026 | Se fijó la fecha efectiva de cancelación al día actual. | Las 62 pruebas, la interfaz y Oracle fueron correctos; React impide modificar la fecha y Spring rechaza fechas pasadas o futuras. | Crear el modelo administrativo para resolver solicitudes. |
+| 21/11/2026 | Se desplegó y verificó el modelo administrativo de cancelaciones. | Roles, usuarios internos, relación de permisos, responsable de resolución, trigger reforzado, seed repetible y pruebas `05`, `07` y `99` terminaron correctamente. | Implementar autenticación administrativa en Spring Security. |
 

@@ -8,7 +8,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
-| Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
+| Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
 | Spring Boot | 62 pruebas automatizadas | 62 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
@@ -25,6 +25,7 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 | `tests/04_pagos_polizas.sql` | Integración transaccional | Intentos de pago, aprobación única, emisión de póliza, modalidad, costo, documentos e historial | Aprobada |
 | `tests/05_cancelaciones.sql` | Integración transaccional | Fechas, solicitudes duplicadas, resolución, sincronización de estado, historial y protección contra borrado | Aprobada |
 | `tests/06_simulador_pagos.sql` | Estructura e integración | Pasarela académica, columnas de idempotencia, secuencias y seis instrumentos con saldos y respuestas controladas | Aprobada |
+| `tests/07_administracion_cancelaciones.sql` | Estructura e integración transaccional | Usuarios internos, roles, responsable, observación, autorización, aprobación, rechazo y resolución única | Aprobada |
 | `tests/99_recorrido_completo.sql` | E2E transaccional | Recorrido completo del caso de estudio y reglas negativas, con rollback integral | Aprobada |
 
 Los scripts de estructura y carga también se ejecutaron dos veces durante cada incremento para verificar su idempotencia o repetibilidad sin duplicar datos.
