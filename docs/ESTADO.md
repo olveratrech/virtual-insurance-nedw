@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
 | Frontend React | Recorrido principal aprobado | Panel, registro, autenticación, cotizaciones, pagos, pólizas, documentos y cancelaciones consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Panel aprobado | Las 62 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
-| Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
+| Backend Spring Boot | Autenticación administrativa aprobada | Las 71 pruebas pasan; panel, cotizaciones, pagos, emisión, pólizas, PDFs, cancelaciones y seguridad están verificados. |
+| Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Recorrido principal integrado | Registro, autenticación, cotizaciones, pago, emisión, pólizas, documentos y solicitudes de cancelación recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 62 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 71 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas, PDFs y cancelaciones están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Implementar autenticación y autorización administrativa en Spring Security.
+Implementar la API administrativa para consultar, aprobar y rechazar solicitudes de cancelación.
 
 ## Bitácora breve
 
@@ -321,4 +321,5 @@ Implementar autenticación y autorización administrativa en Spring Security.
 | 21/11/2026 | Se verificó la integración real del panel en React. | `lint`, `build`, actividad persistente, navegación, recarga, cancelación pendiente, estado vacío y diseño adaptable fueron correctos; `dashboardData.js` fue eliminado. | Preparar el recorrido de demostración y estabilización final. |
 | 21/11/2026 | Se fijó la fecha efectiva de cancelación al día actual. | Las 62 pruebas, la interfaz y Oracle fueron correctos; React impide modificar la fecha y Spring rechaza fechas pasadas o futuras. | Crear el modelo administrativo para resolver solicitudes. |
 | 21/11/2026 | Se desplegó y verificó el modelo administrativo de cancelaciones. | Roles, usuarios internos, relación de permisos, responsable de resolución, trigger reforzado, seed repetible y pruebas `05`, `07` y `99` terminaron correctamente. | Implementar autenticación administrativa en Spring Security. |
+| 21/11/2026 | Se implementó y verificó la autenticación administrativa. | Proveedores separados, roles internos, sesión, CSRF, logout y aislamiento entre rutas de clientes y administradores quedaron aprobados en la suite completa de 71 pruebas. | Implementar la API administrativa de consulta y resolución de cancelaciones. |
 

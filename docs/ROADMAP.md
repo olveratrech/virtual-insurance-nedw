@@ -160,7 +160,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 - [x] Fijar la fecha efectiva de cancelación al día actual y rechazar fechas distintas en la API.
 - [x] Crear usuarios internos, roles y auditoría mínima de resolución en Oracle.
-- [ ] Implementar autenticación y autorización administrativa en Spring Security.
+- [x] Implementar autenticación y autorización administrativa en Spring Security.
 - [ ] Implementar la API de consulta, aprobación y rechazo de cancelaciones.
 - [ ] Construir el panel administrativo en React.
 - [ ] Integrar y verificar el resultado administrativo en póliza, PDF, panel e historial del cliente.

@@ -2,7 +2,7 @@
 
 Este documento registra los patrones utilizados deliberadamente en Virtual Insurance, el problema que resuelven y los archivos donde pueden verificarse. No se busca acumular patrones: cada uno debe reducir acoplamiento, concentrar una responsabilidad o facilitar pruebas y mantenimiento.
 
-Última actualización: **20 de noviembre de 2026**.
+Última actualización: **21 de noviembre de 2026**.
 
 ## Resumen
 
@@ -13,7 +13,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Repository | Backend | Implementado | Abstraer persistencia y consultas JPA |
 | Service Layer | Backend | Implementado | Concentrar reglas, coordinación y transacciones |
 | DTO | Backend | Implementado | Definir contratos sin exponer entidades JPA |
-| Adapter | Backend | Implementado | Adaptar el cliente del dominio a Spring Security |
+| Adapter | Backend | Implementado | Adaptar clientes y usuarios internos a Spring Security sin acoplar las entidades |
 | Dependency Injection | Backend | Implementado mediante Spring | Desacoplar dependencias y facilitar pruebas |
 | Component Composition | Frontend | Implementado | Construir pantallas mediante componentes reutilizables |
 | Provider / Context | Frontend | Implementado | Compartir la sesión autenticada sin prop drilling |
@@ -40,10 +40,16 @@ La autenticación agrega un adaptador hacia Spring Security:
 
 ```text
 AuthenticationService
-  -> AuthenticationManager
+  -> clientAuthenticationManager
   -> ClientUserDetailsService (Adapter)
   -> ClientRepository
   -> CLIENTE
+
+AdminAuthenticationService
+  -> adminAuthenticationManager
+  -> InternalUserDetailsService (Adapter)
+  -> InternalUserRepository
+  -> USUARIO_INTERNO + roles
 ```
 
 ## Patrones implementados en el backend
@@ -105,11 +111,11 @@ AuthenticationService
 
 ### Adapter
 
-**Problema:** Spring Security autentica mediante `UserDetailsService`, pero el modelo propio utiliza `Client` y `ClientRepository`.
+**Problema:** Spring Security autentica mediante `UserDetailsService`, pero el modelo propio tiene dos identidades distintas: clientes comerciales y usuarios internos.
 
-**Aplicación:** `ClientUserDetailsService` traduce un cliente persistido a `ClientPrincipal`, que implementa el contrato `UserDetails`.
+**Aplicación:** `ClientUserDetailsService` traduce un cliente a `ClientPrincipal`; `InternalUserDetailsService` traduce un usuario interno y sus roles a `InternalUserPrincipal`. Cada adaptador utiliza un `AuthenticationManager` calificado y separado.
 
-**Beneficio:** la entidad `Client` no depende de Spring Security y el mecanismo de autenticación puede cambiar sin rediseñar la tabla.
+**Beneficio:** las entidades no dependen de Spring Security, un correo coincidente no mezcla fuentes de identidad y las rutas pueden exigir `ROLE_CLIENT`, `ROLE_ADMIN` o `ROLE_CANCELLATION_REVIEWER` explícitamente.
 
 ### Dependency Injection
 

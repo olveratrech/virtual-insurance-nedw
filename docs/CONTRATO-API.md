@@ -1,8 +1,8 @@
 # Contrato de API REST de Virtual Insurance
 
-**Versión:** 1.0
+**Versión:** 1.1
 
-**Fecha:** 20 de noviembre de 2026
+**Fecha:** 21 de noviembre de 2026
 
 **Rutas del backend:** desde `/`
 
@@ -35,6 +35,8 @@ Este documento define el límite vigente entre React y Spring Boot. Los nombres 
 - El navegador recibirá una cookie de sesión `HttpOnly`.
 - La cookie no será accesible desde React.
 - Las operaciones protegidas requieren una sesión válida.
+- La sesión contiene una sola identidad: cliente o usuario interno. Un nuevo login reemplaza la identidad anterior de esa sesión.
+- Las rutas comerciales requieren `ROLE_CLIENT`; las rutas `/admin/**` requieren `ROLE_ADMIN` o `ROLE_CANCELLATION_REVIEWER`.
 - Durante desarrollo, Vite redirigirá `/api` a Spring Boot para trabajar bajo el mismo origen lógico.
 - Las peticiones que modifican estado estarán protegidas contra CSRF.
 - Ninguna contraseña, número de tarjeta o CVV aparecerá en respuestas, errores o registros.
@@ -83,6 +85,8 @@ Códigos de negocio previstos:
 - `EMAIL_ALREADY_EXISTS`
 - `FISCAL_ID_ALREADY_EXISTS`
 - `INVALID_CREDENTIALS`
+- `INVALID_ADMIN_CREDENTIALS`
+- `INVALID_ADMIN_SESSION`
 - `VALIDATION_ERROR`
 - `RESOURCE_NOT_FOUND`
 - `RESOURCE_NOT_OWNED`
@@ -310,6 +314,52 @@ Invalida la sesión y responde `204`.
 ### `GET /clientes/me/foto`
 
 Devuelve el archivo de la fotografía del cliente autenticado con su tipo MIME correspondiente. Responde `404` si el recurso no está disponible.
+
+## 5.1. Autenticación administrativa
+
+Los usuarios internos se autentican contra `USUARIO_INTERNO` y sus permisos se obtienen de `USUARIO_INTERNO_ROL`. Las credenciales incorrectas, los usuarios inexistentes, inactivos o sin un rol administrativo admitido responden con el mismo error genérico.
+
+### `POST /admin/auth/login`
+
+No requiere una sesión previa, pero sí un token CSRF obtenido mediante `GET /auth/csrf`.
+
+Petición:
+
+```json
+{
+  "email": "admin.cancelaciones@virtual-insurance.test",
+  "password": "contrasena-no-documentada"
+}
+```
+
+Respuesta `200`:
+
+```json
+{
+  "authenticated": true,
+  "user": {
+    "id": 1,
+    "name": "Administrador academico",
+    "email": "admin.cancelaciones@virtual-insurance.test",
+    "roles": [
+      "ADMIN",
+      "CANCELLATION_REVIEWER"
+    ]
+  }
+}
+```
+
+Credenciales inválidas responden `401 INVALID_ADMIN_CREDENTIALS` sin revelar si el correo existe o si el usuario está inactivo.
+
+### `GET /admin/auth/me`
+
+Requiere una sesión interna con `ADMIN` o `CANCELLATION_REVIEWER` y devuelve la misma estructura de autenticación. Una sesión de cliente recibe `403`.
+
+### `POST /admin/auth/logout`
+
+Requiere CSRF, invalida la sesión, elimina `JSESSIONID` y responde `204`.
+
+La API de consulta y resolución de cancelaciones se incorporará en el siguiente incremento.
 
 ## 6. Panel del cliente
 

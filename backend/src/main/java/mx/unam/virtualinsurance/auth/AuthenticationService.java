@@ -10,6 +10,7 @@ import mx.unam.virtualinsurance.customer.ClientRepository;
 import mx.unam.virtualinsurance.shared.error.ApiException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -26,7 +27,7 @@ public class AuthenticationService {
 	private final SecuritySessionService securitySessionService;
 
 	public AuthenticationService(
-		AuthenticationManager authenticationManager,
+		@Qualifier("clientAuthenticationManager") AuthenticationManager authenticationManager,
 		ClientRepository clientRepository,
 		SecuritySessionService securitySessionService
 	) {

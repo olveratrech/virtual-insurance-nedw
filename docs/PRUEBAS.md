@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 62 pruebas automatizadas | 62 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 71 pruebas automatizadas | 71 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -66,6 +66,15 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `AuthenticationIntegrationTests.normalizesEmailBeforeAuthentication` | Autenticación/integración | Eliminación de espacios y normalización de mayúsculas del correo | Aprobada |
 | `AuthenticationIntegrationTests.logsOutAndInvalidatesSession` | Sesión/integración | Logout, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
 | `AuthenticationIntegrationTests.rejectsSessionCheckAfterLogout` | Seguridad/integración | Rechazo de consulta de sesión después del logout | Aprobada |
+| `AdminAuthenticationIntegrationTests.logsInWithValidCredentialsAndReturnsInternalRoles` | Autenticación/integración | Login interno, sesión, datos administrativos y roles obtenidos de Oracle | Aprobada |
+| `AdminAuthenticationIntegrationTests.normalizesEmailBeforeAuthentication` | Autenticación/integración | Normalización del correo administrativo antes de autenticar | Aprobada |
+| `AdminAuthenticationIntegrationTests.rejectsIncorrectPasswordWithGenericResponse` | Seguridad/integración | Rechazo administrativo genérico de contraseña incorrecta | Aprobada |
+| `AdminAuthenticationIntegrationTests.rejectsUnknownEmailWithSameGenericResponse` | Seguridad/integración | Respuesta indistinguible para un correo interno inexistente | Aprobada |
+| `AdminAuthenticationIntegrationTests.rejectsInactiveInternalUser` | Autorización/integración | Rechazo de un usuario interno inactivo con rollback del cambio temporal | Aprobada |
+| `AdminAuthenticationIntegrationTests.rejectsLoginWithoutCsrfToken` | Seguridad/integración | Protección CSRF del login administrativo | Aprobada |
+| `AdminAuthenticationIntegrationTests.logsOutAndInvalidatesAdministrativeSession` | Sesión/integración | Logout administrativo, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
+| `AdminAuthenticationIntegrationTests.clientSessionCannotAccessAdministrativeEndpoints` | Autorización/integración | Una sesión con `ROLE_CLIENT` recibe `403` en rutas administrativas | Aprobada |
+| `AdminAuthenticationIntegrationTests.administrativeSessionCannotAccessClientEndpoints` | Autorización/integración | Una sesión interna recibe `403` en rutas exclusivas del cliente | Aprobada |
 | `QuoteIntegrationTests.createsApprovedAutoQuoteWithSubtypeAndHistory` | API/integración | Strategy de auto, costo, subtipo, historial y consulta posterior | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithTwelveNegativePoints` | Regla de negocio/integración | Rechazo de auto por 12 puntos y costo nulo | Aprobada |
 | `QuoteIntegrationTests.rejectsAutoQuoteWithCriminalRecord` | Regla de negocio/integración | Rechazo de auto por antecedentes | Aprobada |
@@ -112,7 +121,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **62 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **71 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -211,6 +220,7 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 - La validación inicial del login rechazaba con `422` un correo con espacios exteriores antes de normalizarlo. La limpieza se trasladó al constructor del DTO y las 16 pruebas aprobaron.
 - El proxy inicial de Vite no reenviaba `/cotizaciones` y producía un `404` al crear una cotización. Al agregarlo, también interceptaba la recarga de la ruta SPA `/cotizaciones/:id`; se separaron las llamadas técnicas bajo `/api` con reescritura hacia Spring Boot.
 - La prueba de saldo exacto dependía del saldo inicial del seed y falló después de una demostración manual. Se aisló preparando $1,040 dentro de la propia transacción; el rollback restaura el estado anterior.
+- La primera ejecución de la suite administrativa produjo 71 errores porque había dos beans `AuthenticationManager` sin uno principal para construir `HttpSecurity`. Se marcó el gestor de clientes como `@Primary`; ambos servicios conservan calificadores explícitos y la repetición terminó 71/71.
 
 ## Pendientes de prueba
 
