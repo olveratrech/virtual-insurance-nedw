@@ -129,3 +129,9 @@ Los costos son valores académicos fijos por producto; no representan un cálcul
 `POST /cotizaciones/{quoteId}/intentos-pago` requiere sesión, CSRF e `Idempotency-Key`. La pasarela usa exclusivamente los instrumentos de `database/seed/04_instrumentos_pago.sql`, bloquea el registro durante el débito y emite intento, póliza, historial y documentos dentro de una sola transacción.
 
 Un rechazo de negocio también responde `201` y conserva el intento, pero no descuenta saldo ni emite póliza. Repetir una clave de idempotencia devuelve el resultado previo sin un segundo cargo.
+
+## Consulta de pólizas
+
+`GET /polizas/{policyId}` requiere sesión y combina la póliza con su cotización, cliente, último pago y metadatos de documentos. La consulta siempre incluye `policyId + clientId`; una póliza inexistente o ajena responde el mismo `404 POLICY_NOT_FOUND`.
+
+La respuesta no incluye BLOB, factura JSON/XML, número de tarjeta ni CVV. Los documentos exponen solamente identificador, tipo, nombre y la ruta protegida que se implementará para su descarga.

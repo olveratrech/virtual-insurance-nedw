@@ -1,27 +1,68 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import DocumentList from '../../components/policy/DocumentList/DocumentList.jsx'
 import PaymentOverview from '../../components/policy/PaymentOverview/PaymentOverview.jsx'
 import PolicyDetails from '../../components/policy/PolicyDetails/PolicyDetails.jsx'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
-import { policyData } from '../../mocks/policyData.js'
-import NotFoundPage from '../NotFoundPage/NotFoundPage.jsx'
+import { getPolicy } from '../../services/policyApi.js'
 import './PolicyPage.css'
 
 function PolicyPage() {
   const { polizaId } = useParams()
   const location = useLocation()
   const [downloadMessage, setDownloadMessage] = useState('')
-  const policy = location.state?.policy ?? policyData[polizaId]
+  const [policy, setPolicy] = useState(location.state?.policy ?? null)
+  const [status, setStatus] = useState(policy ? 'ready' : 'loading')
+  const [error, setError] = useState('')
+  const [reloadKey, setReloadKey] = useState(0)
   const issuedAfterPayment = ['APPROVED', 'APROBADO'].includes(location.state?.payment?.status)
-  const cancellationRequested = location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
+  const cancellationRequested = policy?.status === 'CANCELACION_SOLICITADA'
+    || location.state?.cancellationStatus === 'CANCELLATION_REQUESTED'
 
-  if (!policy) {
-    return <NotFoundPage title="Póliza no encontrada" message="No existe una póliza accesible con ese identificador." backTo="/panel" backLabel="Volver al panel" />
+  useEffect(() => {
+    let active = true
+    getPolicy(polizaId)
+      .then((response) => {
+        if (!active) return
+        setPolicy(response)
+        setStatus('ready')
+        setError('')
+      })
+      .catch((requestError) => {
+        if (!active) return
+        setError(requestError.message)
+        setStatus('error')
+      })
+    return () => {
+      active = false
+    }
+  }, [polizaId, reloadKey])
+
+  function retry() {
+    setStatus('loading')
+    setError('')
+    setReloadKey((value) => value + 1)
+  }
+
+  if (status === 'loading') {
+    return <p className="policy-page page-container" role="status">Consultando póliza…</p>
+  }
+
+  if (status === 'error') {
+    return (
+      <section className="policy-page page-container" role="alert">
+        <h1>No fue posible consultar la póliza</h1>
+        <p>{error}</p>
+        <div className="policy-page__actions">
+          <Link className="button button--secondary" to="/panel">Volver al panel</Link>
+          <button className="button button--primary" type="button" onClick={retry}>Reintentar</button>
+        </div>
+      </section>
+    )
   }
 
   function handleDownload(document) {
-    setDownloadMessage(`Descarga simulada: ${document.name}. El PDF real se generará desde el backend.`)
+    setDownloadMessage(`${document.name} ya existe en Oracle. La descarga protegida se integrará en el siguiente incremento.`)
   }
 
   return (

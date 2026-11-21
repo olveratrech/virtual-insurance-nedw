@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 36 pruebas automatizadas | 36 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 41 pruebas automatizadas | 41 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -84,8 +84,13 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PaymentIntegrationTests.repeatsIdempotentPaymentWithoutSecondDebitOrPolicy` | Idempotencia | Misma respuesta sin segundo débito ni póliza | Aprobada |
 | `PaymentIntegrationTests.rejectsPaymentWithoutAuthentication` | Seguridad | Sesión obligatoria para pagar | Aprobada |
 | `PaymentIntegrationTests.validatesTermsBeforeCreatingAttempt` | Validación | Términos obligatorios antes de persistir | Aprobada |
+| `PolicyIntegrationTests.returnsOwnedAutoPolicyWithPaymentAndDocumentMetadata` | API/integración | Póliza de auto, pago, autorización y dos documentos | Aprobada |
+| `PolicyIntegrationTests.returnsOwnedMedicalPolicyWithClientAsInsured` | API/integración | Póliza médica y cliente como persona asegurada | Aprobada |
+| `PolicyIntegrationTests.hidesPolicyFromAnotherClient` | Autorización/integración | Ocultamiento mediante `policyId + clientId` | Aprobada |
+| `PolicyIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para identificador inexistente | Aprobada |
+| `PolicyIntegrationTests.rejectsPolicyQueryWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar pólizas | Aprobada |
 
-Última ejecución confirmada: **36 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **41 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -156,6 +161,12 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Pago con saldo exacto | Prueba de límite E2E | Aprobado; emite póliza y deja saldo en cero |
 | Doble envío del formulario de pago | Regresión de idempotencia | Aprobado; bloquea el botón y genera una sola póliza |
 | Validaciones locales de pago | Regresión manual | Aprobadas; fecha, PAN, vencimiento, CVV y términos |
+| Póliza recién emitida con datos persistidos | E2E parcial React–Spring–Oracle | Aprobada; muestra folio, estado, asegurado, pago y documentos |
+| Recarga y acceso directo a póliza | Persistencia y navegación | Aprobados; reconstruyen la pantalla mediante la API |
+| Consulta persistente de póliza médica | E2E parcial React–Spring–Oracle | Aprobada; muestra producto, cobertura y persona asegurada |
+| Póliza inexistente | Integración de error React–Spring | Aprobada; presenta el `404` dentro de React y permite reintentar |
+| Retorno a póliza después de autenticarse | Regresión de navegación protegida | Aprobado; conserva la URL solicitada |
+| Metadatos de documentos persistidos | Integración manual | Aprobados; ambos documentos provienen de Oracle y anuncian la descarga pendiente |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -164,6 +175,7 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 - La primera prueba del catálogo asumía un orden semántico distinto al orden real de las identidades. Se corrigió para verificar los registros y el orden por ID sin imponer significado comercial a la PK.
 - La validación inicial del login rechazaba con `422` un correo con espacios exteriores antes de normalizarlo. La limpieza se trasladó al constructor del DTO y las 16 pruebas aprobaron.
 - El proxy inicial de Vite no reenviaba `/cotizaciones` y producía un `404` al crear una cotización. Al agregarlo, también interceptaba la recarga de la ruta SPA `/cotizaciones/:id`; se separaron las llamadas técnicas bajo `/api` con reescritura hacia Spring Boot.
+- La prueba de saldo exacto dependía del saldo inicial del seed y falló después de una demostración manual. Se aisló preparando $1,040 dentro de la propia transacción; el rollback restaura el estado anterior.
 
 ## Pendientes de prueba
 

@@ -112,6 +112,9 @@ class PaymentIntegrationTests {
 
 	@Test
 	void acceptsExactBalanceAndLeavesItAtZero() throws Exception {
+		jdbcTemplate.update(
+			"update instrumento_pago_prueba set saldo_disponible = 1040 where ultimos_cuatro = '6666'"
+		);
 		pay(createApprovedAutoQuote(), "4242424242426666", "123", UUID.randomUUID().toString())
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.status").value("APROBADO"));

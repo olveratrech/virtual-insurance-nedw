@@ -21,11 +21,11 @@
 | Modelo relacional | Aprobado para NEDW | Tablas, relaciones, cardinalidades, estados, pagos y cancelaciones definidos en `docs/MODELO-RELACIONAL-NEDW.md`. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
-| Frontend React | Pagos aprobados | Registro, autenticación, cotizaciones, pasarela académica y emisión visual de póliza consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Pagos aprobados | Las 36 pruebas pasan; cotizaciones, pasarela, saldos, idempotencia, emisión, propiedad y seguridad están verificados. |
+| Frontend React | Pólizas aprobadas | Registro, autenticación, cotizaciones, pagos, emisión y consulta persistente de pólizas consumen la API real y fueron verificados manualmente. |
+| Backend Spring Boot | Pólizas aprobadas | Las 41 pruebas pasan; cotizaciones, pagos, emisión, consulta por propietario y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
-| Integración completa | En curso | Registro, autenticación, cotizaciones, pago y emisión están integrados; faltan consulta persistente de pólizas, descarga de documentos y cancelaciones reales. |
-| Pruebas | Parciales aprobadas | Oracle, 36 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones y pagos están aprobados. |
+| Integración completa | En curso | Registro, autenticación, cotizaciones, pago, emisión y consulta de pólizas están integrados; faltan descarga de documentos y cancelaciones reales. |
+| Pruebas | Parciales aprobadas | Oracle, 41 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones y pagos están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Integrar la consulta persistente de pólizas para conservar el resultado después de recargar o acceder mediante su URL.
+Integrar la descarga protegida de los documentos PDF almacenados en Oracle.
 
 ## Bitácora breve
 
@@ -309,4 +309,7 @@ Integrar la consulta persistente de pólizas para conservar el resultado despué
 | 20/11/2026 | Se preparó la integración real de pagos. | Pasarela académica con seis instrumentos, saldos, bloqueo, idempotencia, AES-GCM, intentos, emisión transaccional, póliza, documentos, diez pruebas Spring y frontend real compilan correctamente. | Ejecutar DDL, seed y prueba Oracle; después ejecutar las 36 pruebas Spring. |
 | 20/11/2026 | Se verificó la pasarela en Oracle y Spring. | El DDL, los seis instrumentos y la prueba Oracle fueron correctos; las 36 pruebas Spring terminaron sin fallos, errores ni omisiones. | Ejecutar los recorridos manuales de pago desde React. |
 | 20/11/2026 | Se verificó el pago real desde React. | Aprobación, fondos insuficientes, bloqueo, rechazo del procesador, CVV incorrecto, instrumento desconocido, saldo exacto, doble envío y validaciones locales pasaron correctamente. | Registrar el incremento e integrar la consulta persistente de pólizas. |
+| 20/11/2026 | Se preparó la consulta persistente de pólizas. | DTO anidado, proyección de lectura, autorización por propietario, endpoint, cinco pruebas y página React con carga, error y reintento pasan compilación, `lint` y `build`. | Ejecutar las 41 pruebas con las credenciales locales y realizar el recorrido manual. |
+| 20/11/2026 | Se verificó el backend de consulta de pólizas. | Las cinco pruebas nuevas y la suite completa de 41 terminaron sin fallos, errores ni omisiones; la prueba de saldo exacto quedó aislada del uso manual previo. | Verificar recarga, acceso directo y errores desde React. |
+| 20/11/2026 | Se verificó la consulta persistente desde React. | Pólizas recién emitidas, recarga, acceso directo, producto médico, identificador inexistente, recuperación de sesión y metadatos de documentos pasaron correctamente. | Registrar el incremento e integrar la descarga protegida de documentos. |
 
