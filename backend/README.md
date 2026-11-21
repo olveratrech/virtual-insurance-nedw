@@ -100,3 +100,17 @@ Login y logout requieren el encabezado CSRF. `POST /auth/logout` invalida la ses
 Las pruebas que cargan el contexto requieren que `VI_DB_PASSWORD` esté disponible y que Oracle sea accesible.
 
 El nombre, tipo, alcance y último resultado confirmado de cada prueba se encuentran en el [registro consolidado de pruebas](../docs/PRUEBAS.md).
+
+## Cotizaciones
+
+Las rutas de cotización requieren sesión y CSRF para las operaciones de escritura:
+
+```text
+POST /cotizaciones/auto
+POST /cotizaciones/medicas
+GET  /cotizaciones/{quoteId}
+```
+
+Las reglas de auto y médico se encuentran en estrategias separadas. Una creación persiste la cotización, su único subtipo y el historial inicial dentro de una transacción. La consulta combina `quoteId` con el cliente autenticado y responde `404` cuando el recurso no existe o pertenece a otra cuenta.
+
+Los costos son valores académicos fijos por producto; no representan un cálculo actuarial ni una oferta comercial real.

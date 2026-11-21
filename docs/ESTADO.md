@@ -22,7 +22,7 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
 | Frontend React | Registro y login reales aprobados | Catálogo, multipart, fotografía opcional, sesión, errores, rutas protegidas y logout fueron verificados con Oracle. |
-| Backend Spring Boot | Registro y autenticación aprobados | Las 17 pruebas automatizadas pasan; fotografía opcional, login, sesión y logout están verificados. |
+| Backend Spring Boot | Cotizaciones aprobadas | Las 26 pruebas y el recorrido HTTP pasan; Strategy, persistencia, historial, propiedad y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
 | Integración completa | No iniciada | Depende del frontend, API y esquema Oracle. |
 | Pruebas | E2E de Oracle aprobada | Los cinco incrementos y seis recorridos integrales terminaron correctamente, con controles negativos y rollback sin residuos; faltan pruebas de aplicación. |
@@ -240,7 +240,7 @@
 
 ## Próxima acción
 
-Implementar en Spring el recorrido de cotizaciones con entidades, DTO, Repository, Service Layer y Strategy por producto.
+Integrar en React la creación y consulta real de cotizaciones, sustituyendo `quoteRules.js` y los resultados simulados.
 
 ## Bitácora breve
 
@@ -309,4 +309,7 @@ Implementar en Spring el recorrido de cotizaciones con entidades, DTO, Repositor
 | 20/11/2026 | Se documentaron los patrones de diseño y arquitectura. | Patrones implementados, planificados, ubicaciones, límites y criterios quedaron diferenciados sin atribuir mecanismos internos del framework como implementaciones propias. | Mantener el inventario al implementar Strategy o transiciones de estado. |
 | 20/11/2026 | Se preparó la numeración concurrente de cotizaciones. | El DDL crea de forma idempotente una secuencia de cuatro dígitos separada de los seeds y la prueba valida configuración y `NEXTVAL`. | Ejecutar dos veces el esquema de cotizaciones y después su prueba. |
 | 20/11/2026 | Se verificó la numeración de cotizaciones en Oracle. | La secuencia se creó, la repetición la conservó y `NEXTVAL` quedó operativo sin alterar seeds, subtipos, historiales ni triggers. | Registrar el incremento e implementar el backend de cotizaciones. |
+| 20/11/2026 | Se preparó el backend de cotizaciones. | Entidades, repositorios, DTO, estrategias, Service Layer, propiedad, endpoints y nueve pruebas compilan con `BUILD SUCCESS`. | Ejecutar las 26 pruebas contra Oracle antes de aprobar Strategy. |
+| 20/11/2026 | Se ejecutaron las pruebas del backend de cotizaciones. | Las 26 pruebas pasaron; ambos Strategy, subtipos, historial, secuencia, validación, sesión y propiedad funcionan contra Oracle. | Realizar una comprobación HTTP manual antes del commit. |
+| 20/11/2026 | Se verificó manualmente la API de cotizaciones. | Auto aprobado y médica rechazada respondieron `201`, la consulta propia `200` y la consulta sin sesión `401`, con datos persistidos coherentes. | Registrar el incremento e integrar las cotizaciones en React. |
 

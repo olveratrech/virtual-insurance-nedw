@@ -19,7 +19,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Provider / Context | Frontend | Implementado | Compartir la sesión autenticada sin prop drilling |
 | Facade de servicios | Frontend | Implementado | Ocultar `fetch`, cookies, CSRF, multipart y rutas HTTP |
 | Route Guard | Frontend | Implementado | Impedir acceso visual a rutas que requieren sesión |
-| Strategy | Backend | Planificado | Separar reglas de cotización de auto y médica |
+| Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
 | State simplificado | Backend y Oracle | Planificado | Controlar transiciones válidas de estados comerciales |
 
 ## Flujo arquitectónico actual
@@ -161,13 +161,15 @@ AuthenticationService
 
 **Límite:** esta protección mejora la navegación, pero no sustituye la autorización del backend. Spring debe validar siempre al propietario del recurso.
 
+## Strategy para cotizaciones
+
+Auto y médico comparten el caso de uso de cotización, pero tienen datos y reglas diferentes. Se implementó una estrategia por producto detrás de un servicio coordinador común.
+
+`QuoteStrategy<T>` define la evaluación común. `AutoQuoteStrategy` y `MedicalQuoteStrategy` producen una `QuoteDecision` sin depender de HTTP, sesión o persistencia; `QuoteService` coordina la transacción y el subtipo. Las pruebas cubren decisiones aprobadas y rechazadas de ambas estrategias.
+
+No se crean estrategias adicionales para reglas idénticas.
+
 ## Patrones planificados
-
-### Strategy para cotizaciones
-
-Auto y médico comparten el caso de uso de cotización, pero tienen datos y reglas diferentes. Se prevé una estrategia por producto detrás de un servicio coordinador común.
-
-Solo se marcará como implementado cuando existan interfaces, estrategias concretas y pruebas que demuestren la selección correcta. No se crearán estrategias para reglas idénticas.
 
 ### State simplificado para estados comerciales
 

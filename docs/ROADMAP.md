@@ -129,7 +129,7 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Crear el proyecto Spring Boot dentro de `backend/`.
 - [x] Configurar la conexión con Oracle.
 - [ ] Crear entidades, DTO, repositorios, servicios y controladores.
-- [ ] Implementar Strategy para cotizaciones de auto y médicas.
+- [x] Implementar Strategy para cotizaciones de auto y médicas.
 - [ ] Implementar transiciones válidas de estados.
 - [ ] Rechazar solicitudes de cancelación duplicadas cuando ya exista una pendiente.
 - [x] Configurar registro, autenticación y autorización inicial con Spring Security.

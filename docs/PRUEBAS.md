@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 5 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 17 pruebas automatizadas | 17 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 26 pruebas automatizadas | 26 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación real y recorridos funcionales | Aprobado; autenticación integrada y módulos comerciales todavía simulados |
 
@@ -64,8 +64,17 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `AuthenticationIntegrationTests.normalizesEmailBeforeAuthentication` | Autenticación/integración | Eliminación de espacios y normalización de mayúsculas del correo | Aprobada |
 | `AuthenticationIntegrationTests.logsOutAndInvalidatesSession` | Sesión/integración | Logout, invalidación de sesión y eliminación de `JSESSIONID` | Aprobada |
 | `AuthenticationIntegrationTests.rejectsSessionCheckAfterLogout` | Seguridad/integración | Rechazo de consulta de sesión después del logout | Aprobada |
+| `QuoteIntegrationTests.createsApprovedAutoQuoteWithSubtypeAndHistory` | API/integración | Strategy de auto, costo, subtipo, historial y consulta posterior | Aprobada |
+| `QuoteIntegrationTests.rejectsAutoQuoteWithTwelveNegativePoints` | Regla de negocio/integración | Rechazo de auto por 12 puntos y costo nulo | Aprobada |
+| `QuoteIntegrationTests.rejectsAutoQuoteWithCriminalRecord` | Regla de negocio/integración | Rechazo de auto por antecedentes | Aprobada |
+| `QuoteIntegrationTests.createsApprovedMedicalQuoteWithSubtypeAndHistory` | API/integración | Strategy médica, costo, subtipo e historial | Aprobada |
+| `QuoteIntegrationTests.rejectsMedicalQuoteWithThreeActiveFactors` | Regla de negocio/integración | Rechazo médico por tres factores | Aprobada |
+| `QuoteIntegrationTests.rejectsMedicalQuoteWhenAgeIsAboveSeventy` | Regla de negocio/integración | Rechazo médico por edad | Aprobada |
+| `QuoteIntegrationTests.rejectsVehicleYearAfterNextCalendarYear` | Validación/integración | Rechazo de año posterior al siguiente calendario | Aprobada |
+| `QuoteIntegrationTests.rejectsQuoteCreationWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para crear cotizaciones | Aprobada |
+| `QuoteIntegrationTests.hidesQuoteFromAnotherClient` | Autorización/integración | Ocultamiento mediante `quoteId + clientId` | Aprobada |
 
-Última ejecución confirmada: **17 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **26 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -80,6 +89,10 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `POST /auth/login` con cuenta académica y CSRF | Autenticación HTTP | `200`, datos básicos y sesión autenticada |
 | `POST /auth/logout` con sesión y CSRF | Seguridad HTTP | `204`, cuerpo vacío y expiración de `JSESSIONID` |
 | `GET /auth/me` después del logout | Regresión de sesión HTTP | `401`; la sesión anterior dejó de autenticar |
+| `POST /cotizaciones/auto` con sesión y CSRF | E2E parcial HTTP | `201`, auto aprobado, costos y datos normalizados |
+| `POST /cotizaciones/medicas` con sesión y CSRF | E2E parcial HTTP | `201`, médica rechazada, costos nulos y motivo público |
+| `GET /cotizaciones/{quoteId}` con propietario | Integración HTTP | `200`, devuelve los datos persistidos |
+| `GET /cotizaciones/{quoteId}` sin sesión | Seguridad HTTP | `401` |
 
 No se registran contraseñas, tokens CSRF, identificadores de sesión ni otros secretos como evidencia.
 
