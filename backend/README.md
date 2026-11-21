@@ -134,4 +134,10 @@ Un rechazo de negocio también responde `201` y conserva el intento, pero no des
 
 `GET /polizas/{policyId}` requiere sesión y combina la póliza con su cotización, cliente, último pago y metadatos de documentos. La consulta siempre incluye `policyId + clientId`; una póliza inexistente o ajena responde el mismo `404 POLICY_NOT_FOUND`.
 
-La respuesta no incluye BLOB, factura JSON/XML, número de tarjeta ni CVV. Los documentos exponen solamente identificador, tipo, nombre y la ruta protegida que se implementará para su descarga.
+La respuesta no incluye BLOB, factura JSON/XML, número de tarjeta ni CVV. Los documentos exponen solamente identificador, tipo, nombre y una ruta de descarga protegida por sesión y propiedad.
+
+## Documentos PDF
+
+`GET /polizas/{policyId}/documentos/{documentId}/contenido` entrega únicamente documentos pertenecientes al cliente autenticado. Responde `application/pdf`, `Content-Disposition: attachment` y `Cache-Control: no-store`.
+
+Apache PDFBox genera una póliza contractual académica y un comprobante de pago real. Los datos variables provienen de Oracle y los textos editables se concentran en `AcademicContractContent`; su versión inicial es `NEDW-2026.1`. Cada descarga regenera y actualiza el BLOB, por lo que las pólizas anteriores adoptan la plantilla vigente sin exponer una operación destructiva.

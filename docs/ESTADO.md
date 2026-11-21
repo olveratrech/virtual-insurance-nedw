@@ -22,10 +22,10 @@
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Esquema mínimo verificado | Todos los módulos están desplegados y probados; `CLIENTE.FOTO` es opcional y la migración es idempotente. |
 | Frontend React | Pólizas aprobadas | Registro, autenticación, cotizaciones, pagos, emisión y consulta persistente de pólizas consumen la API real y fueron verificados manualmente. |
-| Backend Spring Boot | Pólizas aprobadas | Las 41 pruebas pasan; cotizaciones, pagos, emisión, consulta por propietario y seguridad están verificados. |
+| Backend Spring Boot | Documentos aprobados | Las 46 pruebas pasan; cotizaciones, pagos, emisión, consulta por propietario, PDFs y seguridad están verificados. |
 | Spring Security | Autenticación verificada | CSRF, BCrypt, sesión, errores genéricos, login, logout e invalidación de cookie fueron verificados. |
-| Integración completa | En curso | Registro, autenticación, cotizaciones, pago, emisión y consulta de pólizas están integrados; faltan descarga de documentos y cancelaciones reales. |
-| Pruebas | Parciales aprobadas | Oracle, 41 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones y pagos están aprobados. |
+| Integración completa | En curso | Registro, autenticación, cotizaciones, pago, emisión, consulta de pólizas y descarga protegida de documentos están integrados; faltan cancelaciones reales. |
+| Pruebas | Parciales aprobadas | Oracle, 46 pruebas de Spring, API HTTP y recorridos React–Spring de autenticación, registro, cotizaciones, pagos, pólizas y PDFs están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -94,7 +94,8 @@
 - `PolicyPage` implementa el detalle de póliza mediante el parámetro dinámico `:polizaId`.
 - `PolicyDetails`, `PaymentOverview` y `DocumentList` separan información contractual, pagos y documentos.
 - `policyData.js` contiene pólizas ficticias diferenciadas para auto y seguro médico.
-- La descarga de documentos está simulada y no genera todavía archivos PDF reales.
+- `DocumentList` descarga pólizas y comprobantes PDF reales mediante una ruta protegida.
+- Los PDF se regeneran con una plantilla académica versionable e incluyen datos específicos de auto, como placas, y modalidades presentadas en español.
 - `CancellationPage` implementa la solicitud y la confirmación sin cancelar inmediatamente la cobertura.
 - `CancellationForm` valida motivo, fecha, comentarios y aceptación del proceso.
 - `cancellationRules.js` genera un folio y el estado temporal `CANCELLATION_REQUESTED`.
@@ -112,8 +113,7 @@
 
 #### Pendientes del frontend
 
-- Sustituir progresivamente los mocks restantes de consulta de pólizas, documentos y cancelaciones por servicios HTTP.
-- Generar pólizas y comprobantes PDF reales desde el backend.
+- Sustituir los mocks restantes de cancelaciones por servicios HTTP.
 - Validar en el backend que una póliza con cancelación pendiente no acepte solicitudes duplicadas; la interfaz ya oculta la acción, pero no constituye una medida de seguridad.
 - Revisar visualmente la aplicación en el navegador y comparar con Figma.
 - Los valores capturados se conservan cuando el usuario selecciona “Revisar datos” desde una cotización rechazada.
@@ -132,7 +132,7 @@
 - Proteger pagos y pólizas mediante recursos reales asociados al cliente autenticado.
 - Sustituir los archivos de `mocks/` por servicios y adaptadores HTTP cuando corresponda.
 - Impedir desde el backend accesos a pólizas de otros clientes y operaciones duplicadas.
-- Generar y descargar documentos reales.
+- Corrección terminada: generar, autorizar y descargar documentos PDF reales.
 
 ### Calidad pendiente
 
@@ -232,7 +232,7 @@
 
 ## Próxima acción
 
-Integrar la descarga protegida de los documentos PDF almacenados en Oracle.
+Integrar las solicitudes de cancelación de React con Spring Boot y Oracle, incluida la prevención de duplicados en el backend.
 
 ## Bitácora breve
 
@@ -312,4 +312,6 @@ Integrar la descarga protegida de los documentos PDF almacenados en Oracle.
 | 20/11/2026 | Se preparó la consulta persistente de pólizas. | DTO anidado, proyección de lectura, autorización por propietario, endpoint, cinco pruebas y página React con carga, error y reintento pasan compilación, `lint` y `build`. | Ejecutar las 41 pruebas con las credenciales locales y realizar el recorrido manual. |
 | 20/11/2026 | Se verificó el backend de consulta de pólizas. | Las cinco pruebas nuevas y la suite completa de 41 terminaron sin fallos, errores ni omisiones; la prueba de saldo exacto quedó aislada del uso manual previo. | Verificar recarga, acceso directo y errores desde React. |
 | 20/11/2026 | Se verificó la consulta persistente desde React. | Pólizas recién emitidas, recarga, acceso directo, producto médico, identificador inexistente, recuperación de sesión y metadatos de documentos pasaron correctamente. | Registrar el incremento e integrar la descarga protegida de documentos. |
+| 20/11/2026 | Se preparó la descarga protegida de documentos. | PDFBox, plantilla contractual versionable, regeneración de BLOB, autorización compuesta, encabezados seguros, descarga React y cinco pruebas nuevas pasan compilación, `lint` y `build`. | Ejecutar las 46 pruebas y revisar manualmente ambos PDFs. |
+| 20/11/2026 | Se verificó la descarga protegida de documentos. | Las 46 pruebas pasaron y React descargó póliza y comprobante reales; se corrigieron placas faltantes y modalidades técnicas para mostrarlas en español. | Registrar el incremento e integrar cancelaciones reales. |
 

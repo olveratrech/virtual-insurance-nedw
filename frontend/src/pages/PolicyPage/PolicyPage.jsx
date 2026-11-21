@@ -4,13 +4,14 @@ import DocumentList from '../../components/policy/DocumentList/DocumentList.jsx'
 import PaymentOverview from '../../components/policy/PaymentOverview/PaymentOverview.jsx'
 import PolicyDetails from '../../components/policy/PolicyDetails/PolicyDetails.jsx'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
-import { getPolicy } from '../../services/policyApi.js'
+import { downloadPolicyDocument, getPolicy } from '../../services/policyApi.js'
 import './PolicyPage.css'
 
 function PolicyPage() {
   const { polizaId } = useParams()
   const location = useLocation()
   const [downloadMessage, setDownloadMessage] = useState('')
+  const [downloadingId, setDownloadingId] = useState(null)
   const [policy, setPolicy] = useState(location.state?.policy ?? null)
   const [status, setStatus] = useState(policy ? 'ready' : 'loading')
   const [error, setError] = useState('')
@@ -61,8 +62,25 @@ function PolicyPage() {
     )
   }
 
-  function handleDownload(document) {
-    setDownloadMessage(`${document.name} ya existe en Oracle. La descarga protegida se integrará en el siguiente incremento.`)
+  async function handleDownload(document) {
+    setDownloadingId(document.id)
+    setDownloadMessage('')
+    try {
+      const { blob, filename } = await downloadPolicyDocument(document.downloadUrl)
+      const objectUrl = URL.createObjectURL(blob)
+      const link = window.document.createElement('a')
+      link.href = objectUrl
+      link.download = filename
+      window.document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000)
+      setDownloadMessage(`${document.name} se descargó correctamente.`)
+    } catch (requestError) {
+      setDownloadMessage(requestError.message)
+    } finally {
+      setDownloadingId(null)
+    }
   }
 
   return (
@@ -84,7 +102,7 @@ function PolicyPage() {
         <PaymentOverview policy={policy} />
       </div>
 
-      <DocumentList documents={policy.documents} onDownload={handleDownload} />
+      <DocumentList documents={policy.documents} onDownload={handleDownload} downloadingId={downloadingId} />
       {downloadMessage && <p className="prototype-notice" role="status">{downloadMessage}</p>}
 
       <div className="policy-page__actions">

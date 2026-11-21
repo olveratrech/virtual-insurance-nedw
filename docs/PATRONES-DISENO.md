@@ -21,6 +21,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Route Guard | Frontend | Implementado | Impedir acceso visual a rutas que requieren sesión |
 | Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
 | Ports and Adapters | Backend | Implementado | Aislar el caso de uso de pago de la pasarela académica |
+| Template | Backend | Implementado | Separar textos contractuales editables de la generación PDF |
 | State simplificado | Backend y Oracle | Planificado | Controlar transiciones válidas de estados comerciales |
 
 ## Flujo arquitectónico actual
@@ -175,6 +176,12 @@ No se crean estrategias adicionales para reglas idénticas.
 `PaymentGateway` es el puerto requerido por el caso de uso y `SimulatedPaymentGateway` es el adaptador que consulta el procesador ficticio en Oracle. `PaymentService` depende del contrato, no de la implementación concreta, por lo que una pasarela externa podría sustituir al simulador sin mover sus detalles al controlador ni al frontend.
 
 La abstracción no oculta la transacción: el servicio coordina idempotencia, intento, débito, póliza, historial y documentos. Las respuestas del procesador se representan con `GatewayPaymentResult` y nunca exponen el número completo ni el CVV.
+
+## Plantilla de documentos
+
+`PolicyDocumentGenerator` define la composición visual común de los PDFs y `AcademicContractContent` concentra las secciones contractuales editables y su versión. `PolicyPdfData` transporta exclusivamente los valores variables obtenidos de Oracle.
+
+Esta separación permite incorporar después exclusiones, anexos, condiciones generales o textos revisados académicamente sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
 
 ## Patrones planificados
 

@@ -639,6 +639,20 @@ Cuando existe una solicitud pendiente:
 }
 ```
 
+### `GET /polizas/{policyId}/documentos/{documentId}/contenido`
+
+Descarga un documento si póliza, documento y cliente autenticado coinciden. Una combinación inexistente o ajena responde `404 POLICY_DOCUMENT_NOT_FOUND` para no revelar recursos de otras cuentas.
+
+Respuesta `200`:
+
+```text
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="poliza-VI-2026-001000.pdf"
+Cache-Control: no-store
+```
+
+El cuerpo contiene un PDF generado desde los datos persistidos. La póliza incluye identificación, asegurado, vigencia, costo, cobertura y secciones contractuales académicas versionables; el comprobante incluye importe y autorización simulada. Ninguno contiene PAN, CVV, contraseña o identificador de sesión.
+
 La representación anterior muestra únicamente los campos que cambian; la respuesta real conserva todos los campos del detalle.
 
 Una póliza ajena o inexistente responde `404`.

@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 6 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 41 pruebas automatizadas | 41 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 46 pruebas automatizadas | 46 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -89,8 +89,13 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PolicyIntegrationTests.hidesPolicyFromAnotherClient` | Autorización/integración | Ocultamiento mediante `policyId + clientId` | Aprobada |
 | `PolicyIntegrationTests.returnsNotFoundForUnknownPolicy` | Error/integración | `404 POLICY_NOT_FOUND` para identificador inexistente | Aprobada |
 | `PolicyIntegrationTests.rejectsPolicyQueryWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar pólizas | Aprobada |
+| `PolicyIntegrationTests.downloadsOwnedPolicyAsRealPdfWithPolicyData` | PDF/integración | PDF válido con datos de póliza, placas, modalidad localizada y plantilla contractual | Aprobada |
+| `PolicyIntegrationTests.downloadsOwnedPaymentReceiptAsRealPdf` | PDF/integración | Comprobante válido con importe y autorización académica | Aprobada |
+| `PolicyIntegrationTests.hidesDocumentFromAnotherClient` | Autorización/integración | Un cliente no puede descargar documentos ajenos | Aprobada |
+| `PolicyIntegrationTests.returnsNotFoundForDocumentOutsidePolicy` | Autorización/integración | Se valida conjuntamente póliza y documento | Aprobada |
+| `PolicyIntegrationTests.rejectsDocumentDownloadWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para descargar | Aprobada |
 
-Última ejecución confirmada: **41 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **46 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
@@ -167,6 +172,8 @@ El frontend continúa utilizando datos simulados en los módulos que todavía no
 | Póliza inexistente | Integración de error React–Spring | Aprobada; presenta el `404` dentro de React y permite reintentar |
 | Retorno a póliza después de autenticarse | Regresión de navegación protegida | Aprobado; conserva la URL solicitada |
 | Metadatos de documentos persistidos | Integración manual | Aprobados; ambos documentos provienen de Oracle y anuncian la descarga pendiente |
+| Descarga de póliza y comprobante PDF | E2E parcial React–Spring–Oracle | Aprobada; ambos archivos abren correctamente y contienen datos persistidos |
+| Contenido PDF de póliza de auto | Regresión funcional y visual | Aprobado; incluye placas y muestra la modalidad como Mensual o Anual |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 

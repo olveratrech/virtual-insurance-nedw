@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 
 import mx.unam.virtualinsurance.customer.Client;
 import mx.unam.virtualinsurance.customer.ClientRepository;
+import mx.unam.virtualinsurance.document.PolicyDocumentService;
 import mx.unam.virtualinsurance.quote.Quote;
 import mx.unam.virtualinsurance.quote.QuoteRepository;
 import mx.unam.virtualinsurance.shared.error.ApiException;
@@ -33,6 +34,7 @@ public class PaymentService {
 	private final CardTypeRepository cardTypeRepository;
 	private final PaymentGateway paymentGateway;
 	private final CardCryptoService cardCryptoService;
+	private final PolicyDocumentService policyDocumentService;
 	private final JdbcTemplate jdbcTemplate;
 
 	public PaymentService(
@@ -45,6 +47,7 @@ public class PaymentService {
 		CardTypeRepository cardTypeRepository,
 		PaymentGateway paymentGateway,
 		CardCryptoService cardCryptoService,
+		PolicyDocumentService policyDocumentService,
 		JdbcTemplate jdbcTemplate
 	) {
 		this.quoteRepository = quoteRepository;
@@ -56,6 +59,7 @@ public class PaymentService {
 		this.cardTypeRepository = cardTypeRepository;
 		this.paymentGateway = paymentGateway;
 		this.cardCryptoService = cardCryptoService;
+		this.policyDocumentService = policyDocumentService;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -207,23 +211,9 @@ public class PaymentService {
 			Long.class,
 			attempt.getId()
 		);
-		byte[] policyPdf = createAcademicPdf("Poliza " + policyNumber);
-		insertDocument(policyId, "POLICY_PDF", "poliza-" + policyNumber + ".pdf", policyPdf);
-		insertDocument(policyId, "PAYMENT_RECEIPT", "comprobante-" + attempt.getPaymentNumber() + ".pdf", receipt);
+		policyDocumentService.generateAndStoreDocuments(policyId);
 
 		return new PolicyResult(policyId, policyNumber, coverageStart, coverageEnd);
-	}
-
-	private void insertDocument(Long policyId, String type, String filename, byte[] content) {
-		jdbcTemplate.update(
-			"""
-			insert into documento_poliza (
-			    poliza_id, tipo_documento, nombre_archivo, contenido,
-			    tipo_mime, fecha_generacion
-			) values (?, ?, ?, ?, 'application/pdf', systimestamp)
-			""",
-			policyId, type, filename, content
-		);
 	}
 
 	private PaymentResponse responseFromExisting(PaymentAttempt attempt, LocalDate requestedStart) {
