@@ -206,6 +206,19 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** cuenta del cliente navegable con resumen acotado e historiales completos obtenidos de Oracle.
 
+### Fase 5.5 — Autogestión del perfil
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Consultar el perfil completo del cliente autenticado.
+- [x] Editar nombre, apellidos y género bajo demanda.
+- [x] Proteger el cambio de correo con contraseña actual y unicidad.
+- [x] Cambiar, servir y eliminar fotografías JPEG o PNG validadas.
+- [x] Mantener nacimiento, sexo e identificador fiscal como identidad no editable.
+- [x] Actualizar la sesión y el encabezado después de guardar cambios.
+
+**Entregable:** perfil autogestionable con controles de identidad, fotografía y seguridad de correo.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre

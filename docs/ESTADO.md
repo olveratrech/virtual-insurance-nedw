@@ -21,11 +21,11 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Cuenta navegable verificada | Inicio, cotización, historiales de cotizaciones, pólizas y pagos, ayuda y perfil comparten navegación adaptable y datos persistidos. |
-| Backend Spring Boot | Historial de cuenta verificado | Las 93 pruebas pasan; el resumen limita la actividad a tres movimientos y el historial completo se separa por tipo y propietario. |
+| Frontend React | Perfil editable verificado | La cuenta permite editar datos personales, correo y fotografía con un modo de edición explícito mediante controles y botones. |
+| Backend Spring Boot | Perfil protegido verificado | Las 100 pruebas pasan; los cambios de correo exigen contraseña y los datos contractuales permanecen inmutables. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 93 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
+| Pruebas | Parciales aprobadas | Oracle, 100 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -82,6 +82,8 @@
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
 - `AccountHistoryPage` presenta el historial completo y separado de cotizaciones, pólizas y pagos con carga, error, reintento y estado vacío.
 - `QuoteHubPage`, `HelpPage` y `ProfilePage` completan la elección de producto, orientación y consulta de identidad sin inventar operaciones no soportadas.
+- `ProfilePage` inicia con campos bloqueados, habilita la edición bajo demanda y activa el guardado después de modificar datos; nombre, apellidos, género, correo y fotografía consumen la API real.
+- El correo requiere confirmar la contraseña actual; nacimiento, sexo e identificador fiscal se conservan como datos no editables.
 - `panelApi.js` adapta el resumen y el historial real de cotizaciones, pólizas y pagos a los componentes compartidos.
 - `QuotePageLayout` comparte la estructura visual de ambas cotizaciones sin repetir avisos globales.
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
@@ -337,4 +339,5 @@ Ejecutar la estabilización final y preparar el recorrido de demostración de ex
 | 21/11/2026 | Se implementó y verificó el panel administrativo en React. | Acceso interno, sesión aislada, filtros, detalle, aprobación, rechazo, recarga, logout y diseño adaptable funcionan; la póliza cancelada se muestra en rojo, sin cobertura ni nueva acción de cancelación. | Completar la integración final del resultado administrativo en las vistas del cliente y documentos. |
 | 21/11/2026 | Se completó y verificó el ciclo administrativo de cancelaciones. | Las 85 pruebas, `lint`, `build` y los recorridos manuales aprobaron; la solicitud usa labels legibles y aprobación o rechazo aparecen en póliza, historial visible, panel y PDF regenerado. | Ejecutar estabilización final y preparar la demostración E2E. |
 | 21/11/2026 | Se completó y verificó la navegación de la cuenta del cliente. | Las 93 pruebas y los recorridos manuales aprobaron; Inicio muestra tres movimientos y Cotizaciones, Pólizas y Pagos conservan el historial completo, junto con Cotizar, Ayuda y Perfil. | Continuar con la lógica detallada de los nuevos paneles o la estabilización final. |
+| 21/11/2026 | Se implementó y verificó la edición protegida del perfil. | Las 100 pruebas y la revisión manual aprobaron; datos personales, correo y fotografía se actualizan, mientras nacimiento, sexo e identificador fiscal permanecen inmutables. | Continuar con los siguientes paneles o la estabilización final. |
 

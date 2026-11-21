@@ -166,6 +166,8 @@ AdminAuthenticationService
 
 El mismo criterio se aplica al área de cuenta: `AccountHistoryService` obtiene una proyección ordenada del repositorio y la separa por tipo de movimiento. `PanelService` reutiliza la misma transformación, pero limita el resultado a tres elementos. React consume ambos contratos mediante `panelApi.js` y reutiliza `AccountHistoryPage` para cotizaciones, pólizas y pagos, evitando tres implementaciones visuales equivalentes.
 
+`ProfileService` concentra normalización, campos editables, verificación BCrypt para el cambio de correo, unicidad y tratamiento de fotografía. `ProfileController` solo traduce HTTP y obtiene la identidad desde la sesión; `ProfilePage` replica validaciones de interacción, pero Spring conserva la autoridad sobre propiedad, credenciales y archivos.
+
 ### Route Guard
 
 **Problema:** una persona sin sesión no debe visualizar el panel del cliente.

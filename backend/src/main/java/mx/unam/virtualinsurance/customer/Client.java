@@ -132,4 +132,22 @@ public class Client {
 	public Gender getGender() {
 		return gender;
 	}
+
+	public void updateProfile(
+		String name,
+		String paternalSurname,
+		String maternalSurname,
+		String email,
+		Gender gender
+	) {
+		this.name = name;
+		this.paternalSurname = paternalSurname;
+		this.maternalSurname = maternalSurname;
+		this.email = email;
+		this.gender = gender;
+	}
+
+	public void updatePhoto(byte[] photo) {
+		this.photo = photo == null ? null : photo.clone();
+	}
 }

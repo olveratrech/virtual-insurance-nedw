@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 93 pruebas automatizadas | 93 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -142,8 +142,15 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.returnsEmptyActivityForClientWithoutOperations` | Caso vacío/integración | Nombre del cliente y lista vacía sin operaciones | Aprobada |
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
+| `ProfileIntegrationTests.returnsOwnedProfileWithContractualFields` | API/integración | Perfil propio con datos personales y contractuales | Aprobada |
+| `ProfileIntegrationTests.updatesEditableProfileFieldsWithoutChangingContractualIdentity` | Regla/integración | Actualización de datos editables sin alterar identidad contractual | Aprobada |
+| `ProfileIntegrationTests.requiresCurrentPasswordToChangeEmail` | Seguridad/integración | Contraseña actual obligatoria para cambiar correo | Aprobada |
+| `ProfileIntegrationTests.rejectsEmailOwnedByAnotherClient` | Unicidad/integración | Rechazo de correo perteneciente a otra cuenta | Aprobada |
+| `ProfileIntegrationTests.updatesAndServesValidatedProfilePhoto` | Archivo/integración | Validación, persistencia y lectura protegida de fotografía | Aprobada |
+| `ProfileIntegrationTests.deletesProfilePhoto` | Archivo/integración | Eliminación de fotografía y respuesta posterior `404` | Aprobada |
+| `ProfileIntegrationTests.protectsProfileWritesWithAuthenticationAndCsrf` | Seguridad/integración | Sesión y CSRF obligatorios para modificar el perfil | Aprobada |
 
-Última ejecución confirmada: **93 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **100 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 

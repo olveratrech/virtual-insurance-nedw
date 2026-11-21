@@ -73,7 +73,9 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/catalogos/generos", "/auth/csrf").permitAll()
 				.requestMatchers(HttpMethod.POST, "/auth/registro", "/auth/login", "/admin/auth/login").permitAll()
 				.requestMatchers("/admin/**").hasAnyRole("ADMIN", "CANCELLATION_REVIEWER")
-				.requestMatchers(HttpMethod.GET, "/auth/me", "/panel", "/cuenta/**").hasRole("CLIENT")
+				.requestMatchers(HttpMethod.GET, "/auth/me", "/panel", "/cuenta/**", "/clientes/me/foto").hasRole("CLIENT")
+				.requestMatchers(HttpMethod.PUT, "/cuenta/**").hasRole("CLIENT")
+				.requestMatchers(HttpMethod.DELETE, "/cuenta/**").hasRole("CLIENT")
 				.requestMatchers("/cotizaciones/**", "/polizas/**").hasRole("CLIENT")
 				.anyRequest().denyAll())
 			.logout(logout -> logout

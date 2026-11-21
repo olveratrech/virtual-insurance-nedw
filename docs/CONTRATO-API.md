@@ -473,6 +473,28 @@ Requiere autenticación de cliente. Devuelve todo el historial propio, ordenado 
 
 Cada elemento conserva el contrato de actividad de `GET /panel`. Una cotización enlaza con su resultado, una póliza con su detalle, un pago aprobado con la póliza emitida y un pago rechazado con la cotización relacionada. La consulta filtra por el cliente autenticado y nunca acepta un identificador de cliente desde la URL o el cuerpo.
 
+### `GET /cuenta/perfil`
+
+Devuelve nombre, apellidos, nacimiento, sexo, género, identificador fiscal, correo y `photoUrl` del cliente autenticado.
+
+### `PUT /cuenta/perfil`
+
+Requiere CSRF. Permite editar `name`, `paternalSurname`, `maternalSurname`, `genderId` y `email`. Si el correo cambia, `currentPassword` es obligatorio y debe coincidir con el hash BCrypt almacenado. Un correo ocupado responde `409 EMAIL_ALREADY_EXISTS`; una contraseña incorrecta responde `401 INVALID_CURRENT_PASSWORD`.
+
+Nacimiento, sexo e identificador fiscal no forman parte de la petición y no pueden modificarse mediante este endpoint.
+
+### `PUT /cuenta/perfil/fotografia`
+
+Requiere CSRF y `multipart/form-data` con la parte `photo`. Admite JPEG o PNG de hasta 2 MiB y valida la firma real del archivo.
+
+### `DELETE /cuenta/perfil/fotografia`
+
+Requiere CSRF. Elimina la fotografía del cliente autenticado.
+
+### `GET /clientes/me/foto`
+
+Devuelve la fotografía protegida con su tipo de contenido y sin caché. Si el cliente no tiene fotografía responde `404 PROFILE_PHOTO_NOT_FOUND`.
+
 ## 7. Cotizaciones
 
 ### Objeto de salida de cotización
