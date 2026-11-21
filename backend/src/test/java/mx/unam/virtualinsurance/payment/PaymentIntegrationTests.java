@@ -3,6 +3,7 @@ package mx.unam.virtualinsurance.payment;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -192,6 +193,54 @@ class PaymentIntegrationTests {
 	}
 
 	@Test
+	void rejectsSecondPaymentWithDifferentIdempotencyKeyAfterPolicyIssuance() throws Exception {
+		Long quoteId = createApprovedAutoQuote();
+		var initialBalance = balance("1111");
+
+		pay(quoteId, "4242424242421111", "123", UUID.randomUUID().toString())
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.status").value("APROBADO"));
+
+		pay(quoteId, "4242424242421111", "123", UUID.randomUUID().toString())
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.code").value("QUOTE_ALREADY_PAID"));
+
+		assertThat(count("select count(*) from intento_pago where cotizacion_id = ?", quoteId))
+			.isEqualTo(1);
+		assertThat(balance("1111"))
+			.isEqualByComparingTo(initialBalance.subtract(new java.math.BigDecimal("1040.00")));
+	}
+
+	@Test
+	void keepsQuoteConsumedWhenIssuedPolicyIsCancelled() throws Exception {
+		Long quoteId = createApprovedAutoQuote();
+		MvcResult firstPayment = pay(
+			quoteId,
+			"4242424242421111",
+			"123",
+			UUID.randomUUID().toString()
+		).andExpect(status().isCreated()).andReturn();
+		Number policyId = JsonPath.read(firstPayment.getResponse().getContentAsString(), "$.policyId");
+
+		updatePolicyStatus(policyId.longValue(), "CANCELACION_SOLICITADA");
+		updatePolicyStatus(policyId.longValue(), "CANCELADA");
+
+		mockMvc.perform(get("/cotizaciones/{quoteId}", quoteId)
+			.with(authenticatedAcademicClient()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.contracted").value(true))
+			.andExpect(jsonPath("$.policyId").value(policyId.longValue()))
+			.andExpect(jsonPath("$.policyStatus").value("CANCELADA"));
+
+		pay(quoteId, "4242424242421111", "123", UUID.randomUUID().toString())
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.code").value("QUOTE_ALREADY_PAID"));
+
+		assertThat(count("select count(*) from intento_pago where cotizacion_id = ?", quoteId))
+			.isEqualTo(1);
+	}
+
+	@Test
 	void rejectsPaymentWithoutAuthentication() throws Exception {
 		mockMvc.perform(post("/cotizaciones/1/intentos-pago")
 			.with(csrf())
@@ -311,6 +360,20 @@ class PaymentIntegrationTests {
 			"select saldo_disponible from instrumento_pago_prueba where ultimos_cuatro = ?",
 			java.math.BigDecimal.class,
 			lastFour
+		);
+	}
+
+	private void updatePolicyStatus(long policyId, String statusKey) {
+		jdbcTemplate.update(
+			"""
+			update poliza
+			   set estatus_poliza_id = (
+			       select estatus_poliza_id from estatus_poliza where clave = ?
+			   )
+			 where poliza_id = ?
+			""",
+			statusKey,
+			policyId
 		);
 	}
 

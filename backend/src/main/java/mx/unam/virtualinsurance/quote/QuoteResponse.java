@@ -19,6 +19,9 @@ public record QuoteResponse(
 	String currency,
 	List<String> benefits,
 	String rejectionReason,
+	boolean contracted,
+	Long policyId,
+	String policyStatus,
 	Object details
 ) {
 	public QuoteResponse {

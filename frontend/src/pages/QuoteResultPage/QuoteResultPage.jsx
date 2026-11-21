@@ -67,7 +67,7 @@ function QuoteResultPage() {
         <p className="eyebrow">Resultado de cotización</p>
         <StatusBadge tone={approved ? 'success' : 'danger'}>{quote.status}</StatusBadge>
         <h1>{approved ? 'Tu cotización fue aprobada' : 'No podemos ofrecer esta cobertura'}</h1>
-        <p>{approved ? 'Revisa la cobertura y el costo antes de continuar con la contratación.' : 'La evaluación encontró factores fuera de las reglas de aceptación.'}</p>
+        <p>{approved ? (quote.contracted ? 'Esta cotización ya fue contratada y conserva su póliza vinculada.' : 'Revisa la cobertura y el costo antes de continuar con la contratación.') : 'La evaluación encontró factores fuera de las reglas de aceptación.'}</p>
       </header>
 
       <section className={`quote-result-card quote-result-card--${approved ? 'approved' : 'rejected'}`}>
@@ -111,10 +111,14 @@ function QuoteResultPage() {
 
       <div className="quote-result-page__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
-        {approved ? (
+        {approved && quote.contracted ? (
+          <Link className="button button--primary" to={`/polizas/${quote.policyId}`}>
+            Ver póliza
+          </Link>
+        ) : approved ? (
           <Link
             className="button button--primary"
-            to="/contratacion/pago"
+            to={`/cotizaciones/${quote.id}/pago`}
             state={{ quoteId: quote.id, quoteType: quote.type, quote }}
           >
             Contratar seguro

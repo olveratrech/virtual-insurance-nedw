@@ -1,22 +1,44 @@
-import { useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import PaymentForm from '../../components/payment/PaymentForm/PaymentForm.jsx'
 import PaymentSummary from '../../components/payment/PaymentSummary/PaymentSummary.jsx'
-import { quoteResultData } from '../../mocks/quoteResultData.js'
 import { createPaymentAttempt } from '../../services/paymentApi.js'
+import { getQuote } from '../../services/quoteApi.js'
 import { formatMxn } from '../../utils/currency.js'
 import './PaymentPage.css'
 
 function PaymentPage() {
-  const location = useLocation()
+  const { quoteId } = useParams()
   const navigate = useNavigate()
+  const [quote, setQuote] = useState(null)
+  const [loadStatus, setLoadStatus] = useState('loading')
+  const [loadError, setLoadError] = useState('')
   const [paymentError, setPaymentError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const idempotencyKey = useRef(crypto.randomUUID())
-  const quoteType = location.state?.quoteType ?? 'AUTO'
-  const quote = location.state?.quote ?? quoteResultData[quoteType] ?? quoteResultData.AUTO
-  const quoteId = location.state?.quoteId ?? quote.id
-  const backDestination = quoteId ? `/cotizaciones/${quoteId}` : '/panel'
+  const backDestination = `/cotizaciones/${quoteId}`
+
+  useEffect(() => {
+    let active = true
+    setLoadStatus('loading')
+    setLoadError('')
+
+    getQuote(quoteId)
+      .then((response) => {
+        if (!active) return
+        setQuote(response)
+        setLoadStatus('ready')
+      })
+      .catch((requestError) => {
+        if (!active) return
+        setLoadError(requestError.message)
+        setLoadStatus('error')
+      })
+
+    return () => {
+      active = false
+    }
+  }, [quoteId])
 
   async function handlePay(values) {
     setPaymentError('')
@@ -42,13 +64,13 @@ function PaymentPage() {
       const policy = {
         policyNumber: result.policyNumber,
         status: 'ACTIVA',
-        type: quoteType,
+        type: quote.type,
         productName: quote.productName,
         coverageName: quote.coverageName,
         validFrom: new Date(`${result.coverageStart}T12:00:00`).toLocaleDateString('es-MX', { dateStyle: 'long' }),
         validUntil: new Date(`${result.coverageEnd}T12:00:00`).toLocaleDateString('es-MX', { dateStyle: 'long' }),
-        insuredLabel: quoteType === 'MEDICAL' ? 'Persona asegurada' : 'Vehículo asegurado',
-        insuredValue: quoteType === 'MEDICAL'
+        insuredLabel: quote.type === 'MEDICAL' ? 'Persona asegurada' : 'Vehículo asegurado',
+        insuredValue: quote.type === 'MEDICAL'
           ? 'Cliente autenticado'
           : `${quote.details.brand} ${quote.details.model} · ${quote.details.year}`,
         paymentMode: values.paymentMode === 'ANNUAL' ? 'Anual' : 'Mensual',
@@ -60,13 +82,51 @@ function PaymentPage() {
         ],
       }
       navigate(`/polizas/${result.policyId}`, {
-        state: { quoteType, quote, policy, payment: result },
+        state: { quoteType: quote.type, quote, policy, payment: result },
       })
     } catch (requestError) {
       setPaymentError(requestError.message)
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (loadStatus === 'loading') {
+    return <p className="payment-page page-container route-status" role="status">Verificando disponibilidad de la cotización…</p>
+  }
+
+  if (loadStatus === 'error') {
+    return (
+      <section className="payment-page page-container route-status" role="alert">
+        <h1>No fue posible preparar la contratación</h1>
+        <p>{loadError}</p>
+        <Link className="button button--secondary" to="/panel">Volver al panel</Link>
+      </section>
+    )
+  }
+
+  if (quote.contracted) {
+    return (
+      <section className="payment-page page-container route-status">
+        <p className="eyebrow">Contratación completada</p>
+        <h1>Esta cotización ya tiene una póliza</h1>
+        <p>Una cotización contratada no puede generar otro pago, aunque su póliza haya cambiado de estado.</p>
+        <div className="payment-form__actions">
+          <Link className="button button--secondary" to={backDestination}>Volver a la cotización</Link>
+          <Link className="button button--primary" to={`/polizas/${quote.policyId}`}>Ver póliza</Link>
+        </div>
+      </section>
+    )
+  }
+
+  if (quote.status !== 'APROBADA') {
+    return (
+      <section className="payment-page page-container route-status">
+        <h1>Esta cotización no está disponible para contratación</h1>
+        <p>Solo una cotización aprobada puede continuar al pago.</p>
+        <Link className="button button--secondary" to={backDestination}>Volver a la cotización</Link>
+      </section>
+    )
   }
 
   return (

@@ -11,6 +11,7 @@ import mx.unam.virtualinsurance.customer.ClientRepository;
 import mx.unam.virtualinsurance.shared.error.ApiException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class QuoteService {
 	private final ClientRepository clientRepository;
 	private final AutoQuoteStrategy autoQuoteStrategy;
 	private final MedicalQuoteStrategy medicalQuoteStrategy;
+	private final JdbcTemplate jdbcTemplate;
 
 	public QuoteService(
 		QuoteRepository quoteRepository,
@@ -37,7 +39,8 @@ public class QuoteService {
 		QuoteStatusRepository quoteStatusRepository,
 		ClientRepository clientRepository,
 		AutoQuoteStrategy autoQuoteStrategy,
-		MedicalQuoteStrategy medicalQuoteStrategy
+		MedicalQuoteStrategy medicalQuoteStrategy,
+		JdbcTemplate jdbcTemplate
 	) {
 		this.quoteRepository = quoteRepository;
 		this.autoQuoteRepository = autoQuoteRepository;
@@ -46,6 +49,7 @@ public class QuoteService {
 		this.clientRepository = clientRepository;
 		this.autoQuoteStrategy = autoQuoteStrategy;
 		this.medicalQuoteStrategy = medicalQuoteStrategy;
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@Transactional
@@ -151,6 +155,7 @@ public class QuoteService {
 		BigDecimal monthlyCost = annualCost == null
 			? null
 			: annualCost.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
+		ContractedPolicy contractedPolicy = findContractedPolicy(quote.getQuoteId());
 
 		return new QuoteResponse(
 			quote.getQuoteId(),
@@ -166,8 +171,28 @@ public class QuoteService {
 			"MXN",
 			decision.approved() ? decision.benefits() : java.util.List.of(),
 			decision.approved() ? null : decision.rejectionReason(),
+			contractedPolicy != null,
+			contractedPolicy == null ? null : contractedPolicy.policyId(),
+			contractedPolicy == null ? null : contractedPolicy.status(),
 			details
 		);
+	}
+
+	private ContractedPolicy findContractedPolicy(Long quoteId) {
+		return jdbcTemplate.query(
+			"""
+			select p.poliza_id, ep.clave
+			  from poliza p
+			  join intento_pago i on i.intento_pago_id = p.intento_pago_id
+			  join estatus_poliza ep on ep.estatus_poliza_id = p.estatus_poliza_id
+			 where i.cotizacion_id = ?
+			""",
+			(rs, rowNumber) -> new ContractedPolicy(rs.getLong("poliza_id"), rs.getString("clave")),
+			quoteId
+		).stream().findFirst().orElse(null);
+	}
+
+	private record ContractedPolicy(Long policyId, String status) {
 	}
 
 	private AutoQuoteDetails toDetails(AutoQuote quote) {

@@ -182,9 +182,11 @@ No se crean estrategias adicionales para reglas idénticas.
 
 ## Puerto y adaptador de pagos
 
-`PaymentGateway` es el puerto requerido por el caso de uso y `SimulatedPaymentGateway` es el adaptador que consulta el procesador ficticio en Oracle. `PaymentService` depende del contrato, no de la implementación concreta, por lo que una pasarela externa podría sustituir al simulador sin mover sus detalles al controlador ni al frontend.
+`PaymentGateway` es el puerto requerido por el caso de uso y `SimulatedPaymentGateway` es el adaptador que consulta el procesador controlado en Oracle. `PaymentService` depende del contrato, no de la implementación concreta, por lo que una pasarela externa podría sustituirlo sin mover sus detalles al controlador ni al frontend.
 
 La abstracción no oculta la transacción: el servicio coordina idempotencia, validación de la red mediante `CardBrand`, intento, débito, póliza, historial y documentos. `CardBrand` concentra prefijos, longitud y tamaño del código de seguridad para Visa, Mastercard y American Express; React replica estas reglas solo para respuesta inmediata y Spring conserva la autoridad. Las respuestas del procesador se representan con `GatewayPaymentResult` y nunca exponen el número completo ni el CVV.
+
+`QuoteService` proyecta la relación persistida con la póliza mediante `contracted`, `policyId` y `policyStatus`. React usa esa proyección para navegación y presentación, mientras `PaymentService` vuelve a consultar la existencia de la póliza dentro de la operación de pago y responde `QUOTE_ALREADY_PAID`; el estado de cancelación no habilita nuevamente la cotización.
 
 ## Plantilla de documentos
 

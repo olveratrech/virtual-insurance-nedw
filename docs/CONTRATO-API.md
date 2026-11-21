@@ -569,6 +569,20 @@ Respuesta `201`: objeto de cotización con `type: "MEDICAL"` y `details` médico
 
 Devuelve `200` con el objeto de cotización si pertenece al cliente autenticado. En otro caso responde `404`.
 
+Cuando la cotización ya produjo una póliza, la respuesta conserva esa relación aunque la póliza cambie de estado:
+
+```json
+{
+  "id": 1167,
+  "status": "APROBADA",
+  "contracted": true,
+  "policyId": 114,
+  "policyStatus": "CANCELADA"
+}
+```
+
+Una cotización nueva devuelve `contracted: false`, `policyId: null` y `policyStatus: null`. Estos campos permiten bloquear la contratación en React, pero no sustituyen la validación transaccional del endpoint de pago.
+
 ### `GET /cotizaciones?limit=20`
 
 Devuelve las cotizaciones del cliente autenticado, de la más reciente a la más antigua.
@@ -676,7 +690,7 @@ Respuesta rechazada `201`:
 
 El rechazo es un resultado de negocio, no una falla HTTP. Por eso también responde `201` y queda registrado.
 
-Si la cotización ya produjo una póliza responde `409` con `QUOTE_ALREADY_PAID`.
+Si la cotización ya produjo una póliza responde `409` con `QUOTE_ALREADY_PAID`. La regla considera la existencia de la póliza, no su estado: sigue aplicando para `ACTIVA`, `CANCELACION_SOLICITADA`, `CANCELADA` o `VENCIDA`.
 
 El saldo pertenece exclusivamente a `INSTRUMENTO_PAGO_PRUEBA`, que representa al banco simulado. No se devuelve por la API. El número ficticio se cifra con AES-GCM antes de almacenarse en `TARJETA`; el CVV no se persiste.
 

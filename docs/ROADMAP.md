@@ -187,12 +187,12 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 - [x] Incorporar selección y validación cruzada de Visa, Mastercard y American Express.
 - [x] Habilitar instrumentos controlados y repetibles para las tres redes.
-- [ ] Impedir visualmente un nuevo pago cuando la cotización ya produjo una póliza.
-- [ ] Verificar en API que una cotización pagada no pueda generar otro intento aprobado ni otra póliza.
-- [ ] Mantener el bloqueo aunque la póliza vinculada esté cancelada.
-- [ ] Cubrir navegación normal, recarga y acceso directo a la ruta de pago.
+- [x] Impedir visualmente un nuevo pago cuando la cotización ya produjo una póliza.
+- [x] Verificar en API que una cotización pagada no pueda generar otro intento aprobado ni otra póliza.
+- [x] Mantener el bloqueo aunque la póliza vinculada esté cancelada.
+- [x] Cubrir navegación normal, recarga y acceso directo a la ruta de pago.
 
-**Entregable parcial:** redes de tarjeta completas; pendiente cerrar definitivamente la reutilización de cotizaciones pagadas.
+**Entregable:** redes de tarjeta completas y cotizaciones contratadas consumidas de forma definitiva en React y Spring.
 
 ### Fase 6 — Pruebas, estabilización y entrega
 

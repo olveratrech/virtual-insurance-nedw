@@ -60,6 +60,9 @@ class QuoteIntegrationTests {
 			.andExpect(jsonPath("$.status").value("APROBADA"))
 			.andExpect(jsonPath("$.annualCost").value(12480.00))
 			.andExpect(jsonPath("$.monthlyCost").value(1040.00))
+			.andExpect(jsonPath("$.contracted").value(false))
+			.andExpect(jsonPath("$.policyId").value(org.hamcrest.Matchers.nullValue()))
+			.andExpect(jsonPath("$.policyStatus").value(org.hamcrest.Matchers.nullValue()))
 			.andExpect(jsonPath("$.quoteNumber").value(org.hamcrest.Matchers.matchesPattern("[1-9][0-9]{3}")))
 			.andExpect(jsonPath("$.details.plates").value("ABC123A"))
 			.andReturn();

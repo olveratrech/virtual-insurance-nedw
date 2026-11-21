@@ -9,7 +9,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 88 pruebas automatizadas | 88 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 90 pruebas automatizadas | 90 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
 
@@ -109,6 +109,8 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PaymentIntegrationTests.acceptsExactBalanceAndLeavesItAtZero` | Límite transaccional | Débito con saldo exacto sin producir saldo negativo | Aprobada |
 | `PaymentIntegrationTests.rejectsInvalidSecurityCodeWithoutStoringIt` | Seguridad | Rechazo de CVV y ausencia de columna persistente | Aprobada |
 | `PaymentIntegrationTests.repeatsIdempotentPaymentWithoutSecondDebitOrPolicy` | Idempotencia | Misma respuesta sin segundo débito ni póliza | Aprobada |
+| `PaymentIntegrationTests.rejectsSecondPaymentWithDifferentIdempotencyKeyAfterPolicyIssuance` | Unicidad transaccional | `409 QUOTE_ALREADY_PAID`, un solo intento, un solo débito y una sola póliza aunque cambie la clave | Aprobada |
+| `PaymentIntegrationTests.keepsQuoteConsumedWhenIssuedPolicyIsCancelled` | Regresión de estado | La cotización proyecta la póliza cancelada y conserva el bloqueo de pago | Aprobada |
 | `PaymentIntegrationTests.rejectsPaymentWithoutAuthentication` | Seguridad | Sesión obligatoria para pagar | Aprobada |
 | `PaymentIntegrationTests.validatesTermsBeforeCreatingAttempt` | Validación | Términos obligatorios antes de persistir | Aprobada |
 | `PolicyIntegrationTests.returnsOwnedAutoPolicyWithPaymentAndDocumentMetadata` | API/integración | Póliza de auto, pago, autorización y dos documentos | Aprobada |
@@ -138,7 +140,7 @@ Estas pruebas se ejecutan con `./mvnw test` y utilizan la instancia real de Orac
 | `PanelIntegrationTests.excludesActivityOwnedByAnotherClient` | Autorización/integración | Exclusión de actividad perteneciente a otro cliente | Aprobada |
 | `PanelIntegrationTests.rejectsPanelWithoutAuthentication` | Seguridad/integración | Sesión obligatoria para consultar el panel | Aprobada |
 
-Última ejecución confirmada: **88 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
+Última ejecución confirmada: **90 pruebas, 0 fallidas, 0 errores y 0 omitidas; `BUILD SUCCESS`**.
 
 ## API REST: comprobaciones manuales
 
