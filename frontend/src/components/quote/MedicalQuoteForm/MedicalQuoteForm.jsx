@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
+import { focusFirstInvalid, preventInvalidKey, replaceFromPaste, sanitizeNumeric } from '../../../utils/inputHygiene.js'
 import './MedicalQuoteForm.css'
 
 const defaultValues = { age: '', hypertension: false, glucoseOutOfRange: false, cholesterolOutOfRange: false, smoker: false, alcoholAddiction: false }
 
 function MedicalQuoteForm({ onEvaluate, initialValues }) {
+  const formRef = useRef(null)
   const [values, setValues] = useState(() => ({ ...defaultValues, ...initialValues }))
   const [errors, setErrors] = useState({})
   const [submitError, setSubmitError] = useState('')
@@ -14,7 +16,7 @@ function MedicalQuoteForm({ onEvaluate, initialValues }) {
 
   function updateField(event) {
     const { name, type, checked, value } = event.target
-    setValues((current) => ({ ...current, [name]: type === 'checkbox' ? checked : value }))
+    setValues((current) => ({ ...current, [name]: type === 'checkbox' ? checked : name === 'age' ? sanitizeNumeric(value, 3) : value }))
     setErrors((current) => ({ ...current, [name]: undefined }))
   }
 
@@ -24,7 +26,10 @@ function MedicalQuoteForm({ onEvaluate, initialValues }) {
     if (!values.age || Number(values.age) < 18 || Number(values.age) > 100) errorsFound.age = 'La edad debe estar entre 18 y 100 años.'
     setErrors(errorsFound)
     setSubmitError('')
-    if (Object.keys(errorsFound).length > 0) return
+    if (Object.keys(errorsFound).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
 
     const request = {
       age: Number(values.age),
@@ -54,12 +59,14 @@ function MedicalQuoteForm({ onEvaluate, initialValues }) {
     ['hypertension', 'Hipertensión'], ['glucoseOutOfRange', 'Glucosa fuera de rango'], ['cholesterolOutOfRange', 'Colesterol fuera de rango'], ['smoker', 'Tabaquismo'], ['alcoholAddiction', 'Adicción al alcohol'],
   ]
 
+  const hasErrors = Object.values(errors).some(Boolean)
+
   return (
-    <form className="quote-form" onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} className="quote-form" onSubmit={handleSubmit} noValidate>
       <fieldset className="quote-form__section">
         <legend>Información declarada del asegurado</legend>
         <div className="quote-form__grid">
-          <FormField id="medical-age" label="Edad del asegurado" name="age" type="number" min="18" max="100" value={values.age} onChange={updateField} error={errors.age} />
+          <FormField id="medical-age" label="Edad del asegurado" name="age" type="text" inputMode="numeric" maxLength="3" data-technical="true" value={values.age} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={(event) => replaceFromPaste(event, (value) => sanitizeNumeric(value, 3), (value) => { setValues((current) => ({ ...current, age: value })); setErrors((current) => ({ ...current, age: undefined })) })} error={errors.age} />
         </div>
         <div className="medical-risk-grid">
           {factors.map(([name, label]) => <CheckboxField key={name} id={`medical-${name}`} name={name} checked={values[name]} onChange={updateField} label={label} description="Selecciona únicamente si corresponde." />)}
@@ -68,7 +75,7 @@ function MedicalQuoteForm({ onEvaluate, initialValues }) {
       {submitError && <p className="quote-form__error" role="alert">{submitError}</p>}
       <div className="quote-form__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
-        <button className="button button--primary" type="submit" disabled={isSubmitting}>
+        <button className="button button--primary" type="submit" disabled={isSubmitting || hasErrors}>
           {isSubmitting ? 'Evaluando…' : 'Evaluar cotización'}
         </button>
       </div>

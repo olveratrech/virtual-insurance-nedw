@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import StatusBadge from '../../components/ui/StatusBadge/StatusBadge.jsx'
+import FlowSteps from '../../components/quote/FlowSteps/FlowSteps.jsx'
 import { getQuote } from '../../services/quoteApi.js'
 import { formatMxn, formatQuoteNumber } from '../../utils/currency.js'
 import './QuoteResultPage.css'
@@ -63,6 +64,7 @@ function QuoteResultPage() {
 
   return (
     <div className="quote-result-page page-container">
+      <FlowSteps current={2} />
       <header className="quote-result-page__heading">
         <p className="eyebrow">Resultado de cotización</p>
         <StatusBadge tone={approved ? 'success' : 'danger'}>{quote.status}</StatusBadge>
@@ -74,7 +76,7 @@ function QuoteResultPage() {
         <div className="quote-result-card__summary">
           <div>
             <span className="quote-result-card__label">Cotización</span>
-            <strong>{formatQuoteNumber(quote.quoteNumber)}</strong>
+            <strong className="technical-data">{formatQuoteNumber(quote.quoteNumber)}</strong>
           </div>
           <div>
             <span className="quote-result-card__label">Producto</span>
@@ -89,8 +91,8 @@ function QuoteResultPage() {
         {approved ? (
           <>
             <div className="quote-result-card__prices">
-              <div><span>Prima anual</span><strong>{formatMxn(quote.annualCost)}</strong></div>
-              <div><span>Pago mensual estimado</span><strong>{formatMxn(quote.monthlyCost)}</strong></div>
+              <div><span>Prima anual</span><strong className="technical-data">{formatMxn(quote.annualCost)}</strong></div>
+              <div><span>Pago mensual estimado</span><strong className="technical-data">{formatMxn(quote.monthlyCost)}</strong></div>
             </div>
             <div>
               <h2>Principales beneficios</h2>

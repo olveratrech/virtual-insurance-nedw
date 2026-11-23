@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import SelectField from '../../ui/SelectField/SelectField.jsx'
 import { getGenders } from '../../../services/catalogApi.js'
+import { focusFirstInvalid, preventInvalidKey, replaceFromPaste, sanitizeAlphabetic, sanitizeIdentifier } from '../../../utils/inputHygiene.js'
 import '../authForms.css'
 
 const MAX_PHOTO_SIZE = 2 * 1024 * 1024
@@ -31,6 +32,7 @@ function latestAdultBirthDate() {
 }
 
 function RegisterForm({ onSuccess }) {
+  const formRef = useRef(null)
   const [values, setValues] = useState(initialValues)
   const [photo, setPhoto] = useState(null)
   const [genders, setGenders] = useState([])
@@ -78,6 +80,31 @@ function RegisterForm({ onSuccess }) {
     setErrors((currentErrors) => ({ ...currentErrors, [name]: undefined }))
   }
 
+  function updateAlphabeticField(event) {
+    event.target.value = sanitizeAlphabetic(event.target.value)
+    updateField(event)
+  }
+
+  function pasteAlphabeticField(event) {
+    const fieldName = event.currentTarget.name
+    replaceFromPaste(event, sanitizeAlphabetic, (value) => {
+      setValues((currentValues) => ({ ...currentValues, [fieldName]: value }))
+      setErrors((currentErrors) => ({ ...currentErrors, [fieldName]: undefined }))
+    })
+  }
+
+  function updateFiscalIdentifier(event) {
+    event.target.value = sanitizeIdentifier(event.target.value).slice(0, 13)
+    updateField(event)
+  }
+
+  function pasteFiscalIdentifier(event) {
+    replaceFromPaste(event, (value) => sanitizeIdentifier(value, 13), (value) => {
+      setValues((currentValues) => ({ ...currentValues, fiscalIdentifier: value }))
+      setErrors((currentErrors) => ({ ...currentErrors, fiscalIdentifier: undefined }))
+    })
+  }
+
   function updatePhoto(event) {
     const selectedPhoto = event.target.files?.[0] ?? null
     setPhoto(selectedPhoto)
@@ -97,7 +124,9 @@ function RegisterForm({ onSuccess }) {
       nextErrors.birthDate = 'Debes ser mayor de edad.'
     }
     if (!values.sex) nextErrors.sex = 'Selecciona una opción.'
-    if (!values.fiscalIdentifier.trim()) nextErrors.fiscalIdentifier = 'Ingresa tu identificador fiscal.'
+    if (!/^([A-ZÑ&]{3,4})\d{6}[A-Z0-9]{3}$/.test(values.fiscalIdentifier.trim())) {
+      nextErrors.fiscalIdentifier = 'Ingresa un RFC válido de 12 o 13 caracteres.'
+    }
     if (!/^\S+@\S+\.\S+$/.test(values.email.trim())) {
       nextErrors.email = 'Ingresa un correo electrónico válido.'
     }
@@ -123,7 +152,10 @@ function RegisterForm({ onSuccess }) {
     const nextErrors = validate()
     setErrors(nextErrors)
     setSubmitError('')
-    if (Object.keys(nextErrors).length > 0) return
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
 
     const data = {
       name: values.name.trim(),
@@ -133,7 +165,7 @@ function RegisterForm({ onSuccess }) {
       sex: values.sex,
       genderId: values.genderId ? Number(values.genderId) : null,
       fiscalIdentifier: values.fiscalIdentifier.trim(),
-      email: values.email.trim(),
+      email: values.email.trim().toLowerCase(),
       password: values.password,
       acceptsTerms: values.acceptsTerms,
     }
@@ -159,16 +191,16 @@ function RegisterForm({ onSuccess }) {
   }
 
   return (
-    <form className="auth-form auth-form--register" onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} className="auth-form auth-form--register" onSubmit={handleSubmit} noValidate>
       <div>
         <h2>Crear cuenta</h2>
         <p>Registra tus datos para guardar cotizaciones y administrar tus seguros.</p>
       </div>
 
       <div className="auth-form__grid">
-        <FormField id="register-name" label="Nombre" name="name" maxLength="40" autoComplete="given-name" value={values.name} onChange={updateField} error={errors.name} />
-        <FormField id="register-paternal-surname" label="Apellido paterno" name="paternalSurname" maxLength="40" autoComplete="family-name" value={values.paternalSurname} onChange={updateField} error={errors.paternalSurname} />
-        <FormField id="register-maternal-surname" label="Apellido materno (opcional)" name="maternalSurname" maxLength="40" value={values.maternalSurname} onChange={updateField} error={errors.maternalSurname} />
+        <FormField id="register-name" label="Nombre" name="name" maxLength="40" autoComplete="given-name" value={values.name} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} error={errors.name} />
+        <FormField id="register-paternal-surname" label="Apellido paterno" name="paternalSurname" maxLength="40" autoComplete="family-name" value={values.paternalSurname} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} error={errors.paternalSurname} />
+        <FormField id="register-maternal-surname" label="Apellido materno (opcional)" name="maternalSurname" maxLength="40" value={values.maternalSurname} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} error={errors.maternalSurname} />
         <FormField id="register-birth-date" label="Fecha de nacimiento" name="birthDate" type="date" min="1900-01-01" max={latestAdultBirthDate()} value={values.birthDate} onChange={updateField} error={errors.birthDate} />
 
         <SelectField id="register-sex" label="Sexo" name="sex" value={values.sex} onChange={updateField} error={errors.sex}>
@@ -193,8 +225,8 @@ function RegisterForm({ onSuccess }) {
           )}
         </div>
 
-        <FormField id="register-fiscal-identifier" label="Identificador fiscal" name="fiscalIdentifier" maxLength="40" value={values.fiscalIdentifier} onChange={updateField} error={errors.fiscalIdentifier} />
-        <FormField id="register-email" label="Correo electrónico" name="email" type="email" maxLength="250" autoComplete="email" value={values.email} onChange={updateField} error={errors.email} />
+        <FormField id="register-fiscal-identifier" label="RFC" name="fiscalIdentifier" maxLength="13" value={values.fiscalIdentifier} onChange={updateFiscalIdentifier} onPaste={pasteFiscalIdentifier} error={errors.fiscalIdentifier} data-technical="true" />
+        <FormField id="register-email" label="Correo electrónico" name="email" type="email" maxLength="250" autoComplete="email" value={values.email} onChange={(event) => { event.target.value = event.target.value.replace(/\s/g, '').toLowerCase(); updateField(event) }} error={errors.email} />
         <FormField id="register-password" label="Contraseña" name="password" type="password" maxLength="72" autoComplete="new-password" value={values.password} onChange={updateField} error={errors.password} />
         <FormField id="register-password-confirmation" label="Confirmar contraseña" name="passwordConfirmation" type="password" maxLength="72" autoComplete="new-password" value={values.passwordConfirmation} onChange={updateField} error={errors.passwordConfirmation} />
 

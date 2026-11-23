@@ -8,8 +8,8 @@ function PaymentSummary({ quote }) {
       <dl>
         <div><dt>Producto</dt><dd>{quote.productName}</dd></div>
         <div><dt>Cobertura</dt><dd>{quote.coverageName}</dd></div>
-        <div><dt>Cotización</dt><dd>{formatQuoteNumber(quote.quoteNumber)}</dd></div>
-        <div className="payment-summary__total"><dt>Total anual</dt><dd>{formatMxn(quote.annualCost)}</dd></div>
+        <div><dt>Cotización</dt><dd className="technical-data">{formatQuoteNumber(quote.quoteNumber)}</dd></div>
+        <div className="payment-summary__total"><dt>Prima anual</dt><dd className="technical-data">{formatMxn(quote.annualCost)}</dd></div>
       </dl>
     </aside>
   )

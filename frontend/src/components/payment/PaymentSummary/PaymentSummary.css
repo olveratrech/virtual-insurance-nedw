@@ -3,7 +3,7 @@
 .payment-summary dl { display: grid; gap: var(--space-lg); margin: 0; }
 .payment-summary dl > div { display: grid; gap: var(--space-sm); }
 .payment-summary dt { color: var(--color-text); font-size: 0.85rem; }
-.payment-summary dd { font-weight: 750; margin: 0; }
+.payment-summary dd { color: var(--color-primary); font-weight: 600; margin: 0; }
 .payment-summary__total { border-top: 1px solid var(--color-border); padding-top: var(--space-lg); }
-.payment-summary__total dd { font-size: 1.75rem; }
+.payment-summary__total dd { font-size: 1.4rem; }
 .payment-summary > p { color: var(--color-text); font-size: 0.85rem; line-height: 1.5; margin: var(--space-xl) 0 0; }

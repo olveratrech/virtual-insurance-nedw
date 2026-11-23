@@ -1,0 +1,7 @@
+.legal-information-page { display: grid; gap: 2rem; padding-bottom: 5rem; padding-top: 4rem; }
+.legal-information-page header { max-width: 52rem; }
+.legal-information-page h1 { color: #0f2c59; font-size: clamp(2.25rem, 5vw, 3.75rem); margin: 0.75rem 0 0; }
+.legal-information-page article { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; border-radius: var(--radius-sm); max-width: 58rem; padding: clamp(1.5rem, 4vw, 2.5rem); }
+.legal-information-page article p { color: #334155; line-height: 1.7; margin: 0 0 1rem; }
+.legal-information-page article p:last-child { color: #0f2c59; margin-bottom: 0; }
+.legal-information-page > .button { justify-self: start; }

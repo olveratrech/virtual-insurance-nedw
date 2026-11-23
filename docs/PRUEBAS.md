@@ -2,7 +2,7 @@
 
 Este documento concentra las pruebas ejecutadas y confirmadas durante el desarrollo. Los README de cada componente conservan las instrucciones de ejecución; este archivo registra **qué se probó, qué tipo de prueba fue y cuál fue su último resultado conocido**.
 
-Última actualización: **21 de noviembre de 2026**.
+Última actualización: **23 de noviembre de 2026**.
 
 ## Resumen
 
@@ -11,7 +11,7 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
 | Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
-| React | Análisis estático, compilación, autenticación, registro, cotizaciones y pago real | Aprobado |
+| React | Recorrido integrado previo aprobado; portal institucional reciente con análisis estático correcto | Validación manual reciente pendiente |
 
 ## Oracle Database
 
@@ -261,6 +261,13 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Aviso global de la aplicación | Regresión visual adaptable | Aprobado; aparece al final de los layouts de cliente y administración sin desplazar contenido ni dejar avisos redundantes |
 | Lenguaje de cotización y pago | Regresión funcional y visual | Aprobado; formularios, resultados y errores usan términos operativos, y los datos controlados se identifican en una sola guía |
 | Comprobante de pago profesional | Regresión automatizada y visual | Aprobado; muestra comprobante, autorización, alcance y pie localizados sin las expresiones anteriores |
+| Acceso institucional dividido | Revisión visual y funcional | Pendiente de confirmación manual |
+| Sidebar de escritorio y drawer bajo 1024 px | Revisión visual, navegación y accesibilidad | Pendiente; debe comprobar cierre por ruta, fondo y Escape |
+| Logotipo completo en shell e isotipo móvil | Regresión visual adaptable | Pendiente de confirmación manual |
+| Validación estricta de escritura y pegado | Regresión manual de formularios | Pendiente; incluye nombres, RFC, campos numéricos, tarjeta, `MM/AA` y CVV |
+| Búsqueda y filtro de historiales | Regresión funcional | Pendiente; verificar que se reinicien al cambiar entre cotizaciones, pólizas y pagos |
+| Perfil en dos zonas | Revisión visual adaptable | Pendiente en escritorio, tablet y móvil |
+| Footer institucional y rutas legales | Navegación y revisión visual | Pendiente; revisar enlaces, responsividad y cintillo regulatorio |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -271,12 +278,14 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 - El proxy inicial de Vite no reenviaba `/cotizaciones` y producía un `404` al crear una cotización. Al agregarlo, también interceptaba la recarga de la ruta SPA `/cotizaciones/:id`; se separaron las llamadas técnicas bajo `/api` con reescritura hacia Spring Boot.
 - La prueba de saldo exacto dependía del saldo inicial del seed y falló después de una demostración manual. Se aisló preparando $1,040 dentro de la propia transacción; el rollback restaura el estado anterior.
 - La primera ejecución de la suite administrativa produjo 71 errores porque había dos beans `AuthenticationManager` sin uno principal para construir `HttpSecurity`. Se marcó el gestor de clientes como `@Primary`; ambos servicios conservan calificadores explícitos y la repetición terminó 71/71.
+- Los filtros de `AccountHistoryPage` persistían al navegar entre cotizaciones, pólizas y pagos porque React reutilizaba el mismo tipo de componente. Cada ruta monta ahora una instancia con clave propia para reiniciar su estado local.
 
 ## Pendientes de prueba
 
 - Descarga protegida de la fotografía del cliente.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.
+- Validación manual integral del portal institucional incorporado el 23 de noviembre.
 
 ## Regla de mantenimiento
 

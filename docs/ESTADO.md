@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 21 de noviembre de 2026
+**Última actualización:** 23 de noviembre de 2026
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -11,6 +11,7 @@
 - El modelo relacional reducido para NEDW y el contrato inicial de la API están definidos.
 - El esquema funcional está desplegado y probado en Oracle Database 26ai dentro de Docker.
 - Registro, autenticación, cotizaciones, pago académico y emisión de póliza ya recorren React, Spring Boot y Oracle.
+- El portal del cliente cuenta con un shell institucional responsivo, navegación por módulos, historiales filtrables, formularios endurecidos y un footer regulatorio académico.
 
 ## Estado por área
 
@@ -21,11 +22,11 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Perfil editable verificado | La cuenta permite editar datos personales, correo y fotografía con un modo de edición explícito mediante controles y botones. |
+| Frontend React | Portal institucional en validación final | Acceso dividido, shell responsivo, cotización y pago rediseñados, historiales filtrables, perfil reorganizado, ayuda y footer global están implementados. |
 | Backend Spring Boot | Perfil protegido verificado | Las 100 pruebas pasan; los cambios de correo exigen contraseña y los datos contractuales permanecen inmutables. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
-| Pruebas | Parciales aprobadas | Oracle, 100 pruebas de Spring, `lint`, `build` y recorridos manuales React–Spring están aprobados. |
+| Pruebas | Backend aprobado; UI reciente pendiente | Oracle, 100 pruebas de Spring y recorridos previos están aprobados. El nuevo portal pasa `lint`; falta la validación manual integral del incremento visual. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -68,24 +69,29 @@
 
 - Proyecto creado con React y Vite.
 - React Router configurado con las diez rutas iniciales y una ruta de página no encontrada.
-- `MainLayout` comparte el encabezado y el área de contenido entre páginas.
-- `DisclosureFooter` presenta en los layouts de cliente y administración el aviso único sobre la implementación académica y sus operaciones ficticias.
+- `MainLayout` separa la navegación pública del shell autenticado del cliente.
+- `PortalShell` presenta sidebar institucional fija desde 1024 px y topbar con isotipo y drawer en pantallas menores; el drawer cierra por ruta, fondo o tecla Escape.
+- El shell utiliza el logotipo oficial completo en escritorio y el isotipo oficial en móvil.
+- `DisclosureFooter` implementa tres columnas institucionales, enlaces de producto, atención simulada y un cintillo regulatorio explícito sobre UNAM, CNSF y CONDUSEF.
+- `LegalInformationPage` atiende `/condiciones-generales` y `/aviso-privacidad` sin enlaces decorativos.
 - `Header` implementa identidad con logotipo completo en escritorio e isotipo en vista estrecha; con sesión activa ofrece Inicio, Cotizar, Cotizaciones, Pólizas, Pagos, Ayuda y Perfil.
 - `HomePage` implementa la primera versión funcional de la pantalla de inicio.
 - `InsuranceCard` reutiliza una misma estructura para seguros de auto y médicos mediante propiedades.
 - `NotFoundPage` atiende rutas y pólizas inexistentes; todas las rutas principales tienen pantalla propia.
-- `AccessPage` implementa acceso y registro con formularios separados.
+- `AccessPage` implementa una composición dividida institucional y alterna inicio de sesión y registro mediante pestañas.
 - `LoginForm` y `RegisterForm` administran valores y validaciones locales mediante `useState`.
 - `FormField` unifica etiquetas, campos y mensajes de error accesibles.
 - Registro, login, recuperación de sesión y logout ya consumen Spring Security y persisten clientes en Oracle.
 - `DashboardPage` consulta el resumen persistente del cliente, conserva accesos rápidos y limita la actividad reciente a los últimos tres movimientos.
 - `DashboardActionCard`, `ActivityList` y `StatusBadge` presentan acciones y estados reutilizables.
-- `AccountHistoryPage` presenta el historial completo y separado de cotizaciones, pólizas y pagos con carga, error, reintento y estado vacío.
+- `AccountHistoryPage` presenta el historial completo y separado de cotizaciones, pólizas y pagos con carga, error, reintento, estado vacío, búsqueda y filtro de estado.
+- Cada historial se monta con una clave propia para limpiar búsqueda y filtros al cambiar de módulo.
 - `QuoteHubPage`, `HelpPage` y `ProfilePage` completan la elección de producto, orientación y consulta de identidad sin inventar operaciones no soportadas.
 - `ProfilePage` inicia con campos bloqueados, habilita la edición bajo demanda y activa el guardado después de modificar datos; nombre, apellidos, género, correo y fotografía consumen la API real.
+- En escritorio, el perfil utiliza una ficha de dos zonas para identidad/fotografía y formulario; en tablet y móvil vuelve a una columna.
 - El correo requiere confirmar la contraseña actual; nacimiento, sexo e identificador fiscal se conservan como datos no editables.
 - `panelApi.js` adapta el resumen y el historial real de cotizaciones, pólizas y pagos a los componentes compartidos.
-- `QuotePageLayout` comparte la estructura visual de ambas cotizaciones sin repetir avisos globales.
+- `FlowSteps` unifica la guía Cotización → Propuesta → Pago y `QuotePageLayout` comparte la estructura institucional de ambos productos.
 - `AutoQuoteForm` captura vehículo, licencia, edad, puntos negativos y antecedentes declarados.
 - `MedicalQuoteForm` captura edad y cinco factores declarados de salud.
 - `SelectField` y `CheckboxField` complementan los controles reutilizables del formulario.
@@ -93,7 +99,8 @@
 - `QuoteResultPage` consulta por identificador y presenta resultados persistidos, aprobados o rechazados, mediante renderizado condicional.
 - Una cotización aprobada sin póliza puede continuar a contratación; si ya fue consumida muestra el enlace a su póliza, incluso cuando esta se encuentre cancelada.
 - `PaymentPage` integra la contratación con el procesador de pagos controlado por Spring y Oracle.
-- `PaymentForm` valida vigencia, modalidad, tarjeta, vencimiento, CVV y términos, mientras la guía identifica los datos habilitados para evaluación.
+- `PaymentForm` valida vigencia, modalidad, tarjeta, vencimiento `MM/AA`, CVV y términos; limita caracteres desde escritura y pegado y enfoca el primer error.
+- `inputHygiene.js` concentra limpieza alfabética y numérica, identificadores, formato de tarjeta, vencimiento, pegado seguro y enfoque del primer campo inválido.
 - El pago permite seleccionar Visa, Mastercard o American Express; React y Spring comprueban que la red, el prefijo, la longitud del PAN y los 3 o 4 dígitos del CVV sean coherentes.
 - `paymentApi.js` envía CSRF e idempotencia y evita que los componentes conozcan detalles del transporte.
 - Un pago rechazado permanece en la pantalla y no navega hacia una póliza; solamente uno aprobado continúa.
@@ -125,11 +132,12 @@
 
 #### Pendientes del frontend
 
-- Corrección terminada: las cancelaciones consumen la API real y persisten en Oracle; se eliminaron sus mocks obsoletos.
-- Corrección terminada: el backend rechaza solicitudes duplicadas, pólizas ajenas y pólizas que no están activas.
-- Corrección terminada: el panel consume actividad persistida y ya no depende de `dashboardData.js`.
-- Revisar visualmente la aplicación en el navegador y comparar con Figma.
-- Los valores capturados se conservan cuando el usuario selecciona “Revisar datos” desde una cotización rechazada.
+- Validar manualmente el incremento institucional completo en escritorio, tablet y móvil.
+- Implementar recuperación de contraseña solo después de definir tokens, expiración y canal de entrega en backend.
+- Ampliar perfil con teléfono, domicilio, RFC/CFDI y cambio de contraseña mediante contratos y persistencia reales.
+- Implementar gestión de tarjetas guardadas y facturación; actualmente Pagos muestra el historial real disponible.
+- Implementar reporte y seguimiento de siniestros/tickets; actualmente Ayuda no simula su registro.
+- Incorporar pruebas automatizadas del frontend y navegación responsiva.
 
 ## Auditoría del recorrido frontend
 
@@ -186,23 +194,14 @@
 
 ## Componentes todavía no iniciados
 
-### Backend
-
-- Proyecto Spring Boot.
-- Conexión con Oracle.
-- Entidades y DTO.
-- Repositorios, servicios y controladores.
-- Strategy de cotización.
-- Reglas de transición de estados.
-- Spring Security.
-
-### Pruebas
-
-- Pruebas unitarias de cotización y estados.
-- Pruebas de repositorios y servicios.
-- Pruebas de integración con Oracle.
+- Recuperación segura de contraseña.
+- Datos fiscales CFDI y domicilio/contacto ampliado.
+- Cambio de contraseña desde el perfil.
+- Gestión persistente de tarjetas del cliente.
+- Facturación fiscal real, expresamente fuera del alcance NEDW actual.
+- Registro y seguimiento de siniestros o tickets.
 - Pruebas del frontend.
-- Guion manual de demostración de extremo a extremo.
+- Guion reproducible y versión etiquetada de entrega.
 
 ## Decisiones vigentes
 
@@ -245,7 +244,7 @@
 
 ## Próxima acción
 
-Ejecutar la estabilización final y preparar el recorrido de demostración de extremo a extremo.
+Validar manualmente el portal institucional completo, corregir regresiones y preparar los datos y el guion reproducible de demostración. Los nuevos módulos con persistencia se abordarán como incrementos posteriores y separados.
 
 ## Bitácora breve
 
@@ -340,4 +339,7 @@ Ejecutar la estabilización final y preparar el recorrido de demostración de ex
 | 21/11/2026 | Se completó y verificó el ciclo administrativo de cancelaciones. | Las 85 pruebas, `lint`, `build` y los recorridos manuales aprobaron; la solicitud usa labels legibles y aprobación o rechazo aparecen en póliza, historial visible, panel y PDF regenerado. | Ejecutar estabilización final y preparar la demostración E2E. |
 | 21/11/2026 | Se completó y verificó la navegación de la cuenta del cliente. | Las 93 pruebas y los recorridos manuales aprobaron; Inicio muestra tres movimientos y Cotizaciones, Pólizas y Pagos conservan el historial completo, junto con Cotizar, Ayuda y Perfil. | Continuar con la lógica detallada de los nuevos paneles o la estabilización final. |
 | 21/11/2026 | Se implementó y verificó la edición protegida del perfil. | Las 100 pruebas y la revisión manual aprobaron; datos personales, correo y fotografía se actualizan, mientras nacimiento, sexo e identificador fiscal permanecen inmutables. | Continuar con los siguientes paneles o la estabilización final. |
+| 23/11/2026 | Se implementó la arquitectura visual institucional del portal. | Acceso dividido, shell responsivo, sidebar, drawer accesible, historiales filtrables, validaciones estrictas, cotización/pago rediseñados y perfil reorganizado pasan análisis estático. | Ejecutar la validación manual integral del nuevo portal. |
+| 23/11/2026 | Se amplió el pie de página global y la información legal. | Footer de tres columnas, cintillo regulatorio y rutas de Condiciones Generales y Aviso de Privacidad quedaron navegables. | Revisar textos legales finales antes de una publicación. |
+| 23/11/2026 | Se corrigió el estado compartido de los historiales. | Cotizaciones, pólizas y pagos reinician sus filtros al cambiar de módulo. | Confirmar la regresión manual. |
 

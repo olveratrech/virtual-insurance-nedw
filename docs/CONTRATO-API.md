@@ -1,8 +1,8 @@
 # Contrato de API REST de Virtual Insurance
 
-**Versión:** 1.1
+**Versión:** 1.2
 
-**Fecha:** 21 de noviembre de 2026
+**Fecha:** 23 de noviembre de 2026
 
 **Rutas del backend:** desde `/`
 
@@ -472,6 +472,8 @@ Requiere autenticación de cliente. Devuelve todo el historial propio, ordenado 
 ```
 
 Cada elemento conserva el contrato de actividad de `GET /panel`. Una cotización enlaza con su resultado, una póliza con su detalle, un pago aprobado con la póliza emitida y un pago rechazado con la cotización relacionada. La consulta filtra por el cliente autenticado y nunca acepta un identificador de cliente desde la URL o el cuerpo.
+
+La búsqueda y el filtro por estado de los historiales son responsabilidades locales de React sobre estas colecciones. Cambiar entre cotizaciones, pólizas y pagos no genera nuevas variantes de este endpoint ni conserva filtros en el servidor.
 
 ### `GET /cuenta/perfil`
 
@@ -971,12 +973,15 @@ El backend debe impedir que `toString`, trazas o serialización automática de e
 - Autenticación biométrica.
 - Pagos reales o integración con una pasarela.
 - Captura de tarjetas reales.
-- Resolución administrativa mediante una interfaz separada.
 - Renovación automática de pólizas.
-- Recuperación y cambio de contraseña.
-- Edición del perfil del cliente.
+- Recuperación de contraseña mediante token y canal de entrega.
+- Cambio de contraseña desde el perfil.
+- Teléfono, domicilio, razón social, régimen fiscal y uso de CFDI en el perfil.
+- Registro y seguimiento de siniestros o tickets.
 - Eliminación de tarjetas guardadas.
 - Paginación avanzada.
+
+El shell responsivo, el footer, las páginas informativas legales y los filtros visuales no requieren endpoints adicionales. Las ampliaciones anteriores no deben presentarse como operaciones exitosas hasta contar con contrato, autorización y persistencia reales.
 
 ## 15. Decisiones que debe reflejar el DDL
 

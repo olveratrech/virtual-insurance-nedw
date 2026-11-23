@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import FormField from '../../ui/FormField/FormField.jsx'
+import { focusFirstInvalid } from '../../../utils/inputHygiene.js'
 import '../authForms.css'
 
 function LoginForm({ onSuccess }) {
+  const formRef = useRef(null)
   const [values, setValues] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -17,17 +19,20 @@ function LoginForm({ onSuccess }) {
     event.preventDefault()
 
     const nextErrors = {}
-    if (!values.email.trim()) nextErrors.email = 'Ingresa tu correo electrónico.'
+    if (!/^\S+@\S+\.\S+$/.test(values.email.trim())) nextErrors.email = 'Ingresa un correo electrónico válido.'
     if (!values.password) nextErrors.password = 'Ingresa tu contraseña.'
 
     setErrors(nextErrors)
     setSubmitError('')
-    if (Object.keys(nextErrors).length > 0) return
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
 
     setIsSubmitting(true)
     try {
       await onSuccess({
-        email: values.email,
+        email: values.email.trim().toLowerCase(),
         password: values.password,
       })
     } catch (error) {
@@ -39,7 +44,7 @@ function LoginForm({ onSuccess }) {
   }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} className="auth-form" onSubmit={handleSubmit} noValidate>
       <div>
         <h2>Iniciar sesión</h2>
         <p>Consulta tus cotizaciones, pagos y pólizas.</p>
@@ -52,7 +57,10 @@ function LoginForm({ onSuccess }) {
         type="email"
         autoComplete="email"
         value={values.email}
-        onChange={updateField}
+        onChange={(event) => {
+          event.target.value = event.target.value.replace(/\s/g, '').toLowerCase()
+          updateField(event)
+        }}
         error={errors.email}
       />
       <FormField

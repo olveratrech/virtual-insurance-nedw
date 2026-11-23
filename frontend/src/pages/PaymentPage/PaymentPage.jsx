@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import PaymentForm from '../../components/payment/PaymentForm/PaymentForm.jsx'
 import PaymentSummary from '../../components/payment/PaymentSummary/PaymentSummary.jsx'
+import FlowSteps from '../../components/quote/FlowSteps/FlowSteps.jsx'
 import { createPaymentAttempt } from '../../services/paymentApi.js'
 import { getQuote } from '../../services/quoteApi.js'
 import { formatMxn } from '../../utils/currency.js'
@@ -131,6 +132,7 @@ function PaymentPage() {
 
   return (
     <div className="payment-page page-container">
+      <FlowSteps current={3} />
       <header className="payment-page__heading">
         <p className="eyebrow">Contratación</p>
         <h1>Confirma y realiza el pago</h1>

@@ -3,16 +3,17 @@
 .quote-result-page__heading .status-badge { justify-self: start; }
 .quote-result-page__heading h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -0.04em; line-height: 1.05; margin: 0; }
 .quote-result-page__heading > p:last-child { color: var(--color-text); font-size: 1.1rem; line-height: 1.6; margin: 0; }
-.quote-result-card { border: 1px solid; border-radius: var(--radius-lg); display: grid; gap: var(--space-xl); padding: var(--space-xl); }
-.quote-result-card--approved { background: var(--color-success-soft); border-color: var(--color-success-border); }
-.quote-result-card--rejected { background: var(--color-danger-soft); border-color: #fca5a5; }
+.quote-result-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); display: grid; gap: var(--space-xl); padding: var(--space-xl); }
+.quote-result-card--approved { border-top: 3px solid var(--color-cta); }
+.quote-result-card--rejected { border-top: 3px solid var(--color-danger); }
 .quote-result-card__summary { display: grid; gap: var(--space-lg); grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .quote-result-card__summary > div, .quote-result-card__prices > div { display: grid; gap: var(--space-sm); }
 .quote-result-card__label, .quote-result-card__prices span { color: var(--color-text); font-size: 0.85rem; }
-.quote-result-card__prices { background: var(--color-surface); border-radius: var(--radius-sm); display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--space-lg); }
+.quote-result-card__prices { background: var(--color-background); border: 1px solid var(--color-border); border-radius: var(--radius-sm); display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--space-lg); }
 .quote-result-card__prices strong { font-size: clamp(1.4rem, 3vw, 2rem); }
 .quote-result-card h2 { font-size: 1.2rem; margin: 0 0 var(--space-md); }
-.benefit-list { display: grid; gap: var(--space-sm); grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding-left: 1.2rem; }
+.benefit-list { display: grid; gap: var(--space-sm); grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; margin: 0; padding: 0; }
+.benefit-list li::before { color: var(--color-cta); content: "✓"; font-weight: 600; margin-right: var(--space-sm); }
 .result-note, .rejection-explanation p { color: var(--color-text); line-height: 1.6; margin: 0; }
 .rejection-explanation { display: grid; gap: var(--space-md); }
 .quote-result-page__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); }

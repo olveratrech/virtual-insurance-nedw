@@ -5,3 +5,9 @@
 .account-history-page__error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); display: grid; gap: var(--space-md); justify-items: start; padding: var(--space-md); }
 .account-history-page__error p { margin: 0; }
 .account-history-page__empty { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); color: var(--color-text); margin: 0; padding: var(--space-xl); }
+.account-history-page__toolbar { align-items: end; background: #fff; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); display: grid; gap: 1rem; grid-template-columns: minmax(14rem, 1fr) minmax(11rem, 0.3fr); padding: 1rem; }
+.account-history-page__toolbar label { display: grid; gap: 0.4rem; }
+.account-history-page__toolbar label span { color: #0f2c59; font-size: 0.8rem; font-weight: 700; }
+.account-history-page__toolbar input, .account-history-page__toolbar select { background: #fff; border: 1px solid #cbd5e1; border-radius: var(--radius-sm); color: #334155; font: inherit; min-height: 2.75rem; padding: 0.6rem 0.75rem; }
+.account-history-page__toolbar input:focus, .account-history-page__toolbar select:focus { border-color: #0284c7; outline: 3px solid rgba(2,132,199,0.14); }
+@media (max-width: 640px) { .account-history-page__toolbar { grid-template-columns: 1fr; } }

@@ -6,8 +6,8 @@
 .quote-form { display: grid; gap: var(--space-xl); }
 .quote-form__grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .quote-form__section { border: 0; display: grid; gap: var(--space-lg); margin: 0; padding: 0; }
-.quote-form__section legend { font-size: 1.2rem; font-weight: 800; margin-bottom: var(--space-md); padding: 0; }
-.quote-form__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+.quote-form__section legend { color: var(--color-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: var(--space-md); padding: 0; }
+.quote-form__actions { border-top: 1px solid var(--color-border); display: flex; flex-wrap: wrap; gap: var(--space-md); padding-top: var(--space-lg); }
 .quote-form__error { background: var(--color-danger-soft); border: 1px solid var(--color-danger); border-radius: var(--radius-sm); color: var(--color-danger); margin: 0; padding: var(--space-md); }
 
 @media (max-width: 850px) { .quote-form__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -2,7 +2,7 @@
 
 Este documento registra los patrones utilizados deliberadamente en Virtual Insurance, el problema que resuelven y los archivos donde pueden verificarse. No se busca acumular patrones: cada uno debe reducir acoplamiento, concentrar una responsabilidad o facilitar pruebas y mantenimiento.
 
-Última actualización: **21 de noviembre de 2026**.
+Última actualización: **23 de noviembre de 2026**.
 
 ## Resumen
 
@@ -19,6 +19,7 @@ Este documento registra los patrones utilizados deliberadamente en Virtual Insur
 | Provider / Context | Frontend | Implementado | Compartir por separado las sesiones de cliente y administración sin prop drilling |
 | Facade de servicios | Frontend | Implementado | Ocultar `fetch`, cookies, CSRF, multipart y rutas HTTP |
 | Route Guard | Frontend | Implementado | Impedir acceso visual a rutas que requieren sesión |
+| Responsive Application Shell | Frontend | Implementado | Mantener una navegación coherente entre sidebar de escritorio y drawer móvil |
 | Strategy | Backend | Implementado | Separar reglas de cotización de auto y médica |
 | Ports and Adapters | Backend | Implementado | Aislar el caso de uso de pago del procesador controlado |
 | Template | Backend | Implementado | Separar textos contractuales editables de la generación PDF |
@@ -176,6 +177,22 @@ El mismo criterio se aplica al área de cuenta: `AccountHistoryService` obtiene 
 
 **Límite:** esta protección mejora la navegación, pero no sustituye la autorización del backend. Spring debe validar siempre al propietario del recurso.
 
+### Responsive Application Shell
+
+**Problema:** el encabezado horizontal anterior no escalaba con todos los módulos ni ofrecía una navegación móvil controlada.
+
+**Aplicación:** `PortalShell` compone una sidebar fija para escritorio y una topbar con drawer para anchos menores a 1024 px. `PortalNavigation` reutiliza la misma definición de rutas en ambos contenedores. El drawer cierra al navegar, pulsar el fondo o presionar Escape, mientras `MainLayout` decide entre shell público y autenticado mediante `AuthContext`.
+
+**Archivos:**
+
+- `frontend/src/components/layout/PortalShell/PortalShell.jsx`
+- `frontend/src/components/layout/PortalShell/PortalShell.css`
+- `frontend/src/layouts/MainLayout.jsx`
+
+**Beneficio:** una sola fuente de navegación evita que escritorio y móvil diverjan y permite incorporar módulos sin volver al desplazamiento horizontal.
+
+Las reglas de entrada se concentran en `inputHygiene.js` y se componen con `FormField` y `SelectField`. Se documentan como utilidades compartidas, no como un patrón adicional: limpian escritura y pegado, formatean tarjeta y vencimiento y enfocan el primer error, mientras el backend conserva la validación autoritativa.
+
 ## Strategy para cotizaciones
 
 Auto y médico comparten el caso de uso de cotización, pero tienen datos y reglas diferentes. Se implementó una estrategia por producto detrás de un servicio coordinador común.
@@ -196,7 +213,7 @@ La abstracción no oculta la transacción: el servicio coordina idempotencia, va
 
 `PolicyDocumentGenerator` define la composición visual común de los PDFs, carga el logotipo y las familias Cinzel, Fira Sans y JetBrains Mono desde los recursos del backend, y las incrusta en cada archivo. La póliza aplica una jerarquía tipográfica y cromática según títulos, texto, datos técnicos y estados. `AcademicContractContent` concentra las seis secciones contractuales editables, su variante de cobertura por producto y la versión. `PolicyPdfData` transporta exclusivamente los valores variables obtenidos de Oracle, incluido el resultado vigente de una cancelación. Cada descarga regenera el documento para reflejar una aprobación o rechazo posterior a la emisión.
 
-El aviso legal se obtiene de la misma fuente para póliza y comprobante, mientras React lo presenta mediante `DisclosureFooter` en ambos layouts. Esta separación permite incorporar después exclusiones, anexos o condiciones generales sin modificar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
+El aviso legal de los PDF se obtiene de la misma fuente contractual. React presenta su propia comunicación global mediante `DisclosureFooter`, con enlaces a `LegalInformationPage` y un cintillo regulatorio que evita confundir el prototipo con una aseguradora autorizada. Esta separación permite modificar textos web o contractuales sin alterar el controlador de descarga, la autorización por propietario ni las consultas HTTP.
 
 ## State simplificado para estados comerciales
 

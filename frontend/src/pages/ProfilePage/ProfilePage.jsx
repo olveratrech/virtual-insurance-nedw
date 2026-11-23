@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import FormField from '../../components/ui/FormField/FormField.jsx'
 import SelectField from '../../components/ui/SelectField/SelectField.jsx'
 import useAuth from '../../hooks/useAuth.js'
 import { getGenders } from '../../services/catalogApi.js'
 import { deleteProfilePhoto, getProfile, updateProfile, updateProfilePhoto } from '../../services/profileApi.js'
+import { focusFirstInvalid, preventInvalidKey, replaceFromPaste, sanitizeAlphabetic } from '../../utils/inputHygiene.js'
 import './ProfilePage.css'
 
 const emptyValues = { name: '', paternalSurname: '', maternalSurname: '', genderId: '', email: '', currentPassword: '' }
 
 function ProfilePage() {
+  const formRef = useRef(null)
   const { refreshSession } = useAuth()
   const [profile, setProfile] = useState(null)
   const [values, setValues] = useState(emptyValues)
@@ -60,6 +62,21 @@ function ProfilePage() {
     setDirty(true)
   }
 
+  function updateAlphabeticField(event) {
+    event.target.value = sanitizeAlphabetic(event.target.value)
+    updateField(event)
+  }
+
+  function pasteAlphabeticField(event) {
+    const fieldName = event.currentTarget.name
+    replaceFromPaste(event, sanitizeAlphabetic, (value) => {
+      setValues((current) => ({ ...current, [fieldName]: value }))
+      setErrors((current) => ({ ...current, [fieldName]: '' }))
+      setMessage('')
+      setDirty(true)
+    })
+  }
+
   function startEditing() {
     setEditing(true)
     setDirty(false)
@@ -86,7 +103,10 @@ function ProfilePage() {
     setErrors(nextErrors)
     setError('')
     setMessage('')
-    if (Object.keys(nextErrors).length > 0) return
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
 
     setSaving(true)
     try {
@@ -174,20 +194,20 @@ function ProfilePage() {
         </div>
         <p className="profile-page__hint">JPEG o PNG, máximo 2 MiB.</p>
 
-        <form className="profile-page__form" onSubmit={handleSubmit} noValidate>
-          <FormField id="profile-name" label="Nombre" name="name" maxLength="40" autoComplete="given-name" value={values.name} onChange={updateField} readOnly={!editing} error={errors.name} />
-          <FormField id="profile-paternal-surname" label="Apellido paterno" name="paternalSurname" maxLength="40" autoComplete="family-name" value={values.paternalSurname} onChange={updateField} readOnly={!editing} error={errors.paternalSurname} />
-          <FormField id="profile-maternal-surname" label="Apellido materno (opcional)" name="maternalSurname" maxLength="40" value={values.maternalSurname} onChange={updateField} readOnly={!editing} error={errors.maternalSurname} />
+        <form ref={formRef} className="profile-page__form" onSubmit={handleSubmit} noValidate>
+          <FormField id="profile-name" label="Nombre" name="name" maxLength="40" autoComplete="given-name" value={values.name} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} readOnly={!editing} error={errors.name} />
+          <FormField id="profile-paternal-surname" label="Apellido paterno" name="paternalSurname" maxLength="40" autoComplete="family-name" value={values.paternalSurname} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} readOnly={!editing} error={errors.paternalSurname} />
+          <FormField id="profile-maternal-surname" label="Apellido materno (opcional)" name="maternalSurname" maxLength="40" value={values.maternalSurname} onChange={updateAlphabeticField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteAlphabeticField} readOnly={!editing} error={errors.maternalSurname} />
           <SelectField id="profile-gender" label="Género (opcional)" name="genderId" value={values.genderId} onChange={updateField} disabled={!editing} error={errors.genderId}>
             <option value="">Prefiero no seleccionarlo</option>
             {genders.map((gender) => <option key={gender.id} value={gender.id}>{gender.description}</option>)}
           </SelectField>
-          <FormField id="profile-email" label="Correo electrónico" name="email" type="email" maxLength="250" autoComplete="email" value={values.email} onChange={updateField} readOnly={!editing} error={errors.email} />
+          <FormField id="profile-email" label="Correo electrónico" name="email" type="email" maxLength="250" autoComplete="email" value={values.email} onChange={(event) => { event.target.value = event.target.value.replace(/\s/g, '').toLowerCase(); updateField(event) }} readOnly={!editing} error={errors.email} />
           <FormField id="profile-current-password" label="Contraseña actual para cambiar el correo" name="currentPassword" type="password" maxLength="72" autoComplete="current-password" value={values.currentPassword} onChange={updateField} readOnly={!editing} error={errors.currentPassword} />
           <div className="profile-page__readonly">
             <div><span>Fecha de nacimiento</span><strong>{profile.birthDate}</strong></div>
             <div><span>Sexo registrado</span><strong>{sexLabel}</strong></div>
-            <div><span>Identificador fiscal</span><strong>{profile.fiscalIdentifier}</strong></div>
+            <div><span>RFC</span><strong className="technical-data">{profile.fiscalIdentifier}</strong></div>
           </div>
           <div className="profile-page__form-actions">
             <button className="button button--secondary" type="button" disabled={saving || (editing && dirty)} onClick={startEditing}>Editar perfil</button>

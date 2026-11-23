@@ -1,0 +1,10 @@
+.flow-steps { border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-lg); }
+.flow-steps ol { display: grid; gap: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); list-style: none; margin: 0; padding: 0; }
+.flow-steps__item { align-items: center; border-top: 2px solid var(--color-border); color: var(--color-text-muted); display: flex; gap: var(--space-sm); padding-top: 0.75rem; }
+.flow-steps__item > span { align-items: center; border: 1px solid currentColor; border-radius: 50%; display: inline-flex; font-family: "JetBrains Mono", monospace; font-size: 0.75rem; height: 1.5rem; justify-content: center; width: 1.5rem; }
+.flow-steps__item strong { font-size: 0.85rem; font-weight: 500; }
+.flow-steps__item--current { border-color: var(--color-accent); color: var(--color-primary); }
+.flow-steps__item--current > span { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+.flow-steps__item--complete { border-color: var(--color-cta); color: var(--color-primary); }
+.flow-steps__item--complete > span { background: var(--color-cta); border-color: var(--color-cta); color: white; }
+@media (max-width: 520px) { .flow-steps__item strong { font-size: 0.75rem; } }

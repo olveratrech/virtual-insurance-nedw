@@ -8,6 +8,8 @@ function AccountHistoryPage({ eyebrow, title, description, historyKey, emptyMess
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
+  const [query, setQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('TODOS')
 
   useEffect(() => {
     let active = true
@@ -32,6 +34,14 @@ function AccountHistoryPage({ eyebrow, title, description, historyKey, emptyMess
     setReloadKey((value) => value + 1)
   }
 
+  const availableStatuses = [...new Set(items.map((item) => item.status))]
+  const normalizedQuery = query.trim().toLocaleLowerCase('es-MX')
+  const visibleItems = items.filter((item) => {
+    const matchesStatus = statusFilter === 'TODOS' || item.status === statusFilter
+    const searchable = `${item.type} ${item.reference} ${item.detail}`.toLocaleLowerCase('es-MX')
+    return matchesStatus && (!normalizedQuery || searchable.includes(normalizedQuery))
+  })
+
   return (
     <div className="account-history-page page-container">
       <header className="account-history-page__heading">
@@ -39,6 +49,22 @@ function AccountHistoryPage({ eyebrow, title, description, historyKey, emptyMess
         <h1>{title}</h1>
         <p>{description}</p>
       </header>
+
+      {status === 'ready' && items.length > 0 && (
+        <div className="account-history-page__toolbar" aria-label={`Filtros de ${title.toLowerCase()}`}>
+          <label>
+            <span>Buscar</span>
+            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Folio, producto o detalle" />
+          </label>
+          <label>
+            <span>Estado</span>
+            <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+              <option value="TODOS">Todos</option>
+              {availableStatuses.map((itemStatus) => <option key={itemStatus} value={itemStatus}>{itemStatus}</option>)}
+            </select>
+          </label>
+        </div>
+      )}
 
       {status === 'loading' && <p role="status">Consultando historial…</p>}
       {status === 'error' && (
@@ -48,7 +74,8 @@ function AccountHistoryPage({ eyebrow, title, description, historyKey, emptyMess
         </div>
       )}
       {status === 'ready' && items.length === 0 && <p className="account-history-page__empty">{emptyMessage}</p>}
-      {status === 'ready' && items.length > 0 && <ActivityList items={items} />}
+      {status === 'ready' && items.length > 0 && visibleItems.length === 0 && <p className="account-history-page__empty">No hay resultados para los filtros seleccionados.</p>}
+      {status === 'ready' && visibleItems.length > 0 && <ActivityList items={visibleItems} />}
     </div>
   )
 }

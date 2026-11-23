@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import SelectField from '../../ui/SelectField/SelectField.jsx'
+import { focusFirstInvalid, preventInvalidKey, replaceFromPaste, sanitizeAlphabetic, sanitizeIdentifier, sanitizeNumeric, sanitizeVehicleText } from '../../../utils/inputHygiene.js'
 
 const defaultValues = { brand: '', model: '', year: '', category: '', plates: '', licenseNumber: '', driverAge: '', negativePoints: '0', criminalRecord: false }
 const maximumYear = new Date().getFullYear() + 1
 
 function AutoQuoteForm({ onEvaluate, initialValues }) {
+  const formRef = useRef(null)
   const [values, setValues] = useState(() => ({ ...defaultValues, ...initialValues }))
   const [errors, setErrors] = useState({})
   const [submitError, setSubmitError] = useState('')
@@ -15,8 +17,25 @@ function AutoQuoteForm({ onEvaluate, initialValues }) {
 
   function updateField(event) {
     const { name, type, checked, value } = event.target
-    setValues((current) => ({ ...current, [name]: type === 'checkbox' ? checked : value }))
+    const sanitizers = {
+      brand: (input) => sanitizeAlphabetic(input).slice(0, 40),
+      model: (input) => sanitizeVehicleText(input, 40),
+      year: (input) => sanitizeNumeric(input, 4),
+      plates: (input) => sanitizeIdentifier(input, 20),
+      licenseNumber: (input) => sanitizeIdentifier(input, 40),
+      driverAge: (input) => sanitizeNumeric(input, 3),
+      negativePoints: (input) => sanitizeNumeric(input, 2),
+    }
+    const nextValue = type === 'checkbox' ? checked : sanitizers[name]?.(value) ?? value
+    setValues((current) => ({ ...current, [name]: nextValue }))
     setErrors((current) => ({ ...current, [name]: undefined }))
+  }
+
+  function pasteField(name, sanitizer) {
+    return (event) => replaceFromPaste(event, sanitizer, (value) => {
+      setValues((current) => ({ ...current, [name]: value }))
+      setErrors((current) => ({ ...current, [name]: undefined }))
+    })
   }
 
   async function handleSubmit(event) {
@@ -32,7 +51,10 @@ function AutoQuoteForm({ onEvaluate, initialValues }) {
     if (Number(values.negativePoints) < 0) errorsFound.negativePoints = 'El valor no puede ser negativo.'
     setErrors(errorsFound)
     setSubmitError('')
-    if (Object.keys(errorsFound).length > 0) return
+    if (Object.keys(errorsFound).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
 
     const request = {
       brand: values.brand.trim(),
@@ -61,28 +83,30 @@ function AutoQuoteForm({ onEvaluate, initialValues }) {
     }
   }
 
+  const hasErrors = Object.values(errors).some(Boolean)
+
   return (
-    <form className="quote-form" onSubmit={handleSubmit} noValidate>
+    <form ref={formRef} className="quote-form" onSubmit={handleSubmit} noValidate>
       <fieldset className="quote-form__section">
         <legend>Datos del vehículo y conductor</legend>
         <div className="quote-form__grid">
-          <FormField id="auto-brand" label="Marca" name="brand" value={values.brand} onChange={updateField} error={errors.brand} />
-          <FormField id="auto-model" label="Modelo" name="model" value={values.model} onChange={updateField} error={errors.model} />
-          <FormField id="auto-year" label="Año" name="year" type="number" min="1980" max={maximumYear} value={values.year} onChange={updateField} error={errors.year} />
+          <FormField id="auto-brand" label="Marca" name="brand" maxLength="40" value={values.brand} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={pasteField('brand', (value) => sanitizeAlphabetic(value).slice(0, 40))} error={errors.brand} />
+          <FormField id="auto-model" label="Modelo" name="model" maxLength="40" value={values.model} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ0-9\s'-]/)} onPaste={pasteField('model', (value) => sanitizeVehicleText(value, 40))} error={errors.model} />
+          <FormField id="auto-year" label="Año" name="year" type="text" inputMode="numeric" maxLength="4" data-technical="true" value={values.year} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={pasteField('year', (value) => sanitizeNumeric(value, 4))} error={errors.year} />
           <SelectField id="auto-category" label="Categoría" name="category" value={values.category} onChange={updateField} error={errors.category}>
             <option value="">Selecciona una opción</option><option value="SEDAN">Sedán</option><option value="SUV">SUV</option><option value="PICKUP">Pickup</option><option value="OTHER">Otra</option>
           </SelectField>
-          <FormField id="auto-plates" label="Placas" name="plates" value={values.plates} onChange={updateField} error={errors.plates} />
-          <FormField id="auto-license" label="Número de licencia" name="licenseNumber" value={values.licenseNumber} onChange={updateField} error={errors.licenseNumber} />
-          <FormField id="auto-driver-age" label="Edad del conductor" name="driverAge" type="number" min="18" max="90" value={values.driverAge} onChange={updateField} error={errors.driverAge} />
-          <FormField id="auto-negative-points" label="Puntos negativos" name="negativePoints" type="number" min="0" value={values.negativePoints} onChange={updateField} error={errors.negativePoints} />
+          <FormField id="auto-plates" label="Placas" name="plates" maxLength="20" data-technical="true" value={values.plates} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-Z0-9-]/)} onPaste={pasteField('plates', (value) => sanitizeIdentifier(value, 20))} error={errors.plates} />
+          <FormField id="auto-license" label="Número de licencia" name="licenseNumber" maxLength="40" data-technical="true" value={values.licenseNumber} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-Z0-9-]/)} onPaste={pasteField('licenseNumber', (value) => sanitizeIdentifier(value, 40))} error={errors.licenseNumber} />
+          <FormField id="auto-driver-age" label="Edad del conductor" name="driverAge" type="text" inputMode="numeric" maxLength="3" data-technical="true" value={values.driverAge} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={pasteField('driverAge', (value) => sanitizeNumeric(value, 3))} error={errors.driverAge} />
+          <FormField id="auto-negative-points" label="Puntos negativos" name="negativePoints" type="text" inputMode="numeric" maxLength="2" data-technical="true" value={values.negativePoints} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={pasteField('negativePoints', (value) => sanitizeNumeric(value, 2))} error={errors.negativePoints} />
         </div>
         <CheckboxField id="auto-criminal-record" name="criminalRecord" checked={values.criminalRecord} onChange={updateField} label="Tengo antecedentes penales" description="Esta respuesta se considera durante la evaluación del riesgo." />
       </fieldset>
       {submitError && <p className="quote-form__error" role="alert">{submitError}</p>}
       <div className="quote-form__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
-        <button className="button button--primary" type="submit" disabled={isSubmitting}>
+        <button className="button button--primary" type="submit" disabled={isSubmitting || hasErrors}>
           {isSubmitting ? 'Evaluando…' : 'Evaluar cotización'}
         </button>
       </div>

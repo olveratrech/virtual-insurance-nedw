@@ -219,16 +219,46 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 
 **Entregable:** perfil autogestionable con controles de identidad, fotografía y seguridad de correo.
 
+### Fase 5.6 — Portal institucional y endurecimiento UX
+
+**Fecha objetivo:** antes de la estabilización final
+
+- [x] Aplicar la paleta, tipografías y jerarquía institucional a cotización y pago.
+- [x] Incorporar validación estricta desde escritura y pegado para texto, números, RFC, tarjeta, `MM/AA` y CVV.
+- [x] Rediseñar el acceso como pantalla dividida con inicio de sesión y registro.
+- [x] Sustituir la navegación horizontal autenticada por sidebar de escritorio y drawer móvil accesible.
+- [x] Incorporar búsqueda y filtros independientes en cotizaciones, pólizas y pagos.
+- [x] Reorganizar el perfil para aprovechar el espacio disponible sin perder adaptación móvil.
+- [x] Incorporar footer institucional, cintillo regulatorio y páginas informativas legales.
+- [ ] Validar manualmente el portal completo en escritorio, tablet y móvil.
+
+**Entregable:** portal visualmente coherente, adaptable y con controles de entrada reutilizables.
+
+### Fase 5.7 — Ampliaciones posteriores del portal
+
+**Fecha objetivo:** posterior a la entrega prioritaria
+
+- [ ] Recuperación segura de contraseña con token de un solo uso y expiración.
+- [ ] Teléfono, domicilio y datos fiscales CFDI persistentes.
+- [ ] Cambio de contraseña autenticado desde el perfil.
+- [ ] Gestión de tarjetas ficticias guardadas sin persistir CVV.
+- [ ] Resumen de facturación y descarga de comprobantes disponibles.
+- [ ] Registro y seguimiento de siniestros o tickets con folio.
+
+**Entregable:** funciones de autogestión ampliadas mediante contratos API y persistencia reales, nunca mediante simulaciones visuales aisladas.
+
 ### Fase 6 — Pruebas, estabilización y entrega
 
 **Fecha objetivo:** 24–26 de noviembre
 
-- [ ] Ejecutar pruebas unitarias de reglas críticas.
+- [x] Ejecutar pruebas unitarias de reglas críticas del backend.
 - [x] Ejecutar pruebas de integración del backend y Oracle hasta el incremento de cancelaciones.
 - [x] Probar manualmente los recorridos principales y de error implementados.
 - [x] Corregir los defectos bloqueantes y de alta prioridad detectados hasta el incremento de cancelaciones.
 - [ ] Preparar datos y pasos reproducibles para la demostración.
 - [x] Mantener actualizados README, estado del proyecto y evidencias durante los incrementos.
+- [ ] Incorporar pruebas automatizadas del frontend y del shell responsivo.
+- [ ] Confirmar manualmente el incremento visual del 23 de noviembre.
 - [ ] Crear una versión o etiqueta de entrega.
 
 **Entregable:** proyecto demostrable, documentado y reproducible.

@@ -1,0 +1,38 @@
+.portal-shell { background: var(--color-background); min-height: 100vh; }
+.portal-shell__sidebar, .portal-shell__drawer { background: #0f2c59; color: #fff; display: flex; flex-direction: column; }
+.portal-shell__sidebar { bottom: 0; left: 0; padding: 1.5rem 1rem; position: fixed; top: 0; width: 15rem; z-index: 20; }
+.portal-shell__brand, .portal-shell__mobile-brand { align-items: center; display: flex; text-decoration: none; }
+.portal-shell__brand { min-height: 3.5rem; padding: 0 0.65rem; }
+.portal-shell__brand img { filter: brightness(0) invert(1); height: auto; max-width: 100%; width: 11.5rem; }
+.portal-shell__mobile-brand img { filter: brightness(0) invert(1); height: 2.15rem; width: 2.15rem; }
+.portal-shell__quote-action { align-items: center; background: #10b981; border-radius: var(--radius-sm); color: #062f26; display: flex; font-weight: 700; gap: 0.55rem; margin: 1.4rem 0.45rem; padding: 0.8rem 0.9rem; text-decoration: none; }
+.portal-shell__quote-action:hover { background: #34d399; }
+.portal-shell__quote-action span { font-size: 1.25rem; line-height: 1; }
+.portal-shell__navigation { display: grid; gap: 0.2rem; }
+.portal-shell__navigation a { align-items: center; border-left: 3px solid transparent; border-radius: 0.2rem; color: #dbeafe; display: flex; font-size: 0.9rem; gap: 0.8rem; padding: 0.75rem 0.8rem; text-decoration: none; }
+.portal-shell__navigation a:hover, .portal-shell__navigation a.active { background: rgba(255,255,255,0.1); border-left-color: #38bdf8; color: #fff; }
+.portal-shell__nav-icon { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; text-align: center; width: 1.15rem; }
+.portal-shell__session { border-top: 1px solid rgba(255,255,255,0.18); margin-top: auto; padding: 1rem 0.55rem 0; }
+.portal-shell__session button { background: transparent; border: 0; color: #fff; cursor: pointer; font: inherit; font-weight: 600; padding: 0.45rem 0; }
+.portal-shell__session p { color: #fecaca; font-size: 0.75rem; margin: 0.5rem 0 0; }
+.portal-shell__workspace { margin-left: 15rem; min-height: 100vh; }
+.portal-shell__account-bar { align-items: center; background: #fff; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: flex-end; min-height: 4.5rem; padding: 0 2rem; }
+.portal-shell__account-bar div { display: grid; text-align: right; }
+.portal-shell__account-bar span { color: #64748b; font-size: 0.75rem; text-transform: uppercase; }
+.portal-shell__account-bar strong { color: #0f2c59; font-size: 0.92rem; }
+.portal-shell__content { min-height: calc(100vh - 4.5rem); }
+.portal-shell__mobile-header, .portal-shell__drawer, .portal-shell__backdrop { display: none; }
+
+@media (max-width: 1023px) {
+  .portal-shell__sidebar, .portal-shell__account-bar { display: none; }
+  .portal-shell__workspace { margin-left: 0; padding-top: 4rem; }
+  .portal-shell__mobile-header { align-items: center; background: #0f2c59; display: flex; height: 4rem; justify-content: space-between; left: 0; padding: 0 1.25rem; position: fixed; right: 0; top: 0; z-index: 30; }
+  .portal-shell__menu-button { background: transparent; border: 0; cursor: pointer; display: grid; gap: 0.3rem; padding: 0.6rem; }
+  .portal-shell__menu-button i { background: #fff; display: block; height: 2px; width: 1.55rem; }
+  .portal-shell__backdrop { background: rgba(15, 23, 42, 0.56); border: 0; bottom: 0; display: block; left: 0; padding: 0; position: fixed; right: 0; top: 0; z-index: 39; }
+  .portal-shell__drawer { bottom: 0; display: flex; left: 0; max-width: 20rem; overflow-y: auto; padding: 1rem; position: fixed; top: 0; transform: translateX(-105%); transition: transform 180ms ease; width: min(85vw, 20rem); z-index: 40; }
+  .portal-shell__drawer--open { transform: translateX(0); }
+  .portal-shell__drawer-heading { align-items: center; display: flex; justify-content: space-between; padding: 0.25rem 0.65rem 0.5rem; }
+  .portal-shell__drawer-heading span { font-weight: 700; }
+  .portal-shell__drawer-heading button { background: transparent; border: 0; color: #fff; cursor: pointer; font-size: 2rem; line-height: 1; }
+}

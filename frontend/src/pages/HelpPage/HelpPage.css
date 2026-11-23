@@ -3,8 +3,14 @@
 .help-page h1 { font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -0.04em; margin: var(--space-md) 0; }
 .help-page header > p:last-child, .help-page__topics p { color: var(--color-text); }
 .help-page__topics { display: grid; gap: var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.help-page__topics article, .help-page aside { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-xl); }
+.help-page__topics details, .help-page aside, .help-page__support { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-xl); }
+.help-page__support { align-items: center; border-left: 4px solid #0284c7; display: flex; gap: 2rem; justify-content: space-between; }
+.help-page__support h2 { color: #0f2c59; margin: 0.5rem 0; }
+.help-page__support p:last-child { color: #334155; line-height: 1.6; margin-bottom: 0; max-width: 48rem; }
+.help-page__topics details { padding: 0; }
+.help-page__topics summary { color: #0f2c59; cursor: pointer; font-weight: 700; list-style-position: inside; padding: 1.25rem; }
+.help-page__topics details p { border-top: 1px solid #e2e8f0; margin: 0; padding: 1.25rem; }
 .help-page__topics h2, .help-page aside h2 { font-size: 1.1rem; margin: 0; }
 .help-page__topics p { line-height: 1.6; margin-bottom: 0; }
 .help-page aside div { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-lg); }
-@media (max-width: 720px) { .help-page__topics { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .help-page__topics { grid-template-columns: 1fr; } .help-page__support { align-items: flex-start; flex-direction: column; } }

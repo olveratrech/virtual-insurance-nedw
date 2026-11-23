@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CheckboxField from '../../ui/CheckboxField/CheckboxField.jsx'
 import FormField from '../../ui/FormField/FormField.jsx'
 import SelectField from '../../ui/SelectField/SelectField.jsx'
 import { getTodayInputValue, isCardExpirationExpired, isPastDate } from '../../../utils/dateValidation.js'
+import { focusFirstInvalid, formatCardNumber, formatExpiration, preventInvalidKey, replaceFromPaste, sanitizeAlphabetic, sanitizeNumeric } from '../../../utils/inputHygiene.js'
 import './PaymentForm.css'
 
 const initialValues = { coverageStart: '', paymentMode: 'MONTHLY', cardholderName: '', cardBrand: '', cardNumber: '', expiration: '', cvv: '', acceptsTerms: false }
@@ -14,14 +15,46 @@ const cardRules = {
 }
 
 function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
+  const formRef = useRef(null)
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const today = getTodayInputValue()
 
   function updateField(event) {
     const { name, type, checked, value } = event.target
-    setValues((current) => ({ ...current, [name]: type === 'checkbox' ? checked : value }))
+    setValues((current) => {
+      if (type === 'checkbox') return { ...current, [name]: checked }
+      if (name === 'cardholderName') return { ...current, cardholderName: sanitizeAlphabetic(value).slice(0, 100) }
+      if (name === 'cardNumber') return { ...current, cardNumber: formatCardNumber(value, current.cardBrand === 'AMEX' ? 15 : 16) }
+      if (name === 'expiration') return { ...current, expiration: formatExpiration(value) }
+      if (name === 'cvv') return { ...current, cvv: sanitizeNumeric(value, 4) }
+      if (name === 'cardBrand') {
+        return {
+          ...current,
+          cardBrand: value,
+          cardNumber: formatCardNumber(current.cardNumber, value === 'AMEX' ? 15 : 16),
+          cvv: sanitizeNumeric(current.cvv, value === 'AMEX' ? 4 : 3),
+        }
+      }
+      return { ...current, [name]: value }
+    })
     setErrors((current) => ({ ...current, [name]: undefined }))
+  }
+
+  function setPastedValue(name, sanitizer) {
+    return (event) => replaceFromPaste(event, sanitizer, (value) => {
+      setValues((current) => ({ ...current, [name]: value }))
+      setErrors((current) => ({ ...current, [name]: undefined }))
+    })
+  }
+
+  function handleExpirationKeyDown(event) {
+    if (event.key === 'Backspace' && values.expiration.endsWith('/')) {
+      event.preventDefault()
+      setValues((current) => ({ ...current, expiration: current.expiration.slice(0, -2) }))
+      return
+    }
+    preventInvalidKey(event, /\d/)
   }
 
   function handleSubmit(event) {
@@ -43,31 +76,43 @@ function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
     }
     if (!values.acceptsTerms) errorsFound.acceptsTerms = 'Debes aceptar los términos para continuar.'
     setErrors(errorsFound)
-    if (Object.keys(errorsFound).length === 0 && !isSubmitting) onPay(values)
+    if (Object.keys(errorsFound).length > 0) {
+      focusFirstInvalid(formRef.current)
+      return
+    }
+    if (!isSubmitting) onPay(values)
   }
 
+  const hasErrors = Object.values(errors).some(Boolean)
+
   return (
-    <form className="payment-form" onSubmit={handleSubmit} noValidate>
-      <div className="payment-form__grid">
-        <FormField id="coverage-start" label="Inicio de vigencia" name="coverageStart" type="date" min={today} value={values.coverageStart} onChange={updateField} error={errors.coverageStart} />
-        <SelectField id="payment-mode" label="Modalidad de pago" name="paymentMode" value={values.paymentMode} onChange={updateField}>
-          <option value="MONTHLY">Mensual</option><option value="ANNUAL">Anual</option>
-        </SelectField>
-      </div>
-      <FormField id="cardholder-name" label="Nombre en la tarjeta" name="cardholderName" autoComplete="cc-name" value={values.cardholderName} onChange={updateField} error={errors.cardholderName} />
-      <div className="payment-form__grid">
-        <SelectField id="card-brand" label="Red de la tarjeta" name="cardBrand" value={values.cardBrand} onChange={updateField} error={errors.cardBrand}>
-          <option value="">Selecciona una red</option>
-          <option value="VISA">Visa</option>
-          <option value="MASTERCARD">Mastercard</option>
-          <option value="AMEX">American Express</option>
-        </SelectField>
-        <FormField id="card-number" label="Número de tarjeta" name="cardNumber" inputMode="numeric" autoComplete="cc-number" placeholder={values.cardBrand === 'AMEX' ? '3714 496353 98431' : '4242 4242 4242 4242'} maxLength={values.cardBrand === 'AMEX' ? 17 : 19} value={values.cardNumber} onChange={updateField} error={errors.cardNumber} />
-      </div>
-      <div className="payment-form__grid">
-        <FormField id="card-expiration" label="Vencimiento" name="expiration" autoComplete="cc-exp" placeholder="MM/AA" value={values.expiration} onChange={updateField} error={errors.expiration} />
-        <FormField id="card-cvv" label="CVV" name="cvv" type="password" inputMode="numeric" autoComplete="cc-csc" maxLength={values.cardBrand === 'AMEX' ? 4 : 3} value={values.cvv} onChange={updateField} error={errors.cvv} />
-      </div>
+    <form ref={formRef} className="payment-form" onSubmit={handleSubmit} noValidate>
+      <fieldset className="payment-form__section">
+        <legend>Datos de contratación</legend>
+        <div className="payment-form__grid">
+          <FormField id="coverage-start" label="Inicio de vigencia" name="coverageStart" type="date" min={today} data-technical="true" value={values.coverageStart} onChange={updateField} error={errors.coverageStart} />
+          <SelectField id="payment-mode" label="Modalidad de pago" name="paymentMode" value={values.paymentMode} onChange={updateField}>
+            <option value="MONTHLY">Mensual</option><option value="ANNUAL">Anual</option>
+          </SelectField>
+        </div>
+      </fieldset>
+      <fieldset className="payment-form__section">
+        <legend>Datos del medio de pago</legend>
+        <FormField id="cardholder-name" label="Nombre en la tarjeta" name="cardholderName" autoComplete="cc-name" maxLength="100" value={values.cardholderName} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s'-]/)} onPaste={setPastedValue('cardholderName', (value) => sanitizeAlphabetic(value).slice(0, 100))} error={errors.cardholderName} />
+        <div className="payment-form__grid">
+          <SelectField id="card-brand" label="Red de la tarjeta" name="cardBrand" value={values.cardBrand} onChange={updateField} error={errors.cardBrand}>
+            <option value="">Selecciona una red</option>
+            <option value="VISA">Visa</option>
+            <option value="MASTERCARD">Mastercard</option>
+            <option value="AMEX">American Express</option>
+          </SelectField>
+          <FormField id="card-number" label="Número de tarjeta" name="cardNumber" inputMode="numeric" autoComplete="cc-number" placeholder={values.cardBrand === 'AMEX' ? '3714 4963 5398 431' : '4242 4242 4242 4242'} maxLength="19" data-technical="true" value={values.cardNumber} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={setPastedValue('cardNumber', (value) => formatCardNumber(value, values.cardBrand === 'AMEX' ? 15 : 16))} error={errors.cardNumber} />
+        </div>
+        <div className="payment-form__grid">
+          <FormField id="card-expiration" label="Vencimiento" name="expiration" inputMode="numeric" autoComplete="cc-exp" placeholder="MM/AA" maxLength="5" data-technical="true" value={values.expiration} onChange={updateField} onKeyDown={handleExpirationKeyDown} onPaste={setPastedValue('expiration', formatExpiration)} error={errors.expiration} />
+          <FormField id="card-cvv" label="CVV" name="cvv" type="password" inputMode="numeric" autoComplete="cc-csc" maxLength="4" data-technical="true" value={values.cvv} onChange={updateField} onKeyDown={(event) => preventInvalidKey(event, /\d/)} onPaste={setPastedValue('cvv', (value) => sanitizeNumeric(value, 4))} error={errors.cvv} />
+        </div>
+      </fieldset>
       <div>
         <CheckboxField id="payment-terms" name="acceptsTerms" checked={values.acceptsTerms} onChange={updateField} label="Acepto términos, condiciones y aviso de privacidad" />
         {errors.acceptsTerms && <p className="form-field__error">{errors.acceptsTerms}</p>}
@@ -75,7 +120,7 @@ function PaymentForm({ onPay, paymentError, backDestination, isSubmitting }) {
       {paymentError && <p className="payment-form__error" role="alert">{paymentError}</p>}
       <div className="payment-form__actions">
         <Link className="button button--secondary" to={backDestination}>Volver</Link>
-        <button className="button button--primary" type="submit" disabled={isSubmitting}>
+        <button className="button button--primary" type="submit" disabled={isSubmitting || hasErrors}>
           {isSubmitting ? 'Procesando pago…' : 'Pagar y emitir póliza'}
         </button>
       </div>
