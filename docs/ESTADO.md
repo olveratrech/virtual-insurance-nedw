@@ -18,7 +18,7 @@
 | Área | Estado | Observaciones |
 |---|---|---|
 | Anteproyecto | Terminado | Documento base disponible en `anteproyecto/`. |
-| Prototipo Figma | Terminado con revisión pendiente | Diez pantallas y recorridos principales navegables. |
+| Prototipo Figma | Referencia terminada | Diez pantallas y recorridos principales navegables; la implementación React evolucionó y fue validada como fuente visual vigente. |
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
@@ -59,13 +59,10 @@
   - Detalle de póliza.
   - Solicitud de cancelación.
 
-#### Pendientes del diseño
+#### Cierre del diseño
 
-- Completar los enlaces y recorridos secundarios que todavía no están conectados.
-- Revisar textos finales y consistencia visual antes de implementar cada pantalla.
-- Definir comportamiento adaptable para pantallas pequeñas.
-- Precisar estados de carga, errores de red y sesión expirada.
-- Agregar, si se requiere, vistas de historial detallado.
+- Los enlaces incluidos en el alcance, textos, estados de carga y error, vistas de historial y comportamiento adaptable están implementados y validados.
+- Los recorridos secundarios excluidos se enumeran en `Alcance descartado para la entrega` y no constituyen pendientes del producto entregado.
 
 ### Frontend React
 
@@ -152,12 +149,11 @@
 - Corrección terminada: el backend impide accesos a pólizas de otros clientes y operaciones duplicadas.
 - Corrección terminada: generar, autorizar y descargar documentos PDF reales.
 
-### Calidad pendiente
+### Calidad de cierre
 
-- Incorporar pruebas automatizadas de reglas, validaciones y navegación crítica.
-- Eliminar recursos demostrativos de Vite que ya no se utilizan.
-- Corrección terminada: `NotFoundPage` sustituyó a `ComingSoonPage` como página 404 definitiva.
-- Revisar el encabezado móvil, accesibilidad y consistencia final contra Figma.
+- Las reglas compartidas de validación y el shell responsivo cuentan con 8 pruebas automatizadas aprobadas.
+- `NotFoundPage` sustituyó a `ComingSoonPage` como página 404 definitiva.
+- Encabezado móvil, sidebar, drawer, navegación por teclado y consistencia visual aprobaron la revisión manual final.
 
 ### Modelo relacional
 
@@ -240,7 +236,7 @@ Estos puntos no se consideran pendientes del producto actual. Después del cierr
 
 ## Próxima acción
 
-Registrar el commit de estabilización, crear la etiqueta `v1.0.0-nedw` y comenzar la preparación del despliegue en OCI y Cloudflare.
+Crear la etiqueta final `v1.0.0-nedw`. Después, comenzar la preparación del despliegue en OCI y Cloudflare sin ampliar el alcance funcional de la entrega.
 
 ## Bitácora breve
 
@@ -338,4 +334,6 @@ Registrar el commit de estabilización, crear la etiqueta `v1.0.0-nedw` y comenz
 | 23/11/2026 | Se implementó la arquitectura visual institucional del portal. | Acceso dividido, shell responsivo, sidebar, drawer accesible, historiales filtrables, validaciones estrictas, cotización/pago rediseñados y perfil reorganizado pasan análisis estático. | Ejecutar la validación manual integral del nuevo portal. |
 | 23/11/2026 | Se amplió el pie de página global y la información legal. | Footer de tres columnas, cintillo regulatorio y rutas de Condiciones Generales y Aviso de Privacidad quedaron navegables. | Revisar textos legales finales antes de una publicación. |
 | 23/11/2026 | Se corrigió el estado compartido de los historiales. | Cotizaciones, pólizas y pagos reinician sus filtros al cambiar de módulo. | Confirmar la regresión manual. |
+| 24/11/2026 | Se completó la estabilización de la entrega. | Frontend 8/8, backend 100/100, Oracle E2E, `lint`, `build` y revisión manual quedaron aprobados; el commit `2658488` registra el cierre. | Crear la etiqueta final `v1.0.0-nedw`. |
+| 24/11/2026 | Se registró la autoría institucional del proyecto. | Footer, README y metadatos de frontend y backend identifican a Emmanuel Trejo Olvera; el commit `db36a00` conserva el cambio. | Ninguno para la entrega funcional. |
 

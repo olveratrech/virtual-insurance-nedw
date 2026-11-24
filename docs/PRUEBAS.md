@@ -2,14 +2,14 @@
 
 Este documento concentra las pruebas ejecutadas y confirmadas durante el desarrollo. Los README de cada componente conservan las instrucciones de ejecución; este archivo registra **qué se probó, qué tipo de prueba fue y cuál fue su último resultado conocido**.
 
-Última actualización: **23 de noviembre de 2026**.
+Última actualización: **24 de noviembre de 2026**.
 
 ## Resumen
 
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas; reconfirmado el 23/11/2026 |
+| Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas; reconfirmado el 24/11/2026 |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
 | React | Recorrido integrado, análisis estático, build, 8 pruebas automatizadas y validación manual del nuevo portal | Aprobado; `lint` conserva 2 advertencias conocidas y 0 errores |
 
@@ -284,11 +284,12 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 - La primera ejecución de la suite administrativa produjo 71 errores porque había dos beans `AuthenticationManager` sin uno principal para construir `HttpSecurity`. Se marcó el gestor de clientes como `@Primary`; ambos servicios conservan calificadores explícitos y la repetición terminó 71/71.
 - Los filtros de `AccountHistoryPage` persistían al navegar entre cotizaciones, pólizas y pagos porque React reutilizaba el mismo tipo de componente. Cada ruta monta ahora una instancia con clave propia para reiniciar su estado local.
 
-## Pendientes de prueba
+## Estado de cierre de pruebas
 
-- Descarga protegida de la fotografía del cliente.
-- Recorrido E2E completo desde el navegador hasta Oracle.
-- Pruebas automatizadas del frontend y del recorrido entre frontend y backend.
+- La suite automatizada del frontend cubre las utilidades compartidas de validación y el shell responsivo: 8/8 pruebas aprobadas.
+- El recorrido funcional integrado fue validado manualmente desde React contra Spring y Oracle.
+- El recorrido transaccional reproducible de Oracle conserva su evidencia en `database/tests/salida_recorrido_e2e.txt`.
+- No quedan pruebas bloqueantes pendientes para la entrega. La ampliación futura de cobertura podrá incluir pruebas automatizadas de navegador y casos específicos de descarga de fotografía.
 
 ## Regla de mantenimiento
 

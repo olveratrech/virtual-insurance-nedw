@@ -14,7 +14,7 @@ Para regresar al punto de partida sin destruir el trabajo actual, se debe crear 
 git switch -c recuperacion/pre-entrega checkpoint-pre-entrega-2026-11-23
 ```
 
-## 2. Verificación automatizada pendiente
+## 2. Verificación automatizada completada
 
 - [x] `cd frontend && npm run lint` — 0 errores y 2 advertencias conocidas
 - [x] `cd frontend && npm test` — 2 archivos, 8 pruebas aprobadas
@@ -24,7 +24,7 @@ git switch -c recuperacion/pre-entrega checkpoint-pre-entrega-2026-11-23
 
 Registrar los conteos y resultados reales en `docs/PRUEBAS.md`. No marcar un paso como aprobado solo porque el comando inicia correctamente.
 
-## 3. Verificación manual pendiente
+## 3. Verificación manual completada
 
 - [x] Ejecutar el recorrido principal de `docs/GUIA-DEMO.md`.
 - [x] Ejecutar al menos pago rechazado, cotización rechazada y acceso protegido sin sesión.
@@ -37,7 +37,11 @@ Registrar los conteos y resultados reales en `docs/PRUEBAS.md`. No marcar un pas
 
 ## 4. Commit de estabilización
 
-Agregar solo archivos versionables:
+- [x] Estabilización registrada en `2658488` (`test(frontend): preparar estabilizacion y entrega`).
+- [x] Autoría institucional registrada en `db36a00` (`docs: agregar autoria institucional del proyecto`).
+- [x] `.codex/` permanece fuera del versionado.
+
+Los comandos utilizados para agregar solo archivos versionables fueron:
 
 ```bash
 git add README.md docs frontend
