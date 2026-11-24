@@ -642,7 +642,7 @@ La primera versión no requiere paginación con cursor porque el panel solamente
 
 La operación registra la tarjeta ficticia, crea el intento y, si se aprueba, emite la póliza dentro de una sola transacción.
 
-Requiere el encabezado `Idempotency-Key` con una clave aleatoria de 16 a 64 caracteres. Repetir la misma clave devuelve el intento anterior sin descontar saldo ni emitir otra póliza.
+Requiere el encabezado `Idempotency-Key` con una clave aleatoria de 16 a 64 caracteres. Repetir la misma clave para la misma cotización del cliente devuelve el intento anterior sin descontar saldo ni emitir otra póliza. Una clave usada en otra cotización pertenece a una operación independiente.
 
 Petición:
 

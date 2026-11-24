@@ -18,6 +18,8 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import mx.unam.virtualinsurance.admin.auth.InternalUserDetailsService;
+import mx.unam.virtualinsurance.admin.auth.InternalUserPrincipal;
+import org.springframework.security.authorization.AuthorizationDecision;
 import mx.unam.virtualinsurance.auth.ClientUserDetailsService;
 
 @Configuration
@@ -57,7 +59,8 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(
 		HttpSecurity http,
-		SecurityContextRepository securityContextRepository
+		SecurityContextRepository securityContextRepository,
+		InternalUserDetailsService internalUsers
 	) throws Exception {
 		var logoutRequestMatcher = new OrRequestMatcher(
 			PathPatternRequestMatcher.pathPattern(HttpMethod.POST, "/auth/logout"),
@@ -72,7 +75,18 @@ public class SecurityConfig {
 				.requestMatchers("/actuator/health").permitAll()
 				.requestMatchers(HttpMethod.GET, "/catalogos/generos", "/auth/csrf").permitAll()
 				.requestMatchers(HttpMethod.POST, "/auth/registro", "/auth/login", "/admin/auth/login").permitAll()
-				.requestMatchers("/admin/**").hasAnyRole("ADMIN", "CANCELLATION_REVIEWER")
+				.requestMatchers("/admin/**").access((authentication, context) -> {
+					var current = authentication.get();
+					if (current == null || !(current.getPrincipal() instanceof InternalUserPrincipal principal)) {
+						return new AuthorizationDecision(false);
+					}
+					boolean allowed = internalUsers.hasCurrentAccess(principal.internalUserId());
+					var session = context.getRequest().getSession(false);
+					if (!allowed && session != null) {
+						session.invalidate();
+					}
+					return new AuthorizationDecision(allowed);
+				})
 				.requestMatchers(HttpMethod.GET, "/auth/me", "/panel", "/cuenta/**", "/clientes/me/foto").hasRole("CLIENT")
 				.requestMatchers(HttpMethod.PUT, "/cuenta/**").hasRole("CLIENT")
 				.requestMatchers(HttpMethod.DELETE, "/cuenta/**").hasRole("CLIENT")

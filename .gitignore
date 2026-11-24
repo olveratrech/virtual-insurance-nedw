@@ -48,6 +48,7 @@ backend/target/
 .mvn/timing.properties
 
 # Variables y secretos locales
+.codex/
 .env
 .env.*
 !.env.example

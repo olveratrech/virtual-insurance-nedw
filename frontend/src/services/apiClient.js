@@ -13,6 +13,7 @@ export async function apiRequest(path, options = {}) {
   try {
     response = await fetch(path, {
       credentials: 'include',
+      cache: 'no-store',
       ...options,
     })
   } catch {

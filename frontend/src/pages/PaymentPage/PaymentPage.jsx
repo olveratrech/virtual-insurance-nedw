@@ -5,7 +5,6 @@ import PaymentSummary from '../../components/payment/PaymentSummary/PaymentSumma
 import FlowSteps from '../../components/quote/FlowSteps/FlowSteps.jsx'
 import { createPaymentAttempt } from '../../services/paymentApi.js'
 import { getQuote } from '../../services/quoteApi.js'
-import { formatMxn } from '../../utils/currency.js'
 import './PaymentPage.css'
 
 function PaymentPage() {
@@ -62,29 +61,7 @@ function PaymentPage() {
         return
       }
 
-      const policy = {
-        policyNumber: result.policyNumber,
-        status: 'ACTIVA',
-        type: quote.type,
-        productName: quote.productName,
-        coverageName: quote.coverageName,
-        validFrom: new Date(`${result.coverageStart}T12:00:00`).toLocaleDateString('es-MX', { dateStyle: 'long' }),
-        validUntil: new Date(`${result.coverageEnd}T12:00:00`).toLocaleDateString('es-MX', { dateStyle: 'long' }),
-        insuredLabel: quote.type === 'MEDICAL' ? 'Persona asegurada' : 'Vehículo asegurado',
-        insuredValue: quote.type === 'MEDICAL'
-          ? 'Cliente autenticado'
-          : `${quote.details.brand} ${quote.details.model} · ${quote.details.year}`,
-        paymentMode: values.paymentMode === 'ANNUAL' ? 'Anual' : 'Mensual',
-        nextPayment: values.paymentMode === 'ANNUAL' ? 'Cubierto durante la vigencia' : 'Un mes después del primer pago',
-        lastPayment: `${formatMxn(result.amount)} · APLICADO`,
-        documents: [
-          { id: 'policy-pdf', name: 'Póliza de seguro', format: 'PDF' },
-          { id: 'payment-receipt', name: 'Comprobante de pago', format: 'PDF' },
-        ],
-      }
-      navigate(`/polizas/${result.policyId}`, {
-        state: { quoteType: quote.type, quote, policy, payment: result },
-      })
+      navigate(`/polizas/${result.policyId}`, { state: { issuedAfterPayment: true } })
     } catch (requestError) {
       setPaymentError(requestError.message)
     } finally {

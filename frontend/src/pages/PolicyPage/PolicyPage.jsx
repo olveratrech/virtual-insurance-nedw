@@ -9,15 +9,20 @@ import { downloadPolicyDocument, getPolicy } from '../../services/policyApi.js'
 import './PolicyPage.css'
 
 function PolicyPage() {
+  const { key } = useLocation()
+  return <PolicyPageContent key={key} />
+}
+
+function PolicyPageContent() {
   const { polizaId } = useParams()
   const location = useLocation()
   const [downloadMessage, setDownloadMessage] = useState('')
   const [downloadingId, setDownloadingId] = useState(null)
-  const [policy, setPolicy] = useState(location.state?.policy ?? null)
-  const [status, setStatus] = useState(policy ? 'ready' : 'loading')
+  const [policy, setPolicy] = useState(null)
+  const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
-  const issuedAfterPayment = ['APPROVED', 'APROBADO'].includes(location.state?.payment?.status)
+  const issuedAfterPayment = location.state?.issuedAfterPayment === true
   const active = policy?.status === 'ACTIVA'
   const cancellationRequested = policy?.status === 'CANCELACION_SOLICITADA'
   const cancelled = policy?.status === 'CANCELADA'
@@ -141,7 +146,7 @@ function PolicyPage() {
       <div className="policy-page__actions">
         <Link className="button button--secondary" to="/panel">Volver al panel</Link>
         {canRequestCancellation && (
-          <Link className="button button--primary" to={`/polizas/${polizaId}/cancelacion`} state={{ policy }}>Solicitar cancelación</Link>
+          <Link className="button button--primary" to={`/polizas/${polizaId}/cancelacion`}>Solicitar cancelación</Link>
         )}
       </div>
     </div>

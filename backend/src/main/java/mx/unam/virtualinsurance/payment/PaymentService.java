@@ -64,23 +64,23 @@ public class PaymentService {
 	}
 
 	@Transactional
-	public synchronized PaymentResponse pay(
+	public PaymentResponse pay(
 		Long clientId,
 		Long quoteId,
 		String idempotencyKey,
 		PaymentRequest request
 	) {
 		validateIdempotencyKey(idempotencyKey);
+		Quote quote = quoteRepository.lockOwnedQuote(quoteId, clientId)
+			.orElseThrow(this::quoteNotFound);
 		PaymentAttempt previous = attemptRepository
-			.findOwnedByIdempotencyKey(idempotencyKey, clientId)
+			.findOwnedByIdempotencyKey(idempotencyKey, quoteId, clientId)
 			.orElse(null);
 		if (previous != null) {
 			return responseFromExisting(previous, request.coverageStart());
 		}
 		validateCardBrand(request);
 
-		Quote quote = quoteRepository.findByQuoteIdAndClientClientId(quoteId, clientId)
-			.orElseThrow(this::quoteNotFound);
 		validatePayableQuote(quote, request.coverageStart());
 		if (policyExistsForQuote(quoteId)) {
 			throw problem(

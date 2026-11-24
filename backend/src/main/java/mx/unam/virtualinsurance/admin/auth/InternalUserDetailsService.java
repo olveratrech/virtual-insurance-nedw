@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 
 @Service
 public class InternalUserDetailsService implements UserDetailsService {
@@ -20,8 +22,23 @@ public class InternalUserDetailsService implements UserDetailsService {
 
 	private final InternalUserRepository internalUserRepository;
 
-	public InternalUserDetailsService(InternalUserRepository internalUserRepository) {
+	private final Environment environment;
+
+	public InternalUserDetailsService(InternalUserRepository internalUserRepository, Environment environment) {
 		this.internalUserRepository = internalUserRepository;
+		this.environment = environment;
+	}
+
+	public boolean hasCurrentAccess(Long userId) {
+		return internalUserRepository.findByInternalUserId(userId)
+			.filter(this::isEligible)
+			.filter(user -> user.getRoles().stream().map(InternalRole::getKey).anyMatch(AUTHORIZED_ROLES::contains))
+			.isPresent();
+	}
+
+	private boolean isEligible(InternalUser user) {
+		return user.isActive() && !(environment.acceptsProfiles(Profiles.of("public"))
+			&& "admin.cancelaciones@virtual-insurance.test".equalsIgnoreCase(user.getEmail()));
 	}
 
 	@Override
@@ -40,7 +57,7 @@ public class InternalUserDetailsService implements UserDetailsService {
 			user.getName(),
 			user.getEmail(),
 			user.getPasswordHash(),
-			user.isActive() && !roles.isEmpty(),
+			isEligible(user) && !roles.isEmpty(),
 			roles
 		);
 	}

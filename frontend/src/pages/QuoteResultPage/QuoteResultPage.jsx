@@ -7,10 +7,14 @@ import { formatMxn, formatQuoteNumber } from '../../utils/currency.js'
 import './QuoteResultPage.css'
 
 function QuoteResultPage() {
+  const { key } = useLocation()
+  return <QuoteResultPageContent key={key} />
+}
+
+function QuoteResultPageContent() {
   const { quoteId } = useParams()
-  const location = useLocation()
-  const [quote, setQuote] = useState(location.state?.quote ?? null)
-  const [status, setStatus] = useState(quote ? 'ready' : 'loading')
+  const [quote, setQuote] = useState(null)
+  const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
   const [reloadKey, setReloadKey] = useState(0)
 
@@ -121,12 +125,11 @@ function QuoteResultPage() {
           <Link
             className="button button--primary"
             to={`/cotizaciones/${quote.id}/pago`}
-            state={{ quoteId: quote.id, quoteType: quote.type, quote }}
           >
             Contratar seguro
           </Link>
         ) : (
-          <Link className="button button--primary" to={retryDestination} state={{ initialValues: quote.details }}>
+          <Link className="button button--primary" to={`${retryDestination}?revisar=${quote.id}`}>
             Revisar datos
           </Link>
         )}

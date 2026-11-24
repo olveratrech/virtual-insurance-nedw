@@ -8,6 +8,7 @@ set serveroutput on
 declare
     v_usuario     varchar2(128);
     v_contenedor  varchar2(128);
+    v_restriccion_anterior number;
 
     procedure crear_tabla_si_falta(p_tabla varchar2, p_sentencia varchar2) is
         v_existe number;
@@ -134,9 +135,14 @@ begin
     dbms_output.put_line('precision verificada: intento_pago.numero_pago number(10)');
 
     crear_restriccion_si_falta(
-        'uk_intento_pago_idempotency',
-        'alter table intento_pago add constraint uk_intento_pago_idempotency unique (idempotency_key)'
+        'uk_intento_pago_cot_idemp',
+        'alter table intento_pago add constraint uk_intento_pago_cot_idemp unique (cotizacion_id, idempotency_key)'
     );
+    select count(*) into v_restriccion_anterior from user_constraints
+     where constraint_name = 'UK_INTENTO_PAGO_IDEMPOTENCY' and table_name = 'INTENTO_PAGO';
+    if v_restriccion_anterior > 0 then
+        execute immediate 'alter table intento_pago drop constraint uk_intento_pago_idempotency';
+    end if;
 
     crear_secuencia_si_falta(
         'seq_numero_pago',

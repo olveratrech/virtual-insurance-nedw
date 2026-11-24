@@ -13,8 +13,9 @@ public interface PaymentAttemptRepository extends JpaRepository<PaymentAttempt, 
 		  join fetch attempt.quote quote
 		  join fetch attempt.status status
 		 where attempt.idempotencyKey = :idempotencyKey
+		   and quote.quoteId = :quoteId
 		   and quote.client.clientId = :clientId
 		""")
-	Optional<PaymentAttempt> findOwnedByIdempotencyKey(String idempotencyKey, Long clientId);
+	Optional<PaymentAttempt> findOwnedByIdempotencyKey(String idempotencyKey, Long quoteId, Long clientId);
 }
 

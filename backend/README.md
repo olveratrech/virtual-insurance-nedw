@@ -141,3 +141,9 @@ La respuesta no incluye BLOB, factura JSON/XML, número de tarjeta ni CVV. Los d
 `GET /polizas/{policyId}/documentos/{documentId}/contenido` entrega únicamente documentos pertenecientes al cliente autenticado. Responde `application/pdf`, `Content-Disposition: attachment` y `Cache-Control: no-store`.
 
 Apache PDFBox genera una póliza contractual académica y un comprobante de pago real. Los datos variables provienen de Oracle y los textos editables se concentran en `AcademicContractContent`; su versión inicial es `NEDW-2026.1`. Cada descarga regenera y actualiza el BLOB, por lo que las pólizas anteriores adoptan la plantilla vigente sin exponer una operación destructiva.
+
+## Perfil para publicación
+
+Activa `SPRING_PROFILES_ACTIVE=public` en un entorno servido exclusivamente por HTTPS. Configura el proxy para redirigir HTTP a HTTPS y restringe el acceso directo al puerto del backend. El perfil activa la cookie de sesión `Secure` y bloquea la cuenta administrativa de demostración. Excluye `database/seed/05_usuarios_internos.sql` al preparar esa base y aprovisiona las cuentas internas por separado.
+
+Antes de arrancar esta versión sobre una base existente, detén las instancias del backend y vuelve a aplicar `database/schema/06_simulador_pagos.sql` con el operador del esquema. El script añade la unicidad por cotización y clave antes de retirar la restricción global. La misma clave dentro de la misma cotización recupera el intento original.
