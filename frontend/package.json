@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "author": "Emmanuel Trejo Olvera",
   "private": true,
   "version": "0.0.0",
   "type": "module",

@@ -32,7 +32,7 @@ function DisclosureFooter() {
       <div className="disclosure-footer__regulatory">
         <p>
           <strong>Implementación académica para la asignatura de Negocios Electrónicos y Desarrollo Web · Facultad de Ingeniería · UNAM · 2026.</strong>{' '}
-          Este sitio no realiza operaciones financieras o aseguradoras reales. Virtual Insurance no es una institución autorizada, supervisada ni registrada ante la CNSF o la CONDUSEF. Todos los productos, folios, pagos, tarjetas, teléfonos y canales de atención mostrados son ficticios.
+          Desarrollada por Emmanuel Trejo Olvera. Este sitio no realiza operaciones financieras o aseguradoras reales. Virtual Insurance no es una institución autorizada, supervisada ni registrada ante la CNSF o la CONDUSEF. Todos los productos, folios, pagos, tarjetas, teléfonos y canales de atención mostrados son ficticios.
         </p>
       </div>
     </footer>
