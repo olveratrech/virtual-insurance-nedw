@@ -230,22 +230,9 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Incorporar búsqueda y filtros independientes en cotizaciones, pólizas y pagos.
 - [x] Reorganizar el perfil para aprovechar el espacio disponible sin perder adaptación móvil.
 - [x] Incorporar footer institucional, cintillo regulatorio y páginas informativas legales.
-- [ ] Validar manualmente el portal completo en escritorio, tablet y móvil.
+- [x] Validar manualmente el portal completo en escritorio, tablet y móvil.
 
 **Entregable:** portal visualmente coherente, adaptable y con controles de entrada reutilizables.
-
-### Fase 5.7 — Ampliaciones posteriores del portal
-
-**Fecha objetivo:** posterior a la entrega prioritaria
-
-- [ ] Recuperación segura de contraseña con token de un solo uso y expiración.
-- [ ] Teléfono, domicilio y datos fiscales CFDI persistentes.
-- [ ] Cambio de contraseña autenticado desde el perfil.
-- [ ] Gestión de tarjetas ficticias guardadas sin persistir CVV.
-- [ ] Resumen de facturación y descarga de comprobantes disponibles.
-- [ ] Registro y seguimiento de siniestros o tickets con folio.
-
-**Entregable:** funciones de autogestión ampliadas mediante contratos API y persistencia reales, nunca mediante simulaciones visuales aisladas.
 
 ### Fase 6 — Pruebas, estabilización y entrega
 
@@ -255,13 +242,15 @@ La justificación, ubicación y estado de cada patrón se mantienen en `docs/PAT
 - [x] Ejecutar pruebas de integración del backend y Oracle hasta el incremento de cancelaciones.
 - [x] Probar manualmente los recorridos principales y de error implementados.
 - [x] Corregir los defectos bloqueantes y de alta prioridad detectados hasta el incremento de cancelaciones.
-- [ ] Preparar datos y pasos reproducibles para la demostración.
+- [x] Preparar datos y pasos reproducibles para la demostración.
 - [x] Mantener actualizados README, estado del proyecto y evidencias durante los incrementos.
-- [ ] Incorporar pruebas automatizadas del frontend y del shell responsivo.
-- [ ] Confirmar manualmente el incremento visual del 23 de noviembre.
+- [x] Incorporar pruebas automatizadas del frontend y del shell responsivo.
+- [x] Confirmar manualmente el incremento visual del 23 de noviembre.
 - [ ] Crear una versión o etiqueta de entrega.
 
 **Entregable:** proyecto demostrable, documentado y reproducible.
+
+Las ampliaciones de recuperación/cambio de contraseña, CFDI, domicilio, tarjetas guardadas y siniestros se retiraron del plan de entrega. Después de la versión etiquetada, el siguiente frente será el despliegue en OCI y Cloudflare sin ampliar el dominio funcional.
 
 ## Escenarios mínimos de aceptación
 

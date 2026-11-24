@@ -58,10 +58,6 @@ function AccessPage() {
             <button type="button" role="tab" aria-selected={mode === 'register'} onClick={() => setMode('register')}>Registro</button>
           </div>
           {mode === 'login' ? <LoginForm onSuccess={handleLogin} /> : <RegisterForm onSuccess={handleRegister} />}
-          <aside className="access-page__recovery">
-            <strong>¿No puedes acceder?</strong>
-            <span>La recuperación autogestionada se habilitará cuando el servicio seguro de restablecimiento esté disponible.</span>
-          </aside>
         </div>
       </section>
     </div>

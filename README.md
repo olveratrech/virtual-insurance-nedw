@@ -9,10 +9,12 @@ Proyecto final de **Negocios Electrónicos y Desarrollo Web** de la Facultad de 
 - Esquema funcional desplegado y probado en Oracle Database 26ai.
 - Recorrido E2E transaccional de base de datos aprobado.
 - Frontend React integrado con Spring Boot para registro, autenticación, cotizaciones, pagos, emisión, consulta de pólizas y descarga de documentos.
-- Backend Spring Boot conectado a Oracle, con 46 pruebas automatizadas aprobadas.
+- Backend Spring Boot conectado a Oracle, con 100 pruebas automatizadas aprobadas.
 - Pasarela académica con tarjetas exclusivamente ficticias, saldos de prueba e idempotencia.
 - Pólizas y comprobantes PDF reales, protegidos por sesión y propiedad del recurso.
-- Siguiente incremento: integrar las solicitudes de cancelación de React con Spring Boot y Oracle.
+- Cancelaciones integradas de extremo a extremo, incluida su resolución administrativa.
+- Portal institucional responsivo y suite automatizada de frontend preparados para estabilización final.
+- Siguiente etapa después de la entrega: despliegue en OCI y Cloudflare.
 
 Consulta el [roadmap](docs/ROADMAP.md), el [estado detallado](docs/ESTADO.md), el [registro consolidado de pruebas](docs/PRUEBAS.md) y los [patrones de diseño y arquitectura](docs/PATRONES-DISENO.md).
 

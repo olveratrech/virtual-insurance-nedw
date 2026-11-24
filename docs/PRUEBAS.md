@@ -9,9 +9,9 @@ Este documento concentra las pruebas ejecutadas y confirmadas durante el desarro
 | Componente | Cobertura confirmada | Resultado actual |
 |---|---:|---|
 | Oracle | 7 pruebas incrementales y 1 recorrido E2E transaccional | Aprobado |
-| Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas |
+| Spring Boot | 100 pruebas automatizadas | 100 aprobadas, 0 fallidas, 0 errores, 0 omitidas; reconfirmado el 23/11/2026 |
 | API REST | 9 comprobaciones HTTP manuales | Aprobado |
-| React | Recorrido integrado previo aprobado; portal institucional reciente con análisis estático correcto | Validación manual reciente pendiente |
+| React | Recorrido integrado, análisis estático, build, 8 pruebas automatizadas y validación manual del nuevo portal | Aprobado; `lint` conserva 2 advertencias conocidas y 0 errores |
 
 ## Oracle Database
 
@@ -27,6 +27,8 @@ Los scripts se ejecutaron en `VI_APP@ETOBDA_S1`. Las pruebas que crean datos tem
 | `tests/06_simulador_pagos.sql` | Estructura e integración | Procesador de pagos, columnas de idempotencia, secuencias y ocho instrumentos Visa, Mastercard y American Express con saldos y respuestas controladas | Aprobada |
 | `tests/07_administracion_cancelaciones.sql` | Estructura e integración transaccional | Usuarios internos, roles, responsable, observación, autorización, aprobación, rechazo y resolución única | Aprobada |
 | `tests/99_recorrido_completo.sql` | E2E transaccional | Recorrido completo del caso de estudio y reglas negativas, con rollback integral | Aprobada |
+
+La salida conservada en `database/tests/salida_recorrido_e2e.txt` reconfirma el 23 de noviembre de 2026 los seis recorridos, los controles negativos y cinco conteos en cero posteriores al `rollback`.
 
 Los scripts de estructura y carga también se ejecutaron dos veces durante cada incremento para verificar su idempotencia o repetibilidad sin duplicar datos.
 
@@ -178,8 +180,8 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 
 | Prueba o recorrido | Tipo | Resultado |
 |---|---|---|
-| `npm run lint` | Análisis estático | Aprobado en los incrementos implementados |
-| `npm run build` | Compilación de producción | Aprobado en los incrementos implementados |
+| `npm run lint` | Análisis estático | Aprobado el 24/11/2026; 0 errores y 2 advertencias `set-state-in-effect` conocidas |
+| `npm run build` | Compilación de producción | Aprobado el 24/11/2026; 139 módulos transformados en 310 ms |
 | Inicio, acceso y registro | Manual funcional y visual | Aprobado |
 | Panel, navegación y actividad reciente | Manual funcional y visual | Aprobado |
 | Cotización de auto y médica, con aprobaciones y rechazos | Manual funcional y visual | Aprobado |
@@ -261,13 +263,15 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 | Aviso global de la aplicación | Regresión visual adaptable | Aprobado; aparece al final de los layouts de cliente y administración sin desplazar contenido ni dejar avisos redundantes |
 | Lenguaje de cotización y pago | Regresión funcional y visual | Aprobado; formularios, resultados y errores usan términos operativos, y los datos controlados se identifican en una sola guía |
 | Comprobante de pago profesional | Regresión automatizada y visual | Aprobado; muestra comprobante, autorización, alcance y pie localizados sin las expresiones anteriores |
-| Acceso institucional dividido | Revisión visual y funcional | Pendiente de confirmación manual |
-| Sidebar de escritorio y drawer bajo 1024 px | Revisión visual, navegación y accesibilidad | Pendiente; debe comprobar cierre por ruta, fondo y Escape |
-| Logotipo completo en shell e isotipo móvil | Regresión visual adaptable | Pendiente de confirmación manual |
-| Validación estricta de escritura y pegado | Regresión manual de formularios | Pendiente; incluye nombres, RFC, campos numéricos, tarjeta, `MM/AA` y CVV |
-| Búsqueda y filtro de historiales | Regresión funcional | Pendiente; verificar que se reinicien al cambiar entre cotizaciones, pólizas y pagos |
-| Perfil en dos zonas | Revisión visual adaptable | Pendiente en escritorio, tablet y móvil |
-| Footer institucional y rutas legales | Navegación y revisión visual | Pendiente; revisar enlaces, responsividad y cintillo regulatorio |
+| Acceso institucional dividido | Revisión visual y funcional | Aprobado el 24/11/2026 |
+| Sidebar de escritorio y drawer bajo 1024 px | Revisión visual, navegación y accesibilidad | Aprobado el 24/11/2026 |
+| Logotipo completo en shell e isotipo móvil | Regresión visual adaptable | Aprobado el 24/11/2026 |
+| Validación estricta de escritura y pegado | Regresión manual de formularios | Aprobado el 24/11/2026 |
+| Búsqueda y filtro de historiales | Regresión funcional | Aprobado el 24/11/2026; los filtros se reinician entre módulos |
+| Perfil en dos zonas | Revisión visual adaptable | Aprobado el 24/11/2026 |
+| Footer institucional y rutas legales | Navegación y revisión visual | Aprobado el 24/11/2026 |
+| `src/utils/inputHygiene.test.js` | Unitaria de frontend | 5 aprobadas; sanitización alfabética/numérica, identificadores, tarjeta y vencimiento |
+| `PortalShell.test.jsx` | Componente y navegación responsiva | 3 aprobadas; marcas, estructura dual y cierre por fondo, Escape y ruta |
 
 ## Incidencias detectadas y resueltas durante las pruebas
 
@@ -285,7 +289,6 @@ El recorrido comercial principal del frontend consume la API real. Las pruebas m
 - Descarga protegida de la fotografía del cliente.
 - Recorrido E2E completo desde el navegador hasta Oracle.
 - Pruebas automatizadas del frontend y del recorrido entre frontend y backend.
-- Validación manual integral del portal institucional incorporado el 23 de noviembre.
 
 ## Regla de mantenimiento
 

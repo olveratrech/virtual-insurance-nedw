@@ -10,8 +10,12 @@ Aplicación React creada con Vite para el portal académico de Virtual Insurance
 - Contratación mediante una pasarela académica con tarjetas ficticias.
 - Emisión y consulta de pólizas.
 - Descarga protegida de póliza y comprobante PDF.
+- Solicitud y seguimiento de cancelaciones.
+- Shell responsivo con sidebar de escritorio y drawer móvil.
+- Historiales separados de cotizaciones, pólizas y pagos.
+- Perfil editable y footer institucional global.
 
-La solicitud de cancelación conserva por ahora su implementación de interfaz y es el siguiente módulo que debe conectarse con Spring Boot y Oracle.
+La recuperación y el cambio de contraseña, CFDI, tarjetas guardadas y siniestros no forman parte del alcance de entrega.
 
 ## Ejecución
 
@@ -27,6 +31,7 @@ Vite publica normalmente la aplicación en `http://localhost:5173` y reenvía la
 ```bash
 npm run lint
 npm run build
+npm test
 ```
 
 El estado funcional, las pruebas manuales y los pendientes se mantienen en `../docs/ESTADO.md`, `../docs/PRUEBAS.md` y `../docs/ROADMAP.md`.

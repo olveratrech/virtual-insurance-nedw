@@ -1,6 +1,6 @@
 # Estado del proyecto — Virtual Insurance
 
-**Última actualización:** 23 de noviembre de 2026
+**Última actualización:** 24 de noviembre de 2026
 **Entrega de NEDW:** 26 de noviembre de 2026  
 **Responsable:** Emmanuel Trejo Olvera
 
@@ -22,11 +22,11 @@
 | Modelo relacional | Administración incorporada | Usuarios internos, roles y responsabilidad de resolución complementan el modelo comercial aprobado. |
 | Contrato API | Definido | Entradas, salidas, errores, autenticación y transacciones documentados en `docs/CONTRATO-API.md`. |
 | Oracle | Administración verificada | Siete incrementos, incluido el modelo administrativo de cancelaciones, están desplegados y probados de forma repetible. |
-| Frontend React | Portal institucional en validación final | Acceso dividido, shell responsivo, cotización y pago rediseñados, historiales filtrables, perfil reorganizado, ayuda y footer global están implementados. |
+| Frontend React | Portal institucional verificado | Acceso dividido, shell responsivo, cotización y pago rediseñados, historiales filtrables, perfil reorganizado, ayuda y footer global aprobaron la validación final. |
 | Backend Spring Boot | Perfil protegido verificado | Las 100 pruebas pasan; los cambios de correo exigen contraseña y los datos contractuales permanecen inmutables. |
 | Spring Security | Autenticación dual verificada | Clientes y usuarios internos tienen proveedores, principales y roles separados; CSRF, BCrypt, sesión, login, logout y aislamiento de rutas fueron verificados. |
 | Integración completa | Cancelaciones completas | Solicitud, revisión administrativa, resolución y consulta del resultado recorren React, Spring Boot y Oracle. |
-| Pruebas | Backend aprobado; UI reciente pendiente | Oracle, 100 pruebas de Spring y recorridos previos están aprobados. El nuevo portal pasa `lint`; falta la validación manual integral del incremento visual. |
+| Pruebas | Cierre técnico aprobado | 100 pruebas Spring, E2E Oracle, 8 pruebas React, `lint`, `build` y validación manual están aprobados. |
 | Repositorio Git | Configurado | Rama `main` sincronizada con `origin/main` en GitHub. |
 
 ## Componentes disponibles
@@ -40,6 +40,8 @@
 - `docs/MODELO-RELACIONAL-NEDW.md`: tablas, relaciones, cardinalidades y reglas del modelo aprobado.
 - `docs/CONTRATO-API.md`: contrato entre React y Spring Boot.
 - `docs/PATRONES-DISENO.md`: patrones implementados, planificados y criterio de incorporación.
+- `docs/GUIA-DEMO.md`: preparación de seeds, credenciales ficticias, recorridos y verificación responsiva de la demostración.
+- `docs/ENTREGA.md`: checkpoint, comandos de verificación, revisión manual, commit y etiqueta propuesta para el cierre.
 - `anteproyecto/`: documentación entregable del anteproyecto.
 
 ### Diseño de interfaz
@@ -132,12 +134,7 @@
 
 #### Pendientes del frontend
 
-- Validar manualmente el incremento institucional completo en escritorio, tablet y móvil.
-- Implementar recuperación de contraseña solo después de definir tokens, expiración y canal de entrega en backend.
-- Ampliar perfil con teléfono, domicilio, RFC/CFDI y cambio de contraseña mediante contratos y persistencia reales.
-- Implementar gestión de tarjetas guardadas y facturación; actualmente Pagos muestra el historial real disponible.
-- Implementar reporte y seguimiento de siniestros/tickets; actualmente Ayuda no simula su registro.
-- Incorporar pruebas automatizadas del frontend y navegación responsiva.
+- Crear la etiqueta de entrega después de aprobar las pruebas y la revisión manual.
 
 ## Auditoría del recorrido frontend
 
@@ -192,16 +189,15 @@
 - Restricciones, triggers, estados y operaciones principales verificados.
 - Comandos reproducibles de creación, carga y prueba documentados.
 
-## Componentes todavía no iniciados
+## Alcance descartado para la entrega
 
-- Recuperación segura de contraseña.
+- Recuperación y cambio de contraseña.
 - Datos fiscales CFDI y domicilio/contacto ampliado.
-- Cambio de contraseña desde el perfil.
 - Gestión persistente de tarjetas del cliente.
-- Facturación fiscal real, expresamente fuera del alcance NEDW actual.
+- Facturación fiscal real.
 - Registro y seguimiento de siniestros o tickets.
-- Pruebas del frontend.
-- Guion reproducible y versión etiquetada de entrega.
+
+Estos puntos no se consideran pendientes del producto actual. Después del cierre se priorizará el despliegue en OCI y Cloudflare.
 
 ## Decisiones vigentes
 
@@ -244,7 +240,7 @@
 
 ## Próxima acción
 
-Validar manualmente el portal institucional completo, corregir regresiones y preparar los datos y el guion reproducible de demostración. Los nuevos módulos con persistencia se abordarán como incrementos posteriores y separados.
+Registrar el commit de estabilización, crear la etiqueta `v1.0.0-nedw` y comenzar la preparación del despliegue en OCI y Cloudflare.
 
 ## Bitácora breve
 
